@@ -26,7 +26,8 @@
     "prove:agent-live-model": "pnpm --filter @marked/scripts prove:agent-live-model",
     "reproduce:historical": "pnpm --filter @marked/scripts reproduce:historical",
     "verify:historical": "pnpm --filter @marked/scripts verify:historical",
-    "spot-check:historical": "pnpm --filter @marked/scripts spot-check:historical"
+    "spot-check:historical": "pnpm --filter @marked/scripts spot-check:historical",
+    "db:migrate": "pnpm --filter @marked/db db:migrate"
   },
   "devDependencies": {
     "@eslint/js": "^9.18.0",

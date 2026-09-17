@@ -2,18 +2,21 @@
   "name": "@marked/db",
   "version": "0.0.0",
   "private": true,
-  "description": "Persistence boundary. Drizzle ORM over PostgreSQL in deploy, ephemeral DB in tests. job_events is append-only — corrections append, they never rewrite history.",
+  "description": "Persistence boundary. PostgreSQL (via the postgres driver) in production, node:sqlite locally/in tests. job_events is append-only — corrections append, they never rewrite history.",
   "type": "module",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "db:migrate": "tsx src/migrate.ts"
   },
   "dependencies": {
-    "@marked/core": "workspace:*"
+    "@marked/core": "workspace:*",
+    "postgres": "^3.4.9"
   },
   "devDependencies": {
+    "tsx": "^4.19.2",
     "typescript": "^5.7.3",
     "vitest": "^3.0.5"
   }
