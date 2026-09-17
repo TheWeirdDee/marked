@@ -142,3 +142,35 @@ describe("transition — no route reaches FULFILLED_VERIFIED except through VERI
     }
   });
 });
+
+/**
+ * Gate 12 §7 — a full-graph reachability pass, not present before this
+ * gate: a real breadth-first walk of the transition table (both
+ * fulfillmentMode contexts) starting from NEW, checking every status in
+ * ALL_FULFILLMENT_STATUSES is actually reachable. A status the table
+ * forgot to wire an edge into would be an "orphan state" — reachable in
+ * neither product experience nor test coverage, yet still a legal status
+ * value the persistence layer would silently accept.
+ */
+describe("transition — every declared status is reachable from NEW (no orphan states)", () => {
+  it("a breadth-first walk from NEW visits every status in ALL_FULFILLMENT_STATUSES", () => {
+    const visited = new Set<FulfillmentStatus>(["NEW"]);
+    const queue: FulfillmentStatus[] = ["NEW"];
+    const modes = [undefined, { fulfillmentMode: "AUTO" as const }, { fulfillmentMode: "APPROVE" as const }];
+
+    while (queue.length > 0) {
+      const current = queue.shift()!;
+      for (const candidate of ALL_FULFILLMENT_STATUSES) {
+        if (visited.has(candidate)) continue;
+        const reachable = modes.some((ctx) => isLegalTransition(current, candidate, ctx));
+        if (reachable) {
+          visited.add(candidate);
+          queue.push(candidate);
+        }
+      }
+    }
+
+    const unreached = ALL_FULFILLMENT_STATUSES.filter((s) => !visited.has(s));
+    expect(unreached).toEqual([]);
+  });
+});
