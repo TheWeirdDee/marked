@@ -1,0 +1,136 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #0a0b0d;
+  --surface: #151318;
+  --surface-raised: #1c1a20;
+  --border: #28262c;
+  --border-strong: #38353c;
+  --foreground: #f3efe8;
+  --muted: #938f92;
+  --muted-strong: #b5b1b5;
+  --accent: #34d399;
+  --accent-strong: #10b981;
+  --accent-dim: rgba(52, 211, 153, 0.12);
+  --warn: #f5a524;
+  --warn-dim: rgba(245, 165, 36, 0.12);
+  --danger: #f0605a;
+  --danger-dim: rgba(240, 96, 90, 0.12);
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: auto; /* Lenis owns smooth scrolling; native smooth-scroll would fight it */
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-display {
+  font-family: var(--font-display), system-ui, sans-serif;
+}
+
+.font-mono-num {
+  font-family: var(--font-mono), ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+  /* Defense in depth (§13): a raw hash/address rendered in this class should
+     never be able to force horizontal page overflow, even if some future
+     usage forgets HashChip's truncation. No-op for short values. */
+  overflow-wrap: anywhere;
+}
+
+::selection {
+  background: rgba(52, 211, 153, 0.25);
+}
+
+/* Restrained grain texture — marketing/storytelling surfaces only, never app surfaces. */
+.bg-grain {
+  position: relative;
+}
+.bg-grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/*
+ * Product repair — global site texture (§3). Two more low-opacity layers,
+ * additive with .bg-grain: a faint technical line field (fixed, so it
+ * doesn't repaint per-section) and a soft radial glow anchored near the
+ * top where the hero sits. Marketing surfaces opt into both via
+ * .bg-texture-strong; app/docs/evidence use .bg-texture-quiet (grid only,
+ * no glow, half the opacity) so those surfaces stay calm and readable.
+ * Static on prefers-reduced-motion is automatic here — nothing in either
+ * class animates, so there is nothing to disable.
+ */
+.bg-texture-strong {
+  position: relative;
+  background-image:
+    radial-gradient(ellipse 60% 40% at 50% 0%, rgba(52, 211, 153, 0.08), transparent 70%),
+    linear-gradient(rgba(243, 239, 232, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(243, 239, 232, 0.035) 1px, transparent 1px);
+  background-size:
+    100% 100%,
+    64px 64px,
+    64px 64px;
+  background-position: 0 0, 0 0, 0 0;
+  background-attachment: fixed, fixed, fixed;
+}
+
+.bg-texture-quiet {
+  position: relative;
+  background-image: linear-gradient(rgba(243, 239, 232, 0.018) 1px, transparent 1px), linear-gradient(90deg, rgba(243, 239, 232, 0.018) 1px, transparent 1px);
+  background-size: 64px 64px;
+  background-attachment: fixed;
+}
+
+/* Thin technical rule, used to divide sections and draw attention via ScrollTrigger-animated width. */
+.rule {
+  height: 1px;
+  background: var(--border-strong);
+}
+
+.container-marked {
+  width: 100%;
+  max-width: 88rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+@media (min-width: 640px) {
+  .container-marked {
+    padding-inline: 2rem;
+  }
+}
+
+/* Section eyebrow label — small uppercase tracked technical caption. */
+.section-label {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
