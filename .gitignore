@@ -1,0 +1,64 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# next.js
+.next/
+out/
+
+# vercel
+.vercel/
+
+# build output
+dist/
+build/
+*.tsbuildinfo
+
+# env
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# testing
+coverage/
+playwright-report/
+test-results/
+blob-report/
+
+# logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# editor
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# claude code — personal, machine-local overrides (never commit)
+.claude/settings.local.json
+
+# os
+.DS_Store
+Thumbs.db
+
+# local databases — the trailing * also catches WAL/SHM sidecar files
+# (marked.sqlite-wal, marked.sqlite-shm) that a bare *.sqlite would miss
+*.sqlite*
+*.sqlite3*
+*.db
+apps/web/.data/
+
+# secrets — never commit these
+*.pem
+*.key
+wallet*.json
+mnemonic*
+*private-key*
+*.env.production
+
+# foundry
+contracts/cache/
+contracts/out/
+contracts/broadcast/
