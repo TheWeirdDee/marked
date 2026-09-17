@@ -64,7 +64,7 @@
     "postconditionCoverage": "FULL",
     "requiredAssertionsVerified": true,
     "status": "FULFILLED_VERIFIED",
-    "observedAt": "2026-09-17T14:45:01.193Z"
+    "observedAt": "2026-09-17T15:24:43.527Z"
   },
   "receiptHash": "0x332ea2320ba4a0af131cfbfd78bfd55418b2eca6746df3d722c9eed2c77219c4",
   "finalStatus": "FULFILLED_VERIFIED"
