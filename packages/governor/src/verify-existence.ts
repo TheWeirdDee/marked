@@ -1,6 +1,6 @@
-import { createPublicClient, http, type Chain, type PublicClient } from "viem";
-import { mainnet, sepolia, baseSepolia } from "viem/chains";
+import { createPublicClient, http, type PublicClient } from "viem";
 import type { ChainId, HexAddress } from "@marked/core";
+import { chainById } from "./supported-chains";
 
 /**
  * Minimal, family-agnostic read: `state(uint256) view returns (uint8)`.
@@ -23,12 +23,6 @@ const MINIMAL_STATE_ABI = [
     type: "function",
   },
 ] as const;
-
-const CHAINS_BY_ID: Record<number, Chain> = {
-  1: mainnet,
-  11155111: sepolia,
-  84532: baseSepolia,
-};
 
 export type GovernorExistenceCheck =
   | { ok: true; hasCode: true; stateReadable: true; state: number }
@@ -54,7 +48,7 @@ export async function verifyGovernorProposalExists(params: {
   if (params.clientOverride) {
     client = params.clientOverride;
   } else {
-    const chain = CHAINS_BY_ID[params.chainId];
+    const chain = chainById(params.chainId);
     if (!chain) {
       return { ok: false, hasCode: false, stateReadable: false, reason: `Unsupported chainId for existence check: ${params.chainId}` };
     }

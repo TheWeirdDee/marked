@@ -13,6 +13,18 @@ import { isAgentAvailable } from "@/lib/agent/provider";
 
 export const metadata = { title: "New fulfillment" };
 
+/**
+ * Gate 12 §CACTUS-LIVE-001 — reading `searchParams` already makes Next.js
+ * treat this route as dynamic in practice (confirmed `ƒ` in every build
+ * output this project has produced), but the explicit marker was missing
+ * here while present on every sibling DB/RPC-backed page (`/app`,
+ * `/app/fulfillments/[id]`, `/proof/[id]`) — an inconsistency the Gate 12
+ * audit incorrectly reported as already fixed everywhere. Added for
+ * explicitness and to match the other pages, not because a live bug was
+ * traced to its absence.
+ */
+export const dynamic = "force-dynamic";
+
 const EXAMPLE_URL = "https://www.tally.xyz/gov/compound/proposal/220";
 /**
  * The real, currently-live Cactus governance surface — verified live during
@@ -130,10 +142,17 @@ export default async function NewFulfillmentPage({ searchParams }: { searchParam
               <Badge>Cactus</Badge>
               <span className="text-sm text-[var(--muted)]">{result.cactus.organization.name}</span>
               {isExampleUrl ? <Badge tone="neutral">Historical example</Badge> : null}
+              {result.cactus.organization.isPaused ? <Badge tone="warn">Cactus: DAO page paused</Badge> : null}
             </div>
             <p className="font-medium">
               Proposal #{result.cactus.proposal.onchainProposalId} — {result.cactus.proposal.title}
             </p>
+            {result.cactus.organization.isPaused ? (
+              <p className="mt-2 rounded-md border border-amber-900/40 bg-amber-950/20 px-3 py-2 text-xs text-amber-200">
+                Cactus reports this DAO&apos;s page as paused{result.cactus.organization.pauseReason ? ` (“${result.cactus.organization.pauseReason}”)` : ""}. That is a Cactus-side context signal, not onchain execution authority — Marked
+                independently reads the Governor onchain regardless, and the result is shown below as &quot;Onchain state.&quot; A paused Cactus page never blocks or approves a resolution by itself.
+              </p>
+            ) : null}
             <div className="mt-4 grid gap-2 text-sm sm:grid-cols-2">
               <Row label="Chain" value={result.coordinate.chainId === 1 ? "Ethereum mainnet" : `Chain ${result.coordinate.chainId}`} />
               <Row
@@ -147,7 +166,7 @@ export default async function NewFulfillmentPage({ searchParams }: { searchParam
                   </span>
                 }
               />
-              <Row label="Onchain state" value={result.eligibility?.stateLabel ?? "unknown"} />
+              <Row label="Onchain state (independently observed)" value={result.eligibility?.stateLabel ?? (result.familySupported ? "unknown" : "not checked — unsupported Governor")} />
               <Row label="Cactus-reported status" value={result.cactus.proposal.status ?? "unknown"} />
             </div>
             <p className="mt-4 text-xs text-[var(--muted)]">

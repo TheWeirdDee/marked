@@ -1,5 +1,7 @@
 export { verifyGovernorProposalExists, type GovernorExistenceCheck } from "./verify-existence";
 
+export { SUPPORTED_CHAINS, chainById } from "./supported-chains";
+
 export { GovernorResolutionError, type GovernorResolutionErrorCode } from "./errors";
 
 export {

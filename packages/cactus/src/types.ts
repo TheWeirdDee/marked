@@ -37,6 +37,18 @@ export type ResolvedCactusProposal = {
     id?: string | undefined;
     slug?: string | undefined;
     name: string;
+    /**
+     * Gate 12 §CACTUS-LIVE-001 — Cactus's own "this DAO's page is paused"
+     * signal, when present. Context only, exactly like every other field
+     * on this type: a paused DAO's onchain Governor is still independently
+     * probed and may still resolve a real, executable authorization —
+     * Cactus's lifecycle/pause state is never treated as execution
+     * authority (see the type-level doc comment above and DEC-001). Only
+     * ever used to inform the operator, never to block or approve a
+     * resolution by itself.
+     */
+    isPaused?: boolean | undefined;
+    pauseReason?: string | undefined;
   };
 
   proposal: {

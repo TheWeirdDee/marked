@@ -22,6 +22,8 @@ type NextDataOrganization = {
   id?: string;
   slug?: string;
   name?: string;
+  isPaused?: boolean;
+  pauseReason?: string;
 };
 
 type NextDataPagePropsShape = {
@@ -144,6 +146,8 @@ export async function resolveViaSsrFallback(params: {
       id: organization.id,
       slug: organization.slug,
       name: organization.name,
+      isPaused: organization.isPaused,
+      pauseReason: organization.pauseReason,
     },
     proposal: {
       title: proposal.metadata.title.replace(/^#\s*/, ""),

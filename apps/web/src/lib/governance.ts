@@ -1,11 +1,11 @@
-import { createPublicClient, http, type Chain, type PublicClient } from "viem";
-import { mainnet, sepolia, baseSepolia } from "viem/chains";
+import { createPublicClient, http, type PublicClient } from "viem";
 import type { ChainId, FulfillmentCommitment, Hex, HexAddress, PostconditionCoverage } from "@marked/core";
 import { assessFulfillability, type FulfillabilityAssessment } from "@marked/core";
 import {
   resolveGovernorAuthorization,
   resolveBravoLifecycleEligibility,
   GovernorResolutionError,
+  chainById,
   type ResolvedGovernorAuthorization,
   type LifecycleEligibility,
 } from "@marked/governor";
@@ -27,16 +27,26 @@ import type { PostconditionBinding } from "@marked/core";
  * file — resolving/browsing a proposal is read-only.
  */
 
-const CHAINS_BY_ID: Record<number, Chain> = { 1: mainnet, 11155111: sepolia, 84532: baseSepolia };
-
+/**
+ * Gate 12 §CACTUS-LIVE-001 — this used to maintain its own independent
+ * `CHAINS_BY_ID` map, separate from `packages/governor`'s two internal
+ * copies of the same list. That third, independently-drifted copy was
+ * missing Optimism (chainId 10) while the others didn't need it yet — a
+ * real Cactus-indexed Optimism proposal failed with `UNSUPPORTED_CHAIN`
+ * as a result, not because Optimism is architecturally unsupportable.
+ * `chainById` from `@marked/governor` is now the single source of truth
+ * for "which chains can a real RPC client be opened against" — see
+ * `packages/governor/src/supported-chains.ts`.
+ */
 function rpcUrlFor(chainId: number): string | undefined {
   if (chainId === 1) return process.env["ETHEREUM_RPC_URL"];
   if (chainId === 11155111) return process.env["SEPOLIA_RPC_URL"];
+  if (chainId === 10) return process.env["OPTIMISM_RPC_URL"];
   return undefined;
 }
 
 function buildClient(chainId: number): PublicClient {
-  const chain = CHAINS_BY_ID[chainId];
+  const chain = chainById(chainId);
   if (!chain) throw new GovernorResolutionError("UNSUPPORTED_CHAIN", `chainId ${chainId} is not supported.`);
   return createPublicClient({ chain, transport: http(rpcUrlFor(chainId)) });
 }

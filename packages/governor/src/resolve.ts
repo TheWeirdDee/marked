@@ -1,5 +1,4 @@
-import { createPublicClient, http, type Chain, type PublicClient } from "viem";
-import { mainnet, sepolia, baseSepolia } from "viem/chains";
+import { createPublicClient, http, type PublicClient } from "viem";
 import {
   computeActionAuthorizationHash,
   type ChainId,
@@ -12,8 +11,7 @@ import { bravoStateLabel } from "./bravo-abi";
 import { readBravoActions, readBravoLifecycle } from "./bravo-adapter";
 import { GovernorResolutionError } from "./errors";
 import { detectGovernorFamily } from "./family-detection";
-
-const CHAINS_BY_ID: Record<number, Chain> = { 1: mainnet, 11155111: sepolia, 84532: baseSepolia };
+import { chainById } from "./supported-chains";
 
 export type GovernorProposalCoordinate = {
   chainId: ChainId;
@@ -134,7 +132,7 @@ export async function resolveGovernorAuthorization(
 export { bravoStateLabel };
 
 function buildClient(chainId: number, rpcUrl: string | undefined): PublicClient {
-  const chain = CHAINS_BY_ID[chainId];
+  const chain = chainById(chainId);
   if (!chain) {
     throw new GovernorResolutionError("UNSUPPORTED_CHAIN", `chainId ${chainId} is not supported by the Governor engine.`);
   }
