@@ -2,6 +2,7 @@ import { existsSync, rmSync } from "node:fs";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { getAppStore, resetAppStoreForTests, ensureReviewReadyJob } from "@/lib/job-store";
+import { resetRateLimitStateForTests } from "./rate-limit";
 import type { FulfillmentCommitment } from "@marked/core";
 
 const DATA_DIR = join(process.cwd(), ".data");
@@ -75,6 +76,13 @@ describe("agent actions — available (provider configured, fetch mocked — no 
     process.env["ANTHROPIC_API_KEY"] = "test-key-not-real";
     fetchSpy = vi.fn();
     vi.stubGlobal("fetch", fetchSpy);
+    // Gate 12: this suite calls the agent actions many times across many
+    // tests; without resetting, they'd all share one rate-limit bucket
+    // (headers() has no real request scope in tests, so every call falls
+    // back to the same "unknown-caller" key) and later tests would start
+    // failing with RateLimitExceededError for a reason unrelated to what
+    // each test actually checks.
+    resetRateLimitStateForTests();
   });
 
   afterEach(async () => {
@@ -121,6 +129,38 @@ describe("agent actions — available (provider configured, fetch mocked — no 
     expect(result.ok).toBe(false);
     const store = getAppStore();
     expect(await store.get("does-not-exist")).toBeNull();
+  });
+
+  // --- Gate 12 §35/§36 — the cost-abuse guard, exercised through the real
+  // public Server Action, not just the isolated rate-limit module. ---
+
+  it("Gate 12: rejects a question over the length cap without calling the model at all", async () => {
+    const store = getAppStore();
+    const jobId = "agent-test-job-length";
+    await ensureReviewReadyJob(store, { jobId, commitment: COMMITMENT });
+
+    const { askAboutFulfillment } = await import("./actions");
+    const result = await askAboutFulfillment(jobId, "x".repeat(2001));
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.reason).toMatch(/2000-character limit/);
+    expect(fetchSpy).not.toHaveBeenCalled();
+  });
+
+  it("Gate 12: the 6th agent request within the rate-limit window is refused without calling the model", async () => {
+    fetchSpy.mockResolvedValue(anthropicResponse("ok"));
+    const store = getAppStore();
+    const jobId = "agent-test-job-ratelimit";
+    await ensureReviewReadyJob(store, { jobId, commitment: COMMITMENT });
+
+    const { askAboutFulfillment } = await import("./actions");
+    for (let i = 0; i < 5; i++) {
+      const r = await askAboutFulfillment(jobId, `question ${i}`);
+      expect(r.ok).toBe(true);
+    }
+    const sixth = await askAboutFulfillment(jobId, "question 5");
+    expect(sixth.ok).toBe(false);
+    if (!sixth.ok) expect(sixth.reason).toMatch(/Too many agent requests/);
+    expect(fetchSpy).toHaveBeenCalledTimes(5); // the 6th call never reached the provider
   });
 
   it("a benign candidate plan from the model validates successfully", async () => {
