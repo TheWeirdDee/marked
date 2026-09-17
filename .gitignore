@@ -36,8 +36,17 @@ pnpm-debug.log*
 !.vscode/extensions.json
 .idea/
 
-# claude code — personal, machine-local overrides (never commit)
+# claude code — personal, machine-local overrides and runtime state (never
+# commit). Gate 12 §61/§23 found .claude/scheduled_tasks.lock (a session
+# pid/timestamp lock file) and root .mcp.json (a local MCP tool config,
+# currently only a bare KeeperHub URL but the kind of file that commonly
+# grows a credential field) both untracked with no ignore rule protecting
+# them — named explicitly here rather than blanket-ignoring .claude/, in
+# case this project later wants to track shared .claude/ content (commands,
+# agents) the way some repos do.
 .claude/settings.local.json
+.claude/scheduled_tasks.lock
+.mcp.json
 
 # os
 .DS_Store

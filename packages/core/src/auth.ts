@@ -26,6 +26,25 @@ export class UnauthenticatedError extends Error {
 }
 
 /**
+ * Gate 12 §13 — a plain `!==` string comparison is timing-observable (an
+ * attacker measuring response latency could in principle infer how many
+ * leading bytes matched). This compares every character regardless of an
+ * early mismatch. Written by hand rather than via `node:crypto` so this
+ * module stays runtime-agnostic (no Node-specific import), matching the
+ * rest of `packages/core`. Length is compared directly first — the
+ * token's length is not being treated as the secret here, only its
+ * content.
+ */
+function constantTimeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) {
+    diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  }
+  return diff === 0;
+}
+
+/**
  * Fails closed: a missing, empty, or mismatched token is always rejected —
  * there is no "anonymous" or "default actor" fallback anywhere in this
  * function.
@@ -37,7 +56,7 @@ export function requireAuthenticatedActor(params: { providedToken: string | null
   if (!params.providedToken) {
     throw new UnauthenticatedError("No session token provided.");
   }
-  if (params.providedToken !== params.expectedToken) {
+  if (!constantTimeEqual(params.providedToken, params.expectedToken)) {
     throw new UnauthenticatedError("Session token did not match.");
   }
   if (!params.actorId || params.actorId.trim().length === 0) {

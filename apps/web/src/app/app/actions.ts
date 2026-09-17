@@ -22,9 +22,17 @@ export async function enterDemoWorkspace(formData: FormData) {
     redirect("/app");
   }
 
+  // Gate 12 §13 — Secure was previously never set on either cookie (found by
+  // hostile audit). NEXT_PUBLIC_APP_ENV's real values are "development" |
+  // "testnet" | "mainnet" (packages/config/src/env.ts) — NOT "production",
+  // which that schema explicitly rejects. Local `next dev` is the only case
+  // served over plain http://localhost (where a Secure cookie would simply
+  // never be sent, breaking login); every deployed environment (testnet or
+  // mainnet, both on Vercel) is HTTPS, so Secure is correct there.
+  const isDeployed = process.env["NEXT_PUBLIC_APP_ENV"] !== "development";
   const store = await cookies();
-  store.set(SESSION_COOKIE, "1", { httpOnly: true, sameSite: "lax", path: "/" });
-  store.set(ACTOR_COOKIE, actorName, { httpOnly: true, sameSite: "lax", path: "/" });
+  store.set(SESSION_COOKIE, "1", { httpOnly: true, sameSite: "lax", path: "/", secure: isDeployed });
+  store.set(ACTOR_COOKIE, actorName, { httpOnly: true, sameSite: "lax", path: "/", secure: isDeployed });
   redirect("/app");
 }
 
