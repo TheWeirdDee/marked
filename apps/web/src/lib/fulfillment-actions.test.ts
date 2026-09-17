@@ -117,4 +117,66 @@ describe("fulfillment-actions auth boundary", () => {
     delete process.env["MARKED_DEMO_SESSION_TOKEN"];
     await expect(armDemoJob(store, { providedToken: "anything", actorId: "alice" })).rejects.toThrow(UnauthenticatedError);
   });
+
+  // --- Gate 12 §8 — concurrency audit: two genuinely independent store
+  // instances on the same file, racing via Promise.all (never sequential
+  // awaits), mirroring the exact pattern Gate 11 used to prove real CAS
+  // races against SqliteFulfillmentJobStore directly. ---
+
+  it("Gate 12: two concurrent DISARM calls for the same job do not both succeed and do not double-append events", async () => {
+    await armDemoJob(store, { providedToken: REAL_TOKEN, actorId: "judge-alice" });
+
+    const storeA = new SqliteFulfillmentJobStore(join(dir, "test.sqlite"));
+    const storeB = new SqliteFulfillmentJobStore(join(dir, "test.sqlite"));
+
+    const results = await Promise.allSettled([
+      disarmDemoJob(storeA, { providedToken: REAL_TOKEN, actorId: "judge-bob" }, "bob cancels"),
+      disarmDemoJob(storeB, { providedToken: REAL_TOKEN, actorId: "judge-carol" }, "carol cancels"),
+    ]);
+    await storeA.close();
+    await storeB.close();
+
+    const succeeded = results.filter((r) => r.status === "fulfilled").length;
+    const { job, events } = await getDemoJobState(store);
+    const disarmEvents = events.filter((e) => e.type === "DISARMED");
+
+    expect(job.status).toBe("DISARMED_BY_USER");
+    // Exactly one caller's DISARM may be recorded as having happened — a
+    // second concurrent DISARM racing the first must be rejected (a
+    // conflict error) or otherwise not produce a second DISARMED event.
+    // Both silently "succeeding" would mean two independent cancel actions
+    // are recorded for one user intent, corrupting the audit trail.
+    expect(succeeded).toBe(1);
+    expect(disarmEvents).toHaveLength(1);
+    const loser = results.find((r) => r.status === "rejected");
+    expect(loser?.status === "rejected" ? loser.reason?.name : undefined).toBe("ConcurrentJobModificationError");
+  });
+
+  it("Gate 12: a concurrent APPROVE and DISARM racing from AWAITING_APPROVAL resolve to exactly one outcome, not a silently-overwritten one", async () => {
+    const { job: armed } = await armDemoJob(store, { providedToken: REAL_TOKEN, actorId: "judge-alice" });
+    await store.save({ ...armed, status: "AWAITING_APPROVAL" });
+
+    const storeA = new SqliteFulfillmentJobStore(join(dir, "test.sqlite"));
+    const storeB = new SqliteFulfillmentJobStore(join(dir, "test.sqlite"));
+
+    const results = await Promise.allSettled([
+      approveDemoJob(storeA, { providedToken: REAL_TOKEN, actorId: "judge-bob" }),
+      disarmDemoJob(storeB, { providedToken: REAL_TOKEN, actorId: "judge-carol" }, "carol cancels before approval lands"),
+    ]);
+    await storeA.close();
+    await storeB.close();
+
+    const succeeded = results.filter((r) => r.status === "fulfilled").length;
+    const { job, events } = await getDemoJobState(store);
+
+    // Whichever of the two legal actions wins, it must be exactly one of
+    // them — never both silently applied (which the append-only event log
+    // would otherwise show as an APPROVED event immediately followed by a
+    // DISARMED event with no caller ever being told the other one lost),
+    // and the caller whose action lost the race must receive an error
+    // rather than a false success.
+    expect(succeeded).toBe(1);
+    expect(events).toHaveLength(2); // ARMED + exactly one of {APPROVED, DISARMED}
+    expect(["EXECUTING", "DISARMED_BY_USER"]).toContain(job.status);
+  });
 });

@@ -20,9 +20,16 @@ import { refreshAuthorizationHash } from "./governance";
  *   2. re-verifies live Governor authorization immediately before arming
  *      (never trusts the commitment's own frozen hash as "current"),
  *   3. calls the unmodified Gate 4 domain function,
- *   4. persists the returned job and its event atomically (Gate 11 —
- *      `saveJobAndEvents`, one transaction, never a state change with a
- *      failed event append or vice versa).
+ *   4. persists the returned job and its event atomically AND with a
+ *      compare-and-set guard on the status this decision was computed from
+ *      (Gate 12 §8 — `saveWithCas`, not `saveJobAndEvents`: two concurrent
+ *      mutations racing from the same read snapshot — a double-click, two
+ *      tabs, or an APPROVE racing a DISARM — must resolve to exactly one
+ *      winner, with the loser told its action did not apply, rather than
+ *      both silently "succeeding" and duplicating the event log or
+ *      silently overwriting each other's outcome. Reproduced empirically
+ *      in fulfillment-actions.test.ts before this fix; see
+ *      evidence/system-audit/concurrency-audit.md).
  */
 
 export type AuthParams = { providedToken: string | null | undefined; actorId: string | null | undefined };
@@ -39,6 +46,27 @@ export class JobNotFoundError extends Error {
   constructor(public readonly jobId: string) {
     super(`No job found with id '${jobId}'.`);
     this.name = "JobNotFoundError";
+  }
+}
+
+/** Gate 12 §8 — thrown when a mutation's compare-and-set loses a race: the job's status changed between this call's read and its write, so its computed transition no longer applies. The caller lost the race, not the system failing. */
+export class ConcurrentJobModificationError extends Error {
+  constructor(
+    public readonly jobId: string,
+    public readonly expectedStatus: string,
+    public readonly actualStatus: string | null,
+  ) {
+    super(
+      `Job '${jobId}' was modified concurrently: expected status '${expectedStatus}' when this action was computed, but it is now '${actualStatus ?? "unknown"}'. This action was not applied — reload the job and retry if it is still appropriate.`,
+    );
+    this.name = "ConcurrentJobModificationError";
+  }
+}
+
+async function saveWithCasOrThrow(store: FulfillmentJobStore, jobId: string, expectedCurrentStatus: FulfillmentJob["status"], nextJob: FulfillmentJob, event: FulfillmentJobEvent): Promise<void> {
+  const result = await store.saveWithCas(nextJob, [event], expectedCurrentStatus);
+  if (!result.ok) {
+    throw new ConcurrentJobModificationError(jobId, expectedCurrentStatus, result.actualStatus);
   }
 }
 
@@ -70,7 +98,7 @@ export async function armJob(store: FulfillmentJobStore, jobId: string, auth: Au
     now: new Date().toISOString(),
   });
 
-  await store.saveJobAndEvents(nextJob, [event]);
+  await saveWithCasOrThrow(store, jobId, job.status, nextJob, event);
   return { job: nextJob, event };
 }
 
@@ -90,7 +118,7 @@ export async function disarmJob(
     now: new Date().toISOString(),
   });
 
-  await store.saveJobAndEvents(nextJob, [event]);
+  await saveWithCasOrThrow(store, jobId, job.status, nextJob, event);
   return { job: nextJob, event };
 }
 
@@ -105,7 +133,7 @@ export async function approveJob(store: FulfillmentJobStore, jobId: string, auth
     now: new Date().toISOString(),
   });
 
-  await store.saveJobAndEvents(nextJob, [event]);
+  await saveWithCasOrThrow(store, jobId, job.status, nextJob, event);
   return { job: nextJob, event };
 }
 
@@ -130,7 +158,7 @@ export async function armDemoJob(store: FulfillmentJobStore, auth: AuthParams) {
     actor: actor.actorId,
     now: new Date().toISOString(),
   });
-  await store.saveJobAndEvents(nextJob, [event]);
+  await saveWithCasOrThrow(store, job.jobId, job.status, nextJob, event);
   return { job: nextJob, event };
 }
 
