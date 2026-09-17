@@ -9,6 +9,13 @@
 
 Mechanism proven: `SqliteFulfillmentJobStore.saveJobAndEvents`/`saveWithCas` wrap the job write and event append in one `BEGIN IMMEDIATE` / `COMMIT` transaction, with a `catch` block that issues `ROLLBACK` and re-throws. `node:sqlite`'s `DatabaseSync` gives this real ACID rollback semantics — confirmed by the test actually observing the pre-transaction state survive intact, not merely by reading the source code.
 
-## PostgresFulfillmentJobStore — same mechanism, not exercised against a real connection
+## PostgresFulfillmentJobStore — same mechanism, proven for real against a real hosted connection (Neon)
 
-`PostgresFulfillmentJobStore.saveJobAndEvents`/`saveWithCas` both use `this.sql.begin(async (tx) => { ... })` — porsager/postgres's real transaction API, which issues `BEGIN`/`COMMIT` and automatically issues `ROLLBACK` if the callback throws or rejects. This is the standard, well-established mechanism for this driver, structurally identical in intent to the SQLite proof above. It has not been run against a real Postgres connection in this environment — see `environment-audit.md` and `gate11-result.md` for why, and what is needed to close the gap.
+`PostgresFulfillmentJobStore.saveJobAndEvents`/`saveWithCas` both use `this.sql.begin(async (tx) => { ... })` — porsager/postgres's real transaction API, which issues `BEGIN`/`COMMIT` and automatically issues `ROLLBACK` if the callback throws or rejects.
+
+`packages/db/src/postgres-fulfillment-job-store.hosted.test.ts`, `"PostgresFulfillmentJobStore — transaction rollback against the real hosted database (Gate 11 §18-D, mandatory)"`, uses the exact same forced-failure technique as the SQLite proof — a `BigInt` field poisons `JSON.stringify` after the job `INSERT` has already executed inside the open transaction, before `COMMIT`:
+
+- **`"saveJobAndEvents: a real failure appending the event rolls back the job write too — neither persists"`** — PASS against the real hosted database. `store.get(jobId)` returns `null` and `store.getEvents(jobId)` returns `[]` afterward.
+- **`"saveWithCas: a real failure appending the event rolls back the CAS job write too — the pre-existing job is untouched"`** — PASS. The job's status is still exactly `REVIEW_READY` after the forced failure; no event was appended.
+
+This is a genuine, observed rollback against Neon's real Postgres engine — not merely read from the source or inferred from the driver's documented behavior. Full output: `evidence/production-persistence/hosted-postgres-test-output.txt`; narrative: `evidence/production-persistence/hosted-production-proof.md`.

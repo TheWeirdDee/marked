@@ -1,6 +1,6 @@
 # Gate 11 — atomic compare-and-set proof
 
-Full console output: `evidence/production-persistence/packages-db-test-output.txt`.
+Full console output: `evidence/production-persistence/packages-db-test-output.txt` (SQLite/in-memory) and `evidence/production-persistence/hosted-postgres-test-output.txt` (real hosted Neon Postgres — see `evidence/production-persistence/hosted-production-proof.md`).
 
 ## What was proven for real, against `SqliteFulfillmentJobStore`
 
@@ -20,10 +20,16 @@ Full console output: `evidence/production-persistence/packages-db-test-output.tx
 
 **Contract-suite confirmation** (`packages/db/src/fulfillment-job-store.contract.ts`, run via `sqlite-fulfillment-job-store.contract.test.ts`): the same `saveWithCas`/`tryClaimExecution` assertions, written independently of the tests above, also pass against `SqliteFulfillmentJobStore` — this is the "same behavior, two independently-written test paths" pattern this project has used since Gate 8's historical-baseline verifier.
 
-## What is implemented but NOT proven against a real Postgres engine
+## What was proven for real, against a real hosted Postgres engine (Neon)
 
-`PostgresFulfillmentJobStore.saveWithCas` and `.tryClaimExecution` are implemented using single-statement atomic SQL (`UPDATE ... WHERE status = expected` / `INSERT ... ON CONFLICT DO NOTHING`, both with `RETURNING`) — Postgres's own row-level locking is what would make two concurrent callers resolve to exactly one winner, the same principle the SQLite implementation already proves, just expressed in Postgres's own atomic-statement idiom rather than SQLite's exception-on-constraint-violation idiom.
+`PostgresFulfillmentJobStore.saveWithCas` and `.tryClaimExecution` use single-statement atomic SQL (`UPDATE ... WHERE status = expected` / `INSERT ... ON CONFLICT DO NOTHING`, both with `RETURNING`) — Postgres's own row-level locking, not application code, is what makes two concurrent callers resolve to exactly one winner.
 
-`packages/db/src/postgres-fulfillment-job-store.contract.test.ts` runs the exact same contract battery (`fulfillment-job-store.contract.ts`) against `PostgresFulfillmentJobStore` that was just proven against SQLite above — **but it is currently SKIPPED**, because no reachable Postgres (local, containerized, or hosted) exists in this environment (see `evidence/production-persistence/environment-audit.md` and `gate11-result.md`). The skip is explicit and visible in test output (`↓ ... SKIPPED — no reachable/migratable Postgres in this environment (DATABASE_URL is not set)`), never a silent pass.
+`packages/db/src/postgres-fulfillment-job-store.contract.test.ts` runs the exact same contract battery (`fulfillment-job-store.contract.ts`) against `PostgresFulfillmentJobStore` that was proven against SQLite above, for real, against a hosted Neon Postgres database (`ep-quiet-bonus-...neon.tech`) — **PASS**, all assertions, including `saveWithCas succeeds when expectedCurrentStatus matches, refuses without writing when it doesn't` and `tryClaimExecution: first caller claims, second caller for the same hash is refused and told who holds it`.
 
-**This gate does not claim the Postgres concurrency behavior has been exercised against a real Postgres server.** It claims the implementation is complete, uses the correct atomic-statement pattern, and is proven identical in intent to the already-real-database-proven SQLite implementation via a shared contract suite that will run the moment a real `DATABASE_URL` is supplied — see item 49 of the final report for exactly what is needed to close this gap.
+**`packages/db/src/postgres-fulfillment-job-store.hosted.test.ts`** — the mandatory Gate 11 §18-B concurrent-worker race, run against the same real database, mirroring the SQLite proof exactly:
+- **`"two workers racing tryClaimExecution for the SAME request hash: exactly one claims"`** — PASS. Two separate `PostgresFulfillmentJobStore` instances (`storeA`, `storeB`, genuinely separate connections) call `tryClaimExecution` for the same request hash via `Promise.all` (genuinely concurrent); exactly one returned `claimed: true`.
+- **`"two workers racing saveWithCas against the same expected status: exactly one succeeds"`** — PASS, same pattern, job-level CAS.
+
+Both races resolve correctly because Postgres's own constraint/row-lock enforcement — not a race in application code — decides the winner; this is the real proof the SQL pattern in `postgres-fulfillment-job-store.ts` is genuinely atomic under concurrency, not merely well-intentioned.
+
+Full output: `evidence/production-persistence/hosted-postgres-test-output.txt`; narrative: `evidence/production-persistence/hosted-production-proof.md`.

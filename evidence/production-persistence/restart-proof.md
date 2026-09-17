@@ -1,6 +1,6 @@
 # Gate 11 — restart/reconnect proof
 
-Full console output: `evidence/production-persistence/packages-db-test-output.txt`.
+Full console output: `evidence/production-persistence/packages-db-test-output.txt` (SQLite/in-memory) and `evidence/production-persistence/hosted-postgres-test-output.txt` (real hosted Neon Postgres).
 
 ## SqliteFulfillmentJobStore — proven for real
 
@@ -12,8 +12,12 @@ Full console output: `evidence/production-persistence/packages-db-test-output.tx
 
 This extends Gate 7's own restart proof (`evidence/recovery-hardening/live-restart-proof.md` — a real `taskkill /F` + `pnpm start` against the actual running app, not only the isolated test suite) to the new methods added in this gate.
 
-## PostgresFulfillmentJobStore — NOT exercised against a real connection
+## PostgresFulfillmentJobStore — proven for real, against a real hosted connection (Neon)
 
-A "restart" for a network-backed store means: write with one client connection, fully close it, open a brand-new client connection (simulating a fresh serverless invocation), read back identical state. `packages/db/src/postgres-fulfillment-job-store.contract.test.ts` is structured to prove exactly this (the contract suite's `newStore()`/`disposeStore()` pattern opens and closes a real connection per test), but — as documented in `atomicity.md` and `environment-audit.md` — it is currently SKIPPED because no reachable Postgres exists in this environment.
+A "restart" for a network-backed store means: write with one client connection, fully close it, open a brand-new client connection (simulating a fresh serverless invocation), read back identical state. `packages/db/src/postgres-fulfillment-job-store.contract.test.ts` proves exactly this via its `newStore()`/`disposeStore()` pattern (a fresh connection per test) — every test in that file, including the round-trip and `listJobs` assertions, passed against the real hosted database.
 
-No restart/reconnect claim is made for `PostgresFulfillmentJobStore` beyond "the code is written to prove it and will run the moment a real `DATABASE_URL` is supplied."
+`packages/db/src/postgres-fulfillment-job-store.hosted.test.ts` adds an explicit, named restart proof mirroring the SQLite test above:
+- **`"a job persisted by one store instance is readable from a brand-new instance pointed at the same DATABASE_URL"`** — PASS. Saves a job + appends an event via one `PostgresFulfillmentJobStore` connection, closes it, opens a brand-new instance against the same `DATABASE_URL` (standing in for a fresh serverless invocation), reads both back identical.
+- **`"an execution claim persisted before a crash is still visible after reconnect"`** — PASS, same pattern for `tryClaimExecution`/`getExecutionClaim`.
+
+Full output: `evidence/production-persistence/hosted-postgres-test-output.txt`; narrative: `evidence/production-persistence/hosted-production-proof.md`.

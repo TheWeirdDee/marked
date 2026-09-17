@@ -15,3 +15,7 @@ Repeated the prior audit's discipline: `grep`/`Grep` for every `process.env[...]
 ## Confirmation: no variable was added to `.env.example` without being genuinely consumed
 
 `MARKED_STORAGE_DRIVER` and the updated `DATABASE_URL` comment in `.env.example` (root) both correspond to real `process.env` reads in `apps/web/src/lib/job-store.ts` — verified by reading that file directly as part of this gate's implementation, not inferred.
+
+## Update: `DATABASE_URL` genuinely exercised against a real hosted database
+
+After this audit was written, a real hosted Postgres `DATABASE_URL` (Neon) was supplied and the full Postgres test battery was run against it for real — see `evidence/production-persistence/hosted-production-proof.md`. This does not change anything in this file's method or findings; it closes the one gap `gate11-result.md` previously listed as unmet.

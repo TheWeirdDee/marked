@@ -1,6 +1,6 @@
 # Gate 11 — security scan
 
-Performed before staging anything for commit, per Gate 11 §25.
+Performed before staging anything for commit, per Gate 11 §25. Re-run in full after a real hosted `DATABASE_URL` was supplied (this file's second pass — see "Second pass" below).
 
 ## Real secret values checked (present in this environment's gitignored `.env.local` files)
 
@@ -9,6 +9,7 @@ Repository-wide content search (`grep -r`, excluding `node_modules`/`.git`/`.nex
 - OpenRouter API key (`sk-or-v1-...`) — found **only** in `.env.local` and `apps/web/.env.local`
 - KeeperHub API key (`kh_...`) — found **only** in `.env.local`
 - Gate 5 Sepolia deployer private key (`0x...`) — found **only** in `.env.local`
+- Neon `DATABASE_URL` (real, hosted — see "Second pass" below) — found **only** in `.env.local`
 
 Zero matches anywhere else in the working tree.
 
@@ -16,9 +17,21 @@ Zero matches anywhere else in the working tree.
 
 Regex sweep (`sk-ant-...`, AWS `AKIA...`, GitHub `ghp_...`, Slack `xox[baprs]-...`, `BEGIN (RSA )?PRIVATE KEY`, a Postgres URL with real, non-placeholder embedded credentials) across every new/changed Gate 11 file (`packages/db/`, `evidence/production-persistence/`, `VERCEL_ENVIRONMENT.md`, both `.env.example` files) — zero matches.
 
-## `DATABASE_URL` specifically
+## `DATABASE_URL` specifically — first pass (pre-hosted-DB)
 
-Every `DATABASE_URL` value appearing in a tracked-candidate file is the literal placeholder `postgresql://USER:PASSWORD@HOST:5432/DATABASE?sslmode=require` (`.env.example`) — never a real host, credential, or database name. The `DATABASE_URL` actually present in this environment's gitignored `.env.local` is itself still the unedited example value (`postgresql://user:password@localhost:5432/marked_dev`), confirmed by reading the file directly — there is no real Postgres credential anywhere in this environment to accidentally leak.
+At the time of this gate's first pass, every `DATABASE_URL` value appearing in a tracked-candidate file was the literal placeholder `postgresql://USER:PASSWORD@HOST:5432/DATABASE?sslmode=require` (`.env.example`) — never a real host, credential, or database name. The `DATABASE_URL` in `.env.local` was itself still the unedited example value at that time.
+
+## `DATABASE_URL` specifically — second pass (real hosted Neon credential now present)
+
+The user has since placed a real Neon `DATABASE_URL` (with embedded username/password) in the root `.env.local`. Per the user's explicit instruction ("Do not print, echo, commit, or expose the connection string"), this scan was performed exclusively via filename-only / count-only checks — the value was read into a shell variable once (never echoed, never included in any command's visible arguments as a literal), then used as a `grep -F` pattern via variable expansion so it never appears in any tool call or terminal output:
+
+- Full connection string, across the entire working tree excluding `node_modules`/`.git`/`.next`: matches found in **`.env.local` only**.
+- The password substring alone (defense in depth, in case only a fragment leaked): matches found in **`.env.local` only**.
+- Every raw test-output capture (`hosted-postgres-test-output.txt` and three earlier scratch captures under the OS temp directory, before any were copied into the tracked evidence directory): **zero matches**, for both the full string and the password substring — porsager/postgres's own error-wrapping (`wrapConnectionError` in `postgres-fulfillment-job-store.ts`) never logs the connection string, and no test in `postgres-fulfillment-job-store.contract.test.ts`/`.hosted.test.ts` prints it.
+- `git diff --cached`, `git status`, and a full-history pickaxe search (`git log --all -p -S<password>`) — confirmed the secret has never entered the git index or any commit.
+- `git check-ignore -v .env.local` — confirmed still ignored (`.gitignore:19:.env.local`).
+
+No real Postgres credential appears anywhere in a tracked or about-to-be-tracked file.
 
 ## Runtime data files
 

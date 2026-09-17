@@ -1,0 +1,154 @@
+
+ RUN  v3.2.7 C:/Users/DELL/Desktop/marked/packages/db
+
+stdout | src/postgres-fulfillment-job-store.contract.test.ts
+{
+  severity_local: 'NOTICE',
+  severity: 'NOTICE',
+  code: '42P07',
+  message: 'relation "fulfillment_jobs" already exists, skipping',
+  file: 'parse_utilcmd.c',
+  line: '208',
+  routine: 'transformCreateStmt'
+}
+
+stdout | src/postgres-fulfillment-job-store.contract.test.ts
+{
+  severity_local: 'NOTICE',
+  severity: 'NOTICE',
+  code: '42P07',
+  message: 'relation "job_events" already exists, skipping',
+  file: 'parse_utilcmd.c',
+  line: '208',
+  routine: 'transformCreateStmt'
+}
+{
+  severity_local: 'NOTICE',
+  severity: 'NOTICE',
+  code: '42P07',
+  message: 'relation "idx_job_events_job_id" already exists, skipping',
+  file: 'index.c',
+  line: '898',
+  routine: 'index_create'
+}
+{
+  severity_local: 'NOTICE',
+  severity: 'NOTICE',
+  code: '42P07',
+  message: 'relation "execution_claims" already exists, skipping',
+  file: 'parse_utilcmd.c',
+  line: '208',
+  routine: 'transformCreateStmt'
+}
+
+ ✓ src/postgres-fulfillment-job-store.contract.test.ts > FulfillmentJobStore contract — PostgresFulfillmentJobStore (live) > returns null for a job that was never saved 6053ms
+ ✓ src/postgres-fulfillment-job-store.contract.test.ts > FulfillmentJobStore contract — PostgresFulfillmentJobStore (live) > round-trips a saved job exactly 4592ms
+ ✓ src/postgres-fulfillment-job-store.contract.test.ts > FulfillmentJobStore contract — PostgresFulfillmentJobStore (live) > save overwrites an existing job (upsert) 5179ms
+ ✓ src/postgres-fulfillment-job-store.contract.test.ts > FulfillmentJobStore contract — PostgresFulfillmentJobStore (live) > appendEvents preserves order across multiple calls, and getEvents returns [] for a job with none 7227ms
+ ✓ src/postgres-fulfillment-job-store.contract.test.ts > FulfillmentJobStore contract — PostgresFulfillmentJobStore (live) > listJobs returns every saved job, most-recently-updated first 4722ms
+ ✓ src/postgres-fulfillment-job-store.contract.test.ts > FulfillmentJobStore contract — PostgresFulfillmentJobStore (live) > saveJobAndEvents persists both halves atomically 6780ms
+ ✓ src/postgres-fulfillment-job-store.contract.test.ts > FulfillmentJobStore contract — PostgresFulfillmentJobStore (live) > saveWithCas succeeds when expectedCurrentStatus matches, refuses without writing when it doesn't 8001ms
+ ✓ src/postgres-fulfillment-job-store.contract.test.ts > FulfillmentJobStore contract — PostgresFulfillmentJobStore (live) > tryClaimExecution: first caller claims, second caller for the same hash is refused and told who holds it 5019ms
+ ✓ src/postgres-fulfillment-job-store.contract.test.ts > FulfillmentJobStore contract — PostgresFulfillmentJobStore (live) > getExecutionClaim reads back a claim by request hash 4385ms
+ ✓ src/postgres-fulfillment-job-store.contract.test.ts > FulfillmentJobStore contract — PostgresFulfillmentJobStore (live) > getExecutionClaim returns null for an unclaimed hash 3777ms
+stdout | src/postgres-fulfillment-job-store.hosted.test.ts
+{
+  severity_local: 'NOTICE',
+  severity: 'NOTICE',
+  code: '42P07',
+  message: 'relation "fulfillment_jobs" already exists, skipping',
+  file: 'parse_utilcmd.c',
+  line: '208',
+  routine: 'transformCreateStmt'
+}
+{
+  severity_local: 'NOTICE',
+  severity: 'NOTICE',
+  code: '42P07',
+  message: 'relation "job_events" already exists, skipping',
+  file: 'parse_utilcmd.c',
+  line: '208',
+  routine: 'transformCreateStmt'
+}
+
+stdout | src/postgres-fulfillment-job-store.hosted.test.ts
+{
+  severity_local: 'NOTICE',
+  severity: 'NOTICE',
+  code: '42P07',
+  message: 'relation "idx_job_events_job_id" already exists, skipping',
+  file: 'index.c',
+  line: '898',
+  routine: 'index_create'
+}
+{
+  severity_local: 'NOTICE',
+  severity: 'NOTICE',
+  code: '42P07',
+  message: 'relation "execution_claims" already exists, skipping',
+  file: 'parse_utilcmd.c',
+  line: '208',
+  routine: 'transformCreateStmt'
+}
+
+ ✓ src/postgres-fulfillment-job-store.hosted.test.ts > PostgresFulfillmentJobStore — restart/reconnect survival against the real hosted database (Gate 11 §18-C) > a job persisted by one store instance is readable from a brand-new instance pointed at the same DATABASE_URL 12002ms
+ ✓ src/postgres-fulfillment-job-store.hosted.test.ts > PostgresFulfillmentJobStore — restart/reconnect survival against the real hosted database (Gate 11 §18-C) > an execution claim persisted before a crash is still visible after reconnect 6762ms
+ ✓ src/postgres-fulfillment-job-store.hosted.test.ts > PostgresFulfillmentJobStore — concurrent workers against the real hosted database (Gate 11 §18-B, mandatory) > two workers racing tryClaimExecution for the SAME request hash: exactly one claims 3979ms
+ ✓ src/postgres-fulfillment-job-store.hosted.test.ts > PostgresFulfillmentJobStore — concurrent workers against the real hosted database (Gate 11 §18-B, mandatory) > two workers racing saveWithCas against the same expected status: exactly one succeeds 7901ms
+ ✓ src/postgres-fulfillment-job-store.hosted.test.ts > PostgresFulfillmentJobStore — transaction rollback against the real hosted database (Gate 11 §18-D, mandatory) > saveJobAndEvents: a real failure appending the event rolls back the job write too — neither persists 5377ms
+ ✓ src/postgres-fulfillment-job-store.hosted.test.ts > PostgresFulfillmentJobStore — transaction rollback against the real hosted database (Gate 11 §18-D, mandatory) > saveWithCas: a real failure appending the event rolls back the CAS job write too — the pre-existing job is untouched 6512ms
+ ✓ src/postgres-fulfillment-job-store.hosted.test.ts > PostgresFulfillmentJobStore — JSONB serialization round-trip against the real hosted database (Gate 11 §18-E) > unicode, nested structures, and special characters survive a real round trip through JSONB 5602ms
+(node:13896) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+ ✓ src/sqlite-fulfillment-job-store.test.ts > SqliteFulfillmentJobStore — basic save/get (real file-backed database) > round-trips a saved job 103ms
+ ✓ src/sqlite-fulfillment-job-store.test.ts > SqliteFulfillmentJobStore — basic save/get (real file-backed database) > returns null for a job that was never saved 30ms
+ ✓ src/sqlite-fulfillment-job-store.test.ts > SqliteFulfillmentJobStore — basic save/get (real file-backed database) > save overwrites an existing job (upsert) 41ms
+ ✓ src/sqlite-fulfillment-job-store.test.ts > SqliteFulfillmentJobStore — restart survival (Gate 7 instructions §A/§B, §26 tests 1-2) > a job persisted in one process instance is readable from a brand-new instance pointed at the same file (simulated restart) 40ms
+ ✓ src/sqlite-fulfillment-job-store.test.ts > SqliteFulfillmentJobStore — restart survival (Gate 7 instructions §A/§B, §26 tests 1-2) > an execution claim persisted before a crash is still visible after restart (execution identity survives reload, §26 test 2) 35ms
+ ✓ src/sqlite-fulfillment-job-store.test.ts > SqliteFulfillmentJobStore — append-only event history > event order is preserved exactly as appended, across multiple appendEvents calls 59ms
+ ✓ src/sqlite-fulfillment-job-store.test.ts > SqliteFulfillmentJobStore — append-only event history > exposes no update/delete method for events 55ms
+ ✓ src/sqlite-fulfillment-job-store.test.ts > SqliteFulfillmentJobStore.tryClaimExecution — duplicate-worker protection via real compare-and-set (Gate 7 instructions §I, §26 test 10) > the first worker to claim a request hash succeeds 71ms
+ ✓ src/sqlite-fulfillment-job-store.test.ts > SqliteFulfillmentJobStore.tryClaimExecution — duplicate-worker protection via real compare-and-set (Gate 7 instructions §I, §26 test 10) > a second worker claiming the SAME request hash is refused, and told who already claimed it 89ms
+ ✓ src/sqlite-fulfillment-job-store.test.ts > SqliteFulfillmentJobStore.tryClaimExecution — duplicate-worker protection via real compare-and-set (Gate 7 instructions §I, §26 test 10) > two DIFFERENT request hashes (e.g. different jobs) do not collide 66ms
+ ✓ src/sqlite-fulfillment-job-store.test.ts > SqliteFulfillmentJobStore.tryClaimExecution — duplicate-worker protection via real compare-and-set (Gate 7 instructions §I, §26 test 10) > simulates two concurrent workers racing for the same job: only one logical execution proceeds 55ms
+ ✓ src/sqlite-fulfillment-job-store.test.ts > SqliteFulfillmentJobStore.saveJobAndEvents — atomic job+event write (Gate 11 §7) > persists both the job and its events together 52ms
+ ✓ src/sqlite-fulfillment-job-store.test.ts > SqliteFulfillmentJobStore.saveJobAndEvents — atomic job+event write (Gate 11 §7) > survives a restart with both halves intact 67ms
+ ✓ src/sqlite-fulfillment-job-store.test.ts > SqliteFulfillmentJobStore — transaction rollback (Gate 11 §18-D) > saveJobAndEvents: a failure appending the event rolls back the job write too — neither persists 65ms
+ ✓ src/sqlite-fulfillment-job-store.test.ts > SqliteFulfillmentJobStore — transaction rollback (Gate 11 §18-D) > saveWithCas: a failure appending the event rolls back the CAS job write too — the pre-existing job is untouched 69ms
+ ✓ src/sqlite-fulfillment-job-store.test.ts > SqliteFulfillmentJobStore.saveWithCas — job-level compare-and-set (Gate 11 §6) > succeeds when expectedCurrentStatus matches the real current status 59ms
+ ✓ src/sqlite-fulfillment-job-store.test.ts > SqliteFulfillmentJobStore.saveWithCas — job-level compare-and-set (Gate 11 §6) > succeeds when expectedCurrentStatus is null and the job does not exist yet 57ms
+ ✓ src/sqlite-fulfillment-job-store.test.ts > SqliteFulfillmentJobStore.saveWithCas — job-level compare-and-set (Gate 11 §6) > refuses (without writing) when the real current status does not match expectedCurrentStatus 57ms
+ ✓ src/sqlite-fulfillment-job-store.test.ts > SqliteFulfillmentJobStore.saveWithCas — job-level compare-and-set (Gate 11 §6) > two concurrent CAS attempts against the same expected status: exactly one succeeds 102ms
+ ✓ src/sqlite-fulfillment-job-store.test.ts > SqliteFulfillmentJobStore — listJobs > returns an empty list for a fresh database 27ms
+ ✓ src/sqlite-fulfillment-job-store.test.ts > SqliteFulfillmentJobStore — listJobs > returns every saved job, most-recently-updated first, surviving a restart 46ms
+(node:27700) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+ ✓ src/sqlite-fulfillment-job-store.contract.test.ts > FulfillmentJobStore contract — SqliteFulfillmentJobStore > returns null for a job that was never saved 45ms
+ ✓ src/sqlite-fulfillment-job-store.contract.test.ts > FulfillmentJobStore contract — SqliteFulfillmentJobStore > round-trips a saved job exactly 29ms
+ ✓ src/sqlite-fulfillment-job-store.contract.test.ts > FulfillmentJobStore contract — SqliteFulfillmentJobStore > save overwrites an existing job (upsert) 34ms
+ ✓ src/sqlite-fulfillment-job-store.contract.test.ts > FulfillmentJobStore contract — SqliteFulfillmentJobStore > appendEvents preserves order across multiple calls, and getEvents returns [] for a job with none 44ms
+ ✓ src/sqlite-fulfillment-job-store.contract.test.ts > FulfillmentJobStore contract — SqliteFulfillmentJobStore > listJobs returns every saved job, most-recently-updated first 31ms
+ ✓ src/sqlite-fulfillment-job-store.contract.test.ts > FulfillmentJobStore contract — SqliteFulfillmentJobStore > saveJobAndEvents persists both halves atomically 31ms
+ ✓ src/sqlite-fulfillment-job-store.contract.test.ts > FulfillmentJobStore contract — SqliteFulfillmentJobStore > saveWithCas succeeds when expectedCurrentStatus matches, refuses without writing when it doesn't 36ms
+ ✓ src/sqlite-fulfillment-job-store.contract.test.ts > FulfillmentJobStore contract — SqliteFulfillmentJobStore > tryClaimExecution: first caller claims, second caller for the same hash is refused and told who holds it 31ms
+ ✓ src/sqlite-fulfillment-job-store.contract.test.ts > FulfillmentJobStore contract — SqliteFulfillmentJobStore > getExecutionClaim reads back a claim by request hash 30ms
+ ✓ src/sqlite-fulfillment-job-store.contract.test.ts > FulfillmentJobStore contract — SqliteFulfillmentJobStore > getExecutionClaim returns null for an unclaimed hash 24ms
+ ✓ src/fulfillment-job-store.test.ts > InMemoryFulfillmentJobStore — basic save/get > returns null for a job that was never saved 1ms
+ ✓ src/fulfillment-job-store.test.ts > InMemoryFulfillmentJobStore — basic save/get > round-trips a saved job exactly 1ms
+ ✓ src/fulfillment-job-store.test.ts > InMemoryFulfillmentJobStore — basic save/get > save with a new status overwrites the job record (not the events) 0ms
+ ✓ src/fulfillment-job-store.test.ts > InMemoryFulfillmentJobStore — append-only event history (§11, §12 test 27) > getEvents returns an empty array for a job with no events yet 0ms
+ ✓ src/fulfillment-job-store.test.ts > InMemoryFulfillmentJobStore — append-only event history (§11, §12 test 27) > appendEvents adds to the history without touching prior entries 1ms
+ ✓ src/fulfillment-job-store.test.ts > InMemoryFulfillmentJobStore — append-only event history (§11, §12 test 27) > event order is preserved exactly as appended 0ms
+ ✓ src/fulfillment-job-store.test.ts > InMemoryFulfillmentJobStore — append-only event history (§11, §12 test 27) > the store interface exposes no update or delete method for events 0ms
+ ✓ src/fulfillment-job-store.test.ts > InMemoryFulfillmentJobStore — restart/reload preserves the exact commitment (§10, §12 test 26) > a snapshot round-tripped into a brand-new store instance preserves the job and its full event history byte-for-byte 0ms
+ ✓ src/fulfillment-job-store.test.ts > InMemoryFulfillmentJobStore — restart/reload preserves the exact commitment (§10, §12 test 26) > the frozen commitment and its hash survive the restart round-trip unchanged 0ms
+ ✓ src/fulfillment-job-store.test.ts > InMemoryFulfillmentJobStore — restart/reload preserves the exact commitment (§10, §12 test 26) > mutating the restarted store does not affect the original (independent instances, not shared references) 0ms
+ ✓ src/fulfillment-job-store.test.ts > InMemoryFulfillmentJobStore — listJobs > returns an empty list for a fresh store 0ms
+ ✓ src/fulfillment-job-store.test.ts > InMemoryFulfillmentJobStore — listJobs > returns every saved job, most-recently-updated first 13ms
+
+ Test Files  5 passed (5)
+      Tests  60 passed (60)
+   Start at  14:32:27
+   Duration  114.21s (transform 201ms, setup 0ms, collect 6.25s, tests 106.04s, environment 1ms, prepare 712ms)
+
+EXIT:0
