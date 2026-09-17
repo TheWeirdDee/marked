@@ -78,7 +78,7 @@ Cactus metadata is intentionally never trusted as money-moving authority. It sup
 - Gate 10 — Agent hardening (deterministic agent-plan boundary, visible agent UX): **PASS**
 - Gate 10L — Real free LLM proof (real OpenRouter model exercised live, zero blockchain writes): **PASS**
 - Gate 8 — Historical Governor fulfillment baseline (Compound + Uniswap, reproduced and independently verified): **PASS**
-- Gate 11 — Production persistence + Vercel deployment readiness: **BLOCKED — USER DATABASE SETUP REQUIRED** (PostgreSQL adapter, migrations, driver-selection fail-closed, and a real build-time bug are all complete and proven against SQLite; hosted Postgres itself has not been exercised — see `VERCEL_ENVIRONMENT.md` and `evidence/production-persistence/gate11-result.md`)
+- Gate 11 — Production persistence + Vercel deployment readiness: **PASS** (PostgreSQL adapter, migrations, driver-selection fail-closed, and a real build-time bug fix, proven against SQLite AND against a real hosted Neon database — full mandatory test battery run for real, 60/60 passing — see `VERCEL_ENVIRONMENT.md` and `evidence/production-persistence/{gate11-result,hosted-production-proof}.md`)
 - Gate 12+ onward: not yet completed
 
 See `GATES.md` for the full phased build order and pass conditions, and `CLAIMS.md` for what is currently `PROVEN`, `TARGET`, `BLOCKED`, or `REJECTED`.
