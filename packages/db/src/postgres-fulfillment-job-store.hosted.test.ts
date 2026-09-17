@@ -6,6 +6,7 @@ import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import postgres from "postgres";
 import type { ArmEvent, FulfillmentCommitment, FulfillmentJob } from "@marked/core";
 import { PostgresFulfillmentJobStore } from "./postgres-fulfillment-job-store";
+import { checkDestructiveDbTestGuard } from "./live-postgres-test-guard";
 
 /**
  * Gate 11 §18-B/§18-C/§18-D/§18-E, run for real against the hosted
@@ -15,11 +16,13 @@ import { PostgresFulfillmentJobStore } from "./postgres-fulfillment-job-store";
  * of merely inferred from the shared contract suite passing.
  *
  * Same skip discipline as postgres-fulfillment-job-store.contract.test.ts:
- * no DATABASE_URL (or an unreachable one) means every test here is
- * explicitly `it.skip`, never silently passed.
+ * no DATABASE_URL, or the Gate 12 destructive-test guard refusing it (see
+ * live-postgres-test-guard.ts), means every test here is explicitly
+ * `it.skip`, never silently passed.
  */
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const DATABASE_URL = process.env["DATABASE_URL"];
+const dbGuard = checkDestructiveDbTestGuard();
+const DATABASE_URL = dbGuard.databaseUrl;
 const LIVE_TEST_TIMEOUT_MS = 20_000;
 
 const COMMITMENT: FulfillmentCommitment = {
@@ -80,7 +83,7 @@ async function probeAndMigrate(url: string): Promise<{ ok: true } | { ok: false;
   }
 }
 
-const probe = DATABASE_URL ? await probeAndMigrate(DATABASE_URL) : ({ ok: false, reason: "DATABASE_URL is not set" } as const);
+const probe = DATABASE_URL ? await probeAndMigrate(DATABASE_URL) : ({ ok: false, reason: dbGuard.reason } as const);
 
 if (probe.ok && DATABASE_URL) {
   const url = DATABASE_URL;

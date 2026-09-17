@@ -5,6 +5,7 @@ import { afterAll, describe, it } from "vitest";
 import postgres from "postgres";
 import { PostgresFulfillmentJobStore } from "./postgres-fulfillment-job-store";
 import { runFulfillmentJobStoreContractTests } from "./fulfillment-job-store.contract";
+import { checkDestructiveDbTestGuard } from "./live-postgres-test-guard";
 
 /**
  * Gate 11 §18-A/§19 — proves PostgresFulfillmentJobStore against the exact
@@ -12,17 +13,18 @@ import { runFulfillmentJobStoreContractTests } from "./fulfillment-job-store.con
  * runs against SqliteFulfillmentJobStore.
  *
  * This file does NOT invent, mock, or fake a Postgres connection. It reads
- * `DATABASE_URL` from the environment; if unset, or set but unreachable
- * (no local/hosted Postgres is configured in this environment as of this
- * gate — see evidence/production-persistence/current-storage-audit.md and
- * gate11-result.md), every test in this file is explicitly marked SKIPPED
- * with the reason, never silently passed and never silently deleted. A
- * skipped test run is not a passing proof of hosted persistence — see
- * VERCEL_ENVIRONMENT.md and DECISIONS.md for what is required to actually
- * exercise this suite.
+ * `DATABASE_URL` from the environment; if unset, or set but the Gate 12
+ * destructive-test guard refuses it (see live-postgres-test-guard.ts —
+ * requires the explicit MARKED_ALLOW_DESTRUCTIVE_DB_TESTS=true opt-in, not
+ * merely a reachable DATABASE_URL), every test in this file is explicitly
+ * marked SKIPPED with the reason, never silently passed and never silently
+ * deleted. A skipped test run is not a passing proof of hosted persistence
+ * — see VERCEL_ENVIRONMENT.md and DECISIONS.md for what is required to
+ * actually exercise this suite.
  */
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const DATABASE_URL = process.env["DATABASE_URL"];
+const dbGuard = checkDestructiveDbTestGuard();
+const DATABASE_URL = dbGuard.databaseUrl;
 
 /**
  * Real hosted Postgres round trips run 3-4s each (Neon, network-bound —
@@ -52,7 +54,7 @@ async function probeAndMigrate(url: string): Promise<{ ok: true } | { ok: false;
   }
 }
 
-const probe = DATABASE_URL ? await probeAndMigrate(DATABASE_URL) : ({ ok: false, reason: "DATABASE_URL is not set" } as const);
+const probe = DATABASE_URL ? await probeAndMigrate(DATABASE_URL) : ({ ok: false, reason: dbGuard.reason } as const);
 
 if (probe.ok && DATABASE_URL) {
   // A dedicated connection just for wiping the shared tables between tests
