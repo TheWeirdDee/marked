@@ -12,6 +12,18 @@ export {
   InMemoryFulfillmentJobStore,
   type FulfillmentJobStore,
   type FulfillmentJobStoreSnapshot,
+  type CasSaveResult,
+  type ExecutionClaim,
+  type ExecutionClaimResult,
 } from "./fulfillment-job-store";
 
 export { SqliteFulfillmentJobStore } from "./sqlite-fulfillment-job-store";
+export { PostgresFulfillmentJobStore } from "./postgres-fulfillment-job-store";
+export {
+  PersistenceError,
+  PersistenceUnavailableError,
+  PersistenceConflictError,
+  PersistenceTransactionFailedError,
+  PersistenceConfigurationError,
+  type PersistenceErrorCode,
+} from "./errors";
