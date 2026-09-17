@@ -14,6 +14,9 @@ import { isAgentAvailable } from "@/lib/agent/provider";
 
 export const metadata = { title: "Verified fulfillment" };
 
+/** Gate 11 §21 — id !== "gate6" reads the job store; never attempt a build-time static render for this route. See apps/web/src/app/app/page.tsx's doc comment for why. */
+export const dynamic = "force-dynamic";
+
 /**
  * Gate 9R Part 38 — the public, read-only, shareable receipt page. `id ===
  * "gate6"` serves the one canonical proof this submission has (real Gate

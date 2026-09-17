@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
-import { SqliteFulfillmentJobStore } from "@marked/db";
+import { SqliteFulfillmentJobStore, PostgresFulfillmentJobStore, PersistenceConfigurationError, type FulfillmentJobStore } from "@marked/db";
 import type { FulfillmentCommitment, FulfillmentJob } from "@marked/core";
 import { createReviewReadyJob } from "@marked/core";
 import { loadLane2Gate5 } from "./evidence";
@@ -12,24 +12,55 @@ import { loadLane2Gate5 } from "./evidence";
  * freshly-resolved real governance proposal and the Gate 5 recovery-sandbox
  * fixture are both ordinary rows in the same table, not two parallel
  * systems.
+ *
+ * Gate 11 — explicit storage-driver selection via `MARKED_STORAGE_DRIVER`
+ * ("sqlite" | "postgres", defaulting to "sqlite" — every environment this
+ * app ran in before this gate used SQLite, so that remains the unconfigured
+ * default). This function returns the `FulfillmentJobStore` abstraction,
+ * never a concrete class — business logic must not know which database is
+ * underneath it (Gate 11 §3). `postgres` selected without `DATABASE_URL`
+ * set throws `PersistenceConfigurationError` rather than silently falling
+ * back to ephemeral SQLite (Gate 11 §9 — this is load-bearing on Vercel,
+ * where SQLite cannot serve as durable storage at all; see
+ * VERCEL_ENVIRONMENT.md).
  */
 const DATA_DIR = join(process.cwd(), ".data");
 const DB_PATH = join(DATA_DIR, "marked.sqlite");
 
-let storeSingleton: SqliteFulfillmentJobStore | null = null;
+let storeSingleton: FulfillmentJobStore | null = null;
 
-export function getAppStore(): SqliteFulfillmentJobStore {
+function buildStore(): FulfillmentJobStore {
+  const driver = process.env["MARKED_STORAGE_DRIVER"] ?? "sqlite";
+
+  if (driver === "postgres") {
+    const databaseUrl = process.env["DATABASE_URL"];
+    if (!databaseUrl) {
+      throw new PersistenceConfigurationError(
+        'MARKED_STORAGE_DRIVER=postgres but DATABASE_URL is not set. Refusing to silently fall back to SQLite — set DATABASE_URL, or unset MARKED_STORAGE_DRIVER to use local SQLite. See VERCEL_ENVIRONMENT.md.',
+      );
+    }
+    return new PostgresFulfillmentJobStore(databaseUrl);
+  }
+
+  if (driver !== "sqlite") {
+    throw new PersistenceConfigurationError(`MARKED_STORAGE_DRIVER must be "sqlite" or "postgres" (or unset) — got "${driver}".`);
+  }
+
+  if (!existsSync(DATA_DIR)) mkdirSync(DATA_DIR, { recursive: true });
+  return new SqliteFulfillmentJobStore(DB_PATH);
+}
+
+export function getAppStore(): FulfillmentJobStore {
   if (!storeSingleton) {
-    if (!existsSync(DATA_DIR)) mkdirSync(DATA_DIR, { recursive: true });
-    storeSingleton = new SqliteFulfillmentJobStore(DB_PATH);
+    storeSingleton = buildStore();
   }
   return storeSingleton;
 }
 
 /** Test-only: closes and forgets the module-level singleton so the next `getAppStore()` call opens a fresh connection — needed because each test wants an isolated, freshly-deleted `.data` directory. */
-export function resetAppStoreForTests(): void {
+export async function resetAppStoreForTests(): Promise<void> {
   try {
-    storeSingleton?.close();
+    await storeSingleton?.close();
   } catch {
     // already closed
   }
@@ -65,7 +96,7 @@ function buildSandboxSeedCommitment(): FulfillmentCommitment {
 }
 
 /** Idempotent — creates the sandbox job at REVIEW_READY exactly once (in whichever store is passed); returns the existing job on every later call. */
-export async function ensureSandboxSeedJob(store: SqliteFulfillmentJobStore): Promise<FulfillmentJob> {
+export async function ensureSandboxSeedJob(store: FulfillmentJobStore): Promise<FulfillmentJob> {
   const existing = await store.get(RECOVERY_SANDBOX_JOB_ID);
   if (existing) return existing;
   const job = createReviewReadyJob({
@@ -93,7 +124,7 @@ export function jobIdForCoordinate(chainId: number, governor: string, proposalId
  * REVIEW_READY.
  */
 export async function ensureReviewReadyJob(
-  store: SqliteFulfillmentJobStore,
+  store: FulfillmentJobStore,
   params: { jobId: string; commitment: FulfillmentCommitment },
 ): Promise<FulfillmentJob> {
   const existing = await store.get(params.jobId);

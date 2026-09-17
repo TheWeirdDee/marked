@@ -7,8 +7,8 @@ import { getAppStore, resetAppStoreForTests, ensureSandboxSeedJob, RECOVERY_SAND
 const DATA_DIR = join(process.cwd(), ".data");
 const EVIDENCE_ROOT = join(process.cwd(), "..", "..", "evidence");
 
-afterEach(() => {
-  resetAppStoreForTests();
+afterEach(async () => {
+  await resetAppStoreForTests();
   try {
     if (existsSync(DATA_DIR)) rmSync(DATA_DIR, { recursive: true, force: true });
   } catch {

@@ -24,9 +24,9 @@ describe("fulfillment-actions auth boundary", () => {
     process.env["MARKED_DEMO_SESSION_TOKEN"] = REAL_TOKEN;
   });
 
-  afterEach(() => {
+  afterEach(async () => {
     try {
-      store.close();
+      await store.close();
     } catch {
       // already closed by a test that reopens its own handle on the same file
     }
@@ -101,14 +101,14 @@ describe("fulfillment-actions auth boundary", () => {
 
   it("full authenticated ARM -> DISARM cycle persists across a fresh store instance pointed at the same file", async () => {
     await armDemoJob(store, { providedToken: REAL_TOKEN, actorId: "judge-alice" });
-    store.close();
+    await store.close();
 
     const reopened = new SqliteFulfillmentJobStore(join(dir, "test.sqlite"));
     const { job, events } = await getDemoJobState(reopened);
     expect(job.status).toBe("ARMED");
     expect(events).toHaveLength(1);
     expect(events[0]?.actor).toBe("judge-alice");
-    reopened.close();
+    await reopened.close();
 
     // afterEach will still call store.close() on the already-closed original handle; SqliteFulfillmentJobStore.close() is idempotent-safe for this test's purposes since we only assert via `reopened` above.
   });

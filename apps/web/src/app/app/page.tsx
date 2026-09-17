@@ -7,6 +7,18 @@ import { LinkButton } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 
 export const metadata = { title: "Fulfillments" };
+/**
+ * Gate 11 §21 — this fixed-path page reads the job store unconditionally at
+ * render time. Without `force-dynamic`, Next's build process attempts a
+ * static-render pass over every fixed-path route to classify it, which was
+ * empirically found to execute this component and open a real database
+ * connection (creating apps/web/.data/marked.sqlite as a build side effect
+ * on SQLite, or attempting a live Postgres connection during `next build`
+ * on Postgres — exactly the "database call during module import" build
+ * side effect Gate 11 §21 forbids). `force-dynamic` skips that attempt
+ * entirely; persistence is only ever touched at real request time.
+ */
+export const dynamic = "force-dynamic";
 
 export default async function AppDashboard() {
   const store = getAppStore();

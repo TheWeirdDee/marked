@@ -7,7 +7,7 @@ import {
   type FulfillmentJob,
   type FulfillmentJobEvent,
 } from "@marked/core";
-import type { SqliteFulfillmentJobStore } from "@marked/db";
+import type { FulfillmentJobStore } from "@marked/db";
 import { RECOVERY_SANDBOX_JOB_ID, ensureSandboxSeedJob, getSandboxSeedCommitment } from "./job-store";
 import { refreshAuthorizationHash } from "./governance";
 
@@ -20,7 +20,9 @@ import { refreshAuthorizationHash } from "./governance";
  *   2. re-verifies live Governor authorization immediately before arming
  *      (never trusts the commitment's own frozen hash as "current"),
  *   3. calls the unmodified Gate 4 domain function,
- *   4. persists the returned job and appends the returned event.
+ *   4. persists the returned job and its event atomically (Gate 11 —
+ *      `saveJobAndEvents`, one transaction, never a state change with a
+ *      failed event append or vice versa).
  */
 
 export type AuthParams = { providedToken: string | null | undefined; actorId: string | null | undefined };
@@ -40,13 +42,13 @@ export class JobNotFoundError extends Error {
   }
 }
 
-async function getJobOrThrow(store: SqliteFulfillmentJobStore, jobId: string): Promise<FulfillmentJob> {
+async function getJobOrThrow(store: FulfillmentJobStore, jobId: string): Promise<FulfillmentJob> {
   const job = await store.get(jobId);
   if (!job) throw new JobNotFoundError(jobId);
   return job;
 }
 
-export async function armJob(store: SqliteFulfillmentJobStore, jobId: string, auth: AuthParams): Promise<{ job: FulfillmentJob; event: FulfillmentJobEvent }> {
+export async function armJob(store: FulfillmentJobStore, jobId: string, auth: AuthParams): Promise<{ job: FulfillmentJob; event: FulfillmentJobEvent }> {
   const actor = authenticate(auth);
   const job = await getJobOrThrow(store, jobId);
 
@@ -68,13 +70,12 @@ export async function armJob(store: SqliteFulfillmentJobStore, jobId: string, au
     now: new Date().toISOString(),
   });
 
-  await store.save(nextJob);
-  await store.appendEvents(jobId, [event]);
+  await store.saveJobAndEvents(nextJob, [event]);
   return { job: nextJob, event };
 }
 
 export async function disarmJob(
-  store: SqliteFulfillmentJobStore,
+  store: FulfillmentJobStore,
   jobId: string,
   auth: AuthParams,
   reason?: string | null,
@@ -89,12 +90,11 @@ export async function disarmJob(
     now: new Date().toISOString(),
   });
 
-  await store.save(nextJob);
-  await store.appendEvents(jobId, [event]);
+  await store.saveJobAndEvents(nextJob, [event]);
   return { job: nextJob, event };
 }
 
-export async function approveJob(store: SqliteFulfillmentJobStore, jobId: string, auth: AuthParams): Promise<{ job: FulfillmentJob; event: FulfillmentJobEvent }> {
+export async function approveJob(store: FulfillmentJobStore, jobId: string, auth: AuthParams): Promise<{ job: FulfillmentJob; event: FulfillmentJobEvent }> {
   const actor = authenticate(auth);
   const job = await getJobOrThrow(store, jobId);
 
@@ -105,12 +105,11 @@ export async function approveJob(store: SqliteFulfillmentJobStore, jobId: string
     now: new Date().toISOString(),
   });
 
-  await store.save(nextJob);
-  await store.appendEvents(jobId, [event]);
+  await store.saveJobAndEvents(nextJob, [event]);
   return { job: nextJob, event };
 }
 
-export async function getJobState(store: SqliteFulfillmentJobStore, jobId: string): Promise<{ job: FulfillmentJob; events: readonly FulfillmentJobEvent[] } | null> {
+export async function getJobState(store: FulfillmentJobStore, jobId: string): Promise<{ job: FulfillmentJob; events: readonly FulfillmentJobEvent[] } | null> {
   const job = await store.get(jobId);
   if (!job) return null;
   const events = await store.getEvents(jobId);
@@ -119,7 +118,7 @@ export async function getJobState(store: SqliteFulfillmentJobStore, jobId: strin
 
 // --- Backward-compatible sandbox convenience wrappers (Gate 7's original surface) ---
 
-export async function armDemoJob(store: SqliteFulfillmentJobStore, auth: AuthParams) {
+export async function armDemoJob(store: FulfillmentJobStore, auth: AuthParams) {
   const actor = authenticate(auth);
   const job = await ensureSandboxSeedJob(store);
   const commitment = getSandboxSeedCommitment();
@@ -131,22 +130,21 @@ export async function armDemoJob(store: SqliteFulfillmentJobStore, auth: AuthPar
     actor: actor.actorId,
     now: new Date().toISOString(),
   });
-  await store.save(nextJob);
-  await store.appendEvents(RECOVERY_SANDBOX_JOB_ID, [event]);
+  await store.saveJobAndEvents(nextJob, [event]);
   return { job: nextJob, event };
 }
 
-export async function disarmDemoJob(store: SqliteFulfillmentJobStore, auth: AuthParams, reason?: string | null) {
+export async function disarmDemoJob(store: FulfillmentJobStore, auth: AuthParams, reason?: string | null) {
   await ensureSandboxSeedJob(store);
   return disarmJob(store, RECOVERY_SANDBOX_JOB_ID, auth, reason);
 }
 
-export async function approveDemoJob(store: SqliteFulfillmentJobStore, auth: AuthParams) {
+export async function approveDemoJob(store: FulfillmentJobStore, auth: AuthParams) {
   await ensureSandboxSeedJob(store);
   return approveJob(store, RECOVERY_SANDBOX_JOB_ID, auth);
 }
 
-export async function getDemoJobState(store: SqliteFulfillmentJobStore): Promise<{ job: FulfillmentJob; events: readonly FulfillmentJobEvent[] }> {
+export async function getDemoJobState(store: FulfillmentJobStore): Promise<{ job: FulfillmentJob; events: readonly FulfillmentJobEvent[] }> {
   const job = await ensureSandboxSeedJob(store);
   const events = await store.getEvents(RECOVERY_SANDBOX_JOB_ID);
   return { job, events };

@@ -12,6 +12,9 @@ import { isAgentAvailable } from "@/lib/agent/provider";
 
 const DISARMABLE = new Set(["ARMED", "WAITING_ELIGIBILITY", "ELIGIBLE", "AWAITING_APPROVAL"]);
 
+/** Gate 11 §21 — never attempt a build-time static render for this DB-backed route; see apps/web/src/app/app/page.tsx's doc comment for why. */
+export const dynamic = "force-dynamic";
+
 export default async function FulfillmentDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const store = getAppStore();

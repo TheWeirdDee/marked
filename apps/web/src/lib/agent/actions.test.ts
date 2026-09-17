@@ -77,12 +77,12 @@ describe("agent actions — available (provider configured, fetch mocked — no 
     vi.stubGlobal("fetch", fetchSpy);
   });
 
-  afterEach(() => {
+  afterEach(async () => {
     if (originalKey === undefined) delete process.env["ANTHROPIC_API_KEY"];
     else process.env["ANTHROPIC_API_KEY"] = originalKey;
     vi.unstubAllGlobals();
     try {
-      resetAppStoreForTests();
+      await resetAppStoreForTests();
     } catch {
       // ignore
     }
