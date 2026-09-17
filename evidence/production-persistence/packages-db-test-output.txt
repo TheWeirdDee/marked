@@ -1,0 +1,55 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90mC:/Users/DELL/Desktop/marked/packages/db[39m
+
+(node:16108) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:13240) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m src/fulfillment-job-store.test.ts[2m > [22mInMemoryFulfillmentJobStore — basic save/get[2m > [22mreturns null for a job that was never saved[32m 5[2mms[22m[39m
+ [32m✓[39m src/fulfillment-job-store.test.ts[2m > [22mInMemoryFulfillmentJobStore — basic save/get[2m > [22mround-trips a saved job exactly[32m 2[2mms[22m[39m
+ [32m✓[39m src/fulfillment-job-store.test.ts[2m > [22mInMemoryFulfillmentJobStore — basic save/get[2m > [22msave with a new status overwrites the job record (not the events)[32m 1[2mms[22m[39m
+ [32m✓[39m src/fulfillment-job-store.test.ts[2m > [22mInMemoryFulfillmentJobStore — append-only event history (§11, §12 test 27)[2m > [22mgetEvents returns an empty array for a job with no events yet[32m 1[2mms[22m[39m
+ [32m✓[39m src/fulfillment-job-store.test.ts[2m > [22mInMemoryFulfillmentJobStore — append-only event history (§11, §12 test 27)[2m > [22mappendEvents adds to the history without touching prior entries[32m 3[2mms[22m[39m
+ [32m✓[39m src/fulfillment-job-store.test.ts[2m > [22mInMemoryFulfillmentJobStore — append-only event history (§11, §12 test 27)[2m > [22mevent order is preserved exactly as appended[32m 1[2mms[22m[39m
+ [32m✓[39m src/fulfillment-job-store.test.ts[2m > [22mInMemoryFulfillmentJobStore — append-only event history (§11, §12 test 27)[2m > [22mthe store interface exposes no update or delete method for events[32m 1[2mms[22m[39m
+ [32m✓[39m src/fulfillment-job-store.test.ts[2m > [22mInMemoryFulfillmentJobStore — restart/reload preserves the exact commitment (§10, §12 test 26)[2m > [22ma snapshot round-tripped into a brand-new store instance preserves the job and its full event history byte-for-byte[32m 1[2mms[22m[39m
+ [32m✓[39m src/fulfillment-job-store.test.ts[2m > [22mInMemoryFulfillmentJobStore — restart/reload preserves the exact commitment (§10, §12 test 26)[2m > [22mthe frozen commitment and its hash survive the restart round-trip unchanged[32m 1[2mms[22m[39m
+ [32m✓[39m src/fulfillment-job-store.test.ts[2m > [22mInMemoryFulfillmentJobStore — restart/reload preserves the exact commitment (§10, §12 test 26)[2m > [22mmutating the restarted store does not affect the original (independent instances, not shared references)[32m 1[2mms[22m[39m
+ [32m✓[39m src/fulfillment-job-store.test.ts[2m > [22mInMemoryFulfillmentJobStore — listJobs[2m > [22mreturns an empty list for a fresh store[32m 0[2mms[22m[39m
+ [32m✓[39m src/fulfillment-job-store.test.ts[2m > [22mInMemoryFulfillmentJobStore — listJobs[2m > [22mreturns every saved job, most-recently-updated first[32m 33[2mms[22m[39m
+ [2m[90m↓[39m[22m src/postgres-fulfillment-job-store.contract.test.ts[2m > [22mFulfillmentJobStore contract — PostgresFulfillmentJobStore[2m > [22mSKIPPED — no reachable/migratable Postgres in this environment (DATABASE_URL is not set). This is NOT a passing proof of hosted persistence — see evidence/production-persistence/gate11-result.md and VERCEL_ENVIRONMENT.md for exactly what DATABASE_URL value is required to run this suite for real.
+ [32m✓[39m src/sqlite-fulfillment-job-store.contract.test.ts[2m > [22mFulfillmentJobStore contract — SqliteFulfillmentJobStore[2m > [22mreturns null for a job that was never saved[32m 228[2mms[22m[39m
+ [32m✓[39m src/sqlite-fulfillment-job-store.contract.test.ts[2m > [22mFulfillmentJobStore contract — SqliteFulfillmentJobStore[2m > [22mround-trips a saved job exactly[32m 108[2mms[22m[39m
+ [32m✓[39m src/sqlite-fulfillment-job-store.test.ts[2m > [22mSqliteFulfillmentJobStore — basic save/get (real file-backed database)[2m > [22mround-trips a saved job[32m 296[2mms[22m[39m
+ [32m✓[39m src/sqlite-fulfillment-job-store.test.ts[2m > [22mSqliteFulfillmentJobStore — basic save/get (real file-backed database)[2m > [22mreturns null for a job that was never saved[32m 88[2mms[22m[39m
+ [32m✓[39m src/sqlite-fulfillment-job-store.contract.test.ts[2m > [22mFulfillmentJobStore contract — SqliteFulfillmentJobStore[2m > [22msave overwrites an existing job (upsert)[32m 206[2mms[22m[39m
+ [32m✓[39m src/sqlite-fulfillment-job-store.test.ts[2m > [22mSqliteFulfillmentJobStore — basic save/get (real file-backed database)[2m > [22msave overwrites an existing job (upsert)[32m 192[2mms[22m[39m
+ [32m✓[39m src/sqlite-fulfillment-job-store.contract.test.ts[2m > [22mFulfillmentJobStore contract — SqliteFulfillmentJobStore[2m > [22mappendEvents preserves order across multiple calls, and getEvents returns [] for a job with none[32m 218[2mms[22m[39m
+ [32m✓[39m src/sqlite-fulfillment-job-store.test.ts[2m > [22mSqliteFulfillmentJobStore — restart survival (Gate 7 instructions §A/§B, §26 tests 1-2)[2m > [22ma job persisted in one process instance is readable from a brand-new instance pointed at the same file (simulated restart)[32m 211[2mms[22m[39m
+ [32m✓[39m src/sqlite-fulfillment-job-store.contract.test.ts[2m > [22mFulfillmentJobStore contract — SqliteFulfillmentJobStore[2m > [22mlistJobs returns every saved job, most-recently-updated first[32m 205[2mms[22m[39m
+ [32m✓[39m src/sqlite-fulfillment-job-store.contract.test.ts[2m > [22mFulfillmentJobStore contract — SqliteFulfillmentJobStore[2m > [22msaveJobAndEvents persists both halves atomically[32m 168[2mms[22m[39m
+ [32m✓[39m src/sqlite-fulfillment-job-store.test.ts[2m > [22mSqliteFulfillmentJobStore — restart survival (Gate 7 instructions §A/§B, §26 tests 1-2)[2m > [22man execution claim persisted before a crash is still visible after restart (execution identity survives reload, §26 test 2)[32m 162[2mms[22m[39m
+ [32m✓[39m src/sqlite-fulfillment-job-store.contract.test.ts[2m > [22mFulfillmentJobStore contract — SqliteFulfillmentJobStore[2m > [22msaveWithCas succeeds when expectedCurrentStatus matches, refuses without writing when it doesn't[32m 260[2mms[22m[39m
+ [32m✓[39m src/sqlite-fulfillment-job-store.test.ts[2m > [22mSqliteFulfillmentJobStore — append-only event history[2m > [22mevent order is preserved exactly as appended, across multiple appendEvents calls[33m 364[2mms[22m[39m
+ [32m✓[39m src/sqlite-fulfillment-job-store.contract.test.ts[2m > [22mFulfillmentJobStore contract — SqliteFulfillmentJobStore[2m > [22mtryClaimExecution: first caller claims, second caller for the same hash is refused and told who holds it[32m 107[2mms[22m[39m
+ [32m✓[39m src/sqlite-fulfillment-job-store.test.ts[2m > [22mSqliteFulfillmentJobStore — append-only event history[2m > [22mexposes no update/delete method for events[32m 153[2mms[22m[39m
+ [32m✓[39m src/sqlite-fulfillment-job-store.test.ts[2m > [22mSqliteFulfillmentJobStore.tryClaimExecution — duplicate-worker protection via real compare-and-set (Gate 7 instructions §I, §26 test 10)[2m > [22mthe first worker to claim a request hash succeeds[32m 83[2mms[22m[39m
+ [32m✓[39m src/sqlite-fulfillment-job-store.contract.test.ts[2m > [22mFulfillmentJobStore contract — SqliteFulfillmentJobStore[2m > [22mgetExecutionClaim reads back a claim by request hash[32m 96[2mms[22m[39m
+ [32m✓[39m src/sqlite-fulfillment-job-store.contract.test.ts[2m > [22mFulfillmentJobStore contract — SqliteFulfillmentJobStore[2m > [22mgetExecutionClaim returns null for an unclaimed hash[33m 1471[2mms[22m[39m
+ [32m✓[39m src/sqlite-fulfillment-job-store.test.ts[2m > [22mSqliteFulfillmentJobStore.tryClaimExecution — duplicate-worker protection via real compare-and-set (Gate 7 instructions §I, §26 test 10)[2m > [22ma second worker claiming the SAME request hash is refused, and told who already claimed it[32m 119[2mms[22m[39m
+ [32m✓[39m src/sqlite-fulfillment-job-store.test.ts[2m > [22mSqliteFulfillmentJobStore.tryClaimExecution — duplicate-worker protection via real compare-and-set (Gate 7 instructions §I, §26 test 10)[2m > [22mtwo DIFFERENT request hashes (e.g. different jobs) do not collide[33m 3170[2mms[22m[39m
+ [32m✓[39m src/sqlite-fulfillment-job-store.test.ts[2m > [22mSqliteFulfillmentJobStore.tryClaimExecution — duplicate-worker protection via real compare-and-set (Gate 7 instructions §I, §26 test 10)[2m > [22msimulates two concurrent workers racing for the same job: only one logical execution proceeds[33m 2299[2mms[22m[39m
+ [32m✓[39m src/sqlite-fulfillment-job-store.test.ts[2m > [22mSqliteFulfillmentJobStore.saveJobAndEvents — atomic job+event write (Gate 11 §7)[2m > [22mpersists both the job and its events together[32m 184[2mms[22m[39m
+ [32m✓[39m src/sqlite-fulfillment-job-store.test.ts[2m > [22mSqliteFulfillmentJobStore.saveJobAndEvents — atomic job+event write (Gate 11 §7)[2m > [22msurvives a restart with both halves intact[32m 171[2mms[22m[39m
+ [32m✓[39m src/sqlite-fulfillment-job-store.test.ts[2m > [22mSqliteFulfillmentJobStore.saveWithCas — job-level compare-and-set (Gate 11 §6)[2m > [22msucceeds when expectedCurrentStatus matches the real current status[32m 233[2mms[22m[39m
+ [32m✓[39m src/sqlite-fulfillment-job-store.test.ts[2m > [22mSqliteFulfillmentJobStore.saveWithCas — job-level compare-and-set (Gate 11 §6)[2m > [22msucceeds when expectedCurrentStatus is null and the job does not exist yet[32m 145[2mms[22m[39m
+ [32m✓[39m src/sqlite-fulfillment-job-store.test.ts[2m > [22mSqliteFulfillmentJobStore.saveWithCas — job-level compare-and-set (Gate 11 §6)[2m > [22mrefuses (without writing) when the real current status does not match expectedCurrentStatus[32m 105[2mms[22m[39m
+ [32m✓[39m src/sqlite-fulfillment-job-store.test.ts[2m > [22mSqliteFulfillmentJobStore.saveWithCas — job-level compare-and-set (Gate 11 §6)[2m > [22mtwo concurrent CAS attempts against the same expected status: exactly one succeeds[32m 123[2mms[22m[39m
+ [32m✓[39m src/sqlite-fulfillment-job-store.test.ts[2m > [22mSqliteFulfillmentJobStore — listJobs[2m > [22mreturns an empty list for a fresh database[32m 93[2mms[22m[39m
+ [32m✓[39m src/sqlite-fulfillment-job-store.test.ts[2m > [22mSqliteFulfillmentJobStore — listJobs[2m > [22mreturns every saved job, most-recently-updated first, surviving a restart[32m 157[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (4)[39m
+[2m      Tests [22m [1m[32m41 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (42)[39m
+[2m   Start at [22m 13:22:30
+[2m   Duration [22m 10.10s[2m (transform 1.16s, setup 0ms, collect 1.50s, tests 11.48s, environment 1ms, prepare 2.35s)[22m
+

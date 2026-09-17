@@ -226,7 +226,25 @@ EVIDENCE REQUIRED: Provider/model recorded, four live-proof artifacts distinguis
 
 ---
 
-## Gate 11 — Optional published benchmark
+## Gate 11 — Production persistence + Vercel deployment readiness
+
+**Note on renumbering (2026-09-17):** The PRD's original Gate 11 slot ("Optional published benchmark," never started) is renumbered below to "Gate 11 — Optional published benchmark (deferred)" to make room for this explicitly user-directed "GATE 11: PRODUCTION PERSISTENCE + VERCEL DEPLOYMENT READINESS" — the same kind of deliberate, explicitly-authorized reordering already used for Gate 7/9 and Gate 8. The optional benchmark work remains available to run later under its own name; nothing here invalidates it.
+
+STATUS: **BLOCKED — USER DATABASE SETUP REQUIRED** (for the hosted-Postgres-exercised claim only; every other requirement met — see `evidence/production-persistence/gate11-result.md`)
+
+OBJECTIVE: Replace the deployment-time dependency on ephemeral local SQLite with durable production persistence (PostgreSQL), retain SQLite for local development/tests, preserve `FulfillmentJobStore`'s existing semantics and fail-closed behavior, make Vercel deployment honest and operational, and audit the exact production environment variables — without redesigning Marked, creating new blockchain functionality, or reopening completed proof gates.
+
+PASS CONDITION: A production-compatible PostgreSQL persistence adapter exists, satisfies the exact same `FulfillmentJobStore` interface as `SqliteFulfillmentJobStore`, never silently falls back to SQLite when misconfigured, and its atomic/restart/rollback properties are proven against a real database engine — plus the full existing regression suite passes with zero new blockchain writes. Met for everything except "proven against a real Postgres server": no local, containerized, or hosted Postgres was reachable in this environment (no Docker, no local `psql`, and the repository's own `.env.local` `DATABASE_URL` is still the unedited example placeholder — verified by reading the file, not assumed). `PostgresFulfillmentJobStore` (`packages/db/src/postgres-fulfillment-job-store.ts`) is complete, typechecked, and structurally proven identical to the SQLite implementation via a shared contract test suite (`packages/db/src/fulfillment-job-store.contract.ts`) — but its own test file (`postgres-fulfillment-job-store.contract.test.ts`) is honestly SKIPPED, not passing, because there is nothing to connect to. Every property that *can* be proven without a live Postgres connection — the exact same atomicity/restart/rollback battery run for real against SQLite (a real database engine, not a mock) — genuinely passes: `evidence/production-persistence/{atomicity,restart-proof,rollback-proof}.md`.
+
+A real bug was found and fixed as part of meeting this gate's "Vercel build passes" requirement: `pnpm build` was empirically shown to open a real database connection as a side effect of Next.js's build-time static/dynamic classification pass (traced to `apps/web/src/app/app/page.tsx` calling `getAppStore()` unconditionally at render time). Fixed with `export const dynamic = "force-dynamic"` on the three job-store-backed pages; re-tested and confirmed a clean build no longer touches persistence at all. See `evidence/production-persistence/architecture.md`.
+
+KILL / BLOCK CONDITION: Silent fallback from Postgres to SQLite on misconfiguration, a fabricated or mocked hosted-database proof, business logic depending on a concrete store class instead of `FulfillmentJobStore`, a destructive migration, or any new blockchain write. Not triggered — `buildStore()` (`apps/web/src/lib/job-store.ts`) throws `PersistenceConfigurationError` rather than falling back; `fulfillment-actions.ts`/`job-store.ts` are retyped to the interface; `packages/db/migrations/0001_init.sql` contains only `CREATE TABLE IF NOT EXISTS`/`CREATE INDEX IF NOT EXISTS` statements, never a `DROP`; zero `sendTransaction`/signer/private-key usage anywhere in this gate's changes. The hosted-persistence gap is reported as BLOCKED, not silently downgraded to a passing claim.
+
+EVIDENCE REQUIRED: `evidence/production-persistence/{current-storage-audit,architecture,schema,atomicity,restart-proof,rollback-proof,environment-audit,security-scan,gate11-result}.md`, `evidence/production-persistence/packages-db-test-output.txt`, updated `VERCEL_ENVIRONMENT.md`, `packages/db/migrations/0001_init.sql`, `pnpm db:migrate`. Present — all listed files exist and are accurate as of this entry.
+
+---
+
+## Gate 11 — Optional published benchmark (deferred)
 
 STATUS: NOT_STARTED (optional)
 
@@ -273,7 +291,7 @@ EVIDENCE REQUIRED: Final README, submission form contents, video link.
 | Gate | Status |
 |---|---|
 | 0 — Contract | **PASS** |
-| 1A — Cactus seam | **PASS** (via SSR fallback; official API BLOCKED_CACTUS_CREDENTIAL) |
+| 1A — Cactus seam | **PASS** (resolves real live public Cactus proposal pages; official authenticated GraphQL API proven but unused by default, no credential in this environment) |
 | 1B — KeeperHub seam | **PASS** (Option B only; Option A untested) |
 | 1C — Claim mode | **PASS** (Mode C / Pass B) |
 | 2 — Canonical engine | **PASS** |
@@ -287,7 +305,8 @@ EVIDENCE REQUIRED: Final README, submission form contents, video link.
 | 9R — Productization repair | **PASS** |
 | 10 — Agent hardening | **PASS** (deterministic boundary; live-call claim superseded by 10L) |
 | 10L — Real free LLM proof | **PASS** |
-| 11 — Optional published benchmark | NOT_STARTED |
+| 11 — Production persistence + Vercel deployment readiness | **BLOCKED — USER DATABASE SETUP REQUIRED** (SQLite/abstraction/migrations/env-audit/build-fix all PASS; hosted Postgres not yet exercised) |
+| 11 — Optional published benchmark (deferred) | NOT_STARTED |
 | 12 — Optional safe mainnet write | NOT_STARTED |
 | 13 — Submission freeze | NOT_STARTED |
 
