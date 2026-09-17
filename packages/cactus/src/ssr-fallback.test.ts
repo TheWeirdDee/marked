@@ -169,3 +169,70 @@ describe("resolveViaSsrFallback", () => {
     }
   });
 });
+
+/**
+ * Gate 12 CACTUS-LIVE-001 — sanitized fixtures reproducing the exact shape
+ * of two real Cactus pages this gate's live investigation fetched (ENS and
+ * Optimism), captured as structural fixtures (field shapes and values, not
+ * raw HTML) so this parser is exercised the same way the live compatibility
+ * check was, without a network call in ordinary `pnpm test`. Both real
+ * proposals have uint256-scale ids far beyond the two-/three-digit Gate 1A
+ * fixtures — the actual root cause investigation found this was NOT where
+ * the reported bug lived (see evidence/system-audit/cactus-live-compatibility.md),
+ * but the coverage is real and worth keeping permanently regardless.
+ */
+describe("resolveViaSsrFallback — real-shaped ENS/Optimism fixtures (Gate 12 CACTUS-LIVE-001)", () => {
+  const ENS_PROPOSAL_ID = "19667497139373951686084433718987773325019389190188449031876262520356769920394";
+  const OPTIMISM_PROPOSAL_ID = "47864371633107534187617995773541299064963460661119440983190542488743950169122";
+
+  it("resolves a real-shaped ENS page: uint256-scale id preserved exactly, openzeppelingovernor kind captured, no pause flags set", async () => {
+    const ensPageProps = {
+      proposal: {
+        onchainId: ENS_PROPOSAL_ID,
+        metadata: { title: "# [Executable] SPP3 Marketplace RFP Award: Nomentum Labs (Grails)" },
+        status: "executed",
+        governor: { id: "eip155:1:0x323A76393544d5ecca80cd6ef2A560C6a395b7E3" },
+      },
+      organization: { id: "2206072050458560426", slug: "ens", name: "ENS", isPaused: false, pauseReason: "" },
+      governors: [
+        {
+          id: "eip155:1:0x323A76393544d5ecca80cd6ef2A560C6a395b7E3",
+          type: "openzeppelingovernor",
+          contracts: { governor: { address: "0x323A76393544d5ecca80cd6ef2A560C6a395b7E3" } },
+        },
+      ],
+    };
+    mockFetchOnce(200, htmlWithNextData(ensPageProps));
+    const { resolved } = await resolveViaSsrFallback({ url: `https://www.tally.xyz/gov/ens/proposal/${ENS_PROPOSAL_ID}`, onchainProposalId: ENS_PROPOSAL_ID });
+    expect(resolved.proposal.onchainProposalId).toBe(ENS_PROPOSAL_ID);
+    expect(typeof resolved.proposal.onchainProposalId).toBe("string");
+    expect(resolved.governor.kind).toBe("openzeppelingovernor");
+    expect(resolved.organization.isPaused).toBe(false);
+  });
+
+  it("resolves a real-shaped, paused-DAO Optimism page: uint256-scale id and chain 10 preserved, pause state captured as context (never as a resolution blocker)", async () => {
+    const optimismPageProps = {
+      proposal: {
+        onchainId: OPTIMISM_PROPOSAL_ID,
+        metadata: { title: "# Grants Council Operating Budget" },
+        status: "succeeded",
+        governor: { id: "eip155:10:0xcDF27F107725988f2261Ce2256bDfCdE8B382B10" },
+      },
+      organization: { id: "2206072049871356990", slug: "optimism", name: "Optimism", isPaused: true, pauseReason: "Custom governance not currently supported" },
+      governors: [
+        {
+          id: "eip155:10:0xcDF27F107725988f2261Ce2256bDfCdE8B382B10",
+          type: "openzeppelingovernor",
+          contracts: { governor: { address: "0xcDF27F107725988f2261Ce2256bDfCdE8B382B10" } },
+        },
+      ],
+    };
+    mockFetchOnce(200, htmlWithNextData(optimismPageProps));
+    const { resolved } = await resolveViaSsrFallback({ url: `https://www.tally.xyz/gov/optimism/proposal/${OPTIMISM_PROPOSAL_ID}`, onchainProposalId: OPTIMISM_PROPOSAL_ID });
+    expect(resolved.proposal.onchainProposalId).toBe(OPTIMISM_PROPOSAL_ID);
+    expect(resolved.chain.chainId).toBe(10);
+    expect(resolved.governor.address).toBe("0xcDF27F107725988f2261Ce2256bDfCdE8B382B10");
+    expect(resolved.organization.isPaused).toBe(true);
+    expect(resolved.organization.pauseReason).toBe("Custom governance not currently supported");
+  });
+});
