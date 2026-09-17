@@ -436,6 +436,22 @@ export default function LandingPage() {
             the operational last mile: freezing the authorization, waiting for eligibility, bounded KeeperHub
             execution, and independently verifying the intended outcome.
           </AccordionItem>
+          <AccordionItem question="Where do I get the proposal URL?">
+            Marked starts after a governance proposal already exists. Open the proposal on Cactus, copy its
+            proposal-page URL from the browser, and paste it into Marked. Marked then resolves the underlying
+            Governor and independently verifies the authorization onchain.
+          </AccordionItem>
+          <AccordionItem question="Does Marked require Cactus?">
+            Marked v1 is built for Cactus-indexed governance. Cactus supplies the governance-native operating
+            context; the underlying Governor contract supplies the cryptographic authorization that Marked freezes
+            and validates.
+          </AccordionItem>
+          <AccordionItem question="Does Marked use the Cactus API?">
+            The current Cactus adapter resolves real public Cactus proposal pages from their server-rendered
+            structured data and independently cross-checks the resulting coordinates onchain. It does not currently
+            use Cactus&apos;s authenticated GraphQL API by default — that path exists and is proven, but requires a
+            credential this environment does not ship with.
+          </AccordionItem>
           <AccordionItem question="Does Marked decide what a DAO should do?">
             No. Governance creates authority. Marked may fulfill existing governance authority; it cannot create it.
           </AccordionItem>

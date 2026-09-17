@@ -62,16 +62,16 @@ export default async function NewFulfillmentPage({ searchParams }: { searchParam
       </div>
 
       <Card className="border-[var(--border-strong)] bg-[var(--surface-raised)]/40">
-        <CardLabel>Start from a Cactus governance proposal</CardLabel>
+        <CardLabel>Start from a Cactus proposal</CardLabel>
         <p className="mb-3 text-sm text-[var(--muted)]">
-          Marked does not create the vote. Your DAO creates and passes a proposal through its existing Cactus/Governor
-          process — Marked starts from that already-existing governance object.
+          Marked starts from a governance decision that already exists on Cactus. Marked does not create the vote —
+          your DAO creates and passes a proposal through its existing Cactus/Governor process.
         </p>
         <ol className="flex flex-col gap-1.5 text-sm text-[var(--muted-strong)]">
-          <li>1. Open a DAO proposal on Cactus.</li>
-          <li>2. Copy the proposal page URL from your browser.</li>
-          <li>3. Paste it below.</li>
-          <li>4. Marked resolves the underlying Governor and verifies it independently onchain.</li>
+          <li>1. Open your DAO&apos;s proposal on Cactus.</li>
+          <li>2. Copy the proposal-page URL.</li>
+          <li>3. Paste it into Marked.</li>
+          <li>4. Marked resolves the underlying Governor and independently verifies exactly what governance authorized onchain.</li>
         </ol>
         <a
           href={CACTUS_LIVE_URL}
@@ -85,21 +85,35 @@ export default async function NewFulfillmentPage({ searchParams }: { searchParam
           Cactus rebranded from Tally in 2026; live proposal pages are still reached at tally.xyz while that domain
           migration completes — that link above is the real, currently-live destination, not a stale one.
         </p>
+
+        <div className="mt-5 grid gap-4 border-t border-[var(--border)] pt-5 sm:grid-cols-2">
+          <div>
+            <p className="text-sm font-medium">Your DAO isn&apos;t on Cactus?</p>
+            <p className="mt-1 text-xs text-[var(--muted)]">
+              Marked v1 currently supports Cactus-indexed governance. It can&apos;t register a DAO with Cactus
+              itself —{" "}
+              <a href="https://docs.tally.xyz" target="_blank" rel="noopener noreferrer" className="text-[var(--accent)] hover:underline">
+                see Cactus&apos;s own setup documentation ↗
+              </a>
+              .
+            </p>
+          </div>
+          <div>
+            <p className="text-sm font-medium">Just exploring?</p>
+            <p className="mt-1 text-xs text-[var(--muted)]">
+              Try the verified{" "}
+              <a href={`/app/new?url=${encodeURIComponent(EXAMPLE_URL)}`} className="text-[var(--accent)] hover:underline">
+                Compound #220 example ↗
+              </a>{" "}
+              — real, already-executed, read-only evidence, not a template for creating a new governance decision.
+            </p>
+          </div>
+        </div>
       </Card>
 
       <Card>
         <p className="section-label mb-3">Your proposal</p>
         <ProposalIntakeForm defaultUrl={isExampleUrl ? "" : url} />
-        <div className="mt-3 flex items-center gap-2 text-xs text-[var(--muted)]">
-          <span>Need a proposal to explore instead?</span>
-          <a href={`/app/new?url=${encodeURIComponent(EXAMPLE_URL)}`} className="text-[var(--accent)] hover:underline">
-            View a historical example (Compound #220) →
-          </a>
-        </div>
-        <p className="mt-1.5 text-xs text-[var(--muted)]">
-          The historical example is read-only evidence, not a template for creating a new governance decision — your
-          DAO&apos;s own Cactus proposal is what you&apos;d paste above.
-        </p>
       </Card>
 
       {error ? (

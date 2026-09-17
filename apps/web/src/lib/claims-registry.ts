@@ -19,7 +19,7 @@ export const GATE_CARDS: GateCard[] = [
     summary: "Real mainnet proposals (Compound #220, Uniswap #20) resolved to organization/chain/Governor/onchain proposal ID through live Cactus infrastructure, independently cross-checked onchain.",
     evidence: ["evidence/cactus/compound-220/", "evidence/cactus/uniswap-20/"],
     reproduceCommand: "pnpm prove:cactus",
-    limitation: "Resolved via the documented SSR fallback, not the authenticated official GraphQL API (no API key available in this environment).",
+    limitation: "Resolved by fetching the real, live public Cactus proposal page and reading its server-rendered coordinates — not Cactus's authenticated GraphQL API, which requires a credential this environment does not ship with.",
   },
   {
     gate: "Gate 1B",

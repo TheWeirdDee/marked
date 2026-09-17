@@ -85,9 +85,27 @@ export const DOCS: DocEntry[] = [
     title: "Cactus integration",
     category: "Integrations",
     blocks: [
-      { type: "p", text: "Marked resolves a Cactus proposal URL to organization, title, chain, Governor address, and onchain proposal ID — through Cactus's live infrastructure, with a documented SSR fallback when the authenticated GraphQL API's credential is unavailable." },
+      { type: "p", text: "Marked starts from a governance decision that already exists on Cactus. Given a Cactus proposal URL, Marked resolves the real, live Cactus proposal page and independently verifies the resulting coordinates onchain — organization, title, chain, Governor address, and onchain proposal ID." },
+      { type: "h2", text: "How resolution works" },
+      {
+        type: "code",
+        text:
+          "Cactus proposal URL\n" +
+          "        ↓\n" +
+          "real public Cactus proposal resolution\n" +
+          "        ↓\n" +
+          "organization / proposal / chain / Governor coordinates\n" +
+          "        ↓\n" +
+          "independent Governor verification (onchain)\n" +
+          "        ↓\n" +
+          "canonical onchain authorization\n" +
+          "        ↓\n" +
+          "Marked fulfillment pipeline",
+      },
+      { type: "p", text: "Two resolution paths reach the same real Cactus data. When CACTUS_API_KEY is configured, Marked calls Cactus's official authenticated GraphQL API first. Without that credential — the current default — Marked resolves the real, live public Cactus proposal page and reads the same server-rendered structured data (organization, proposal, and Governor coordinates) the production Cactus app itself renders from. This is real, current Cactus infrastructure fetched live over the network for every resolution; it is not a mock, not a simulation, and not fixture data standing in for a live call. Marked does not currently use Cactus's authenticated GraphQL API by default — that path exists and is proven, but requires a credential this environment does not ship with." },
       { type: "callout", kind: "SECURITY", text: "Only an allowlisted set of Cactus/Tally hostnames may be fetched — the URL parser is the SSRF boundary." },
-      { type: "callout", kind: "LIMITATION", text: "Cactus never supplies calldata, actions, or an authorization hash. Marked always re-derives those from the Governor contract itself." },
+      { type: "callout", kind: "LIMITATION", text: "Cactus never supplies calldata, actions, or an authorization hash — governance-native context, not money-moving authority. Marked always re-derives those from the Governor contract itself, independently, before anything can be armed." },
+      { type: "callout", kind: "LIMITATION", text: "The controlled Sepolia KeeperHub execution proof is not Cactus-indexed — new DAO submissions to Cactus are currently paused, so that proof uses a self-deployed Governor instead. The live Cactus production-read proof and the KeeperHub controlled-write proof remain two separate pieces of evidence (Mode C), never presented as one continuous closed loop." },
     ],
   },
   {
