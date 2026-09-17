@@ -1,0 +1,7 @@
+# Gate 12 §31 — historical pipeline audit
+
+Not recomputed for ceremony — re-ran the existing independent verifier (`pnpm verify:historical`) once, as part of this gate's required regression, and it matched the committed Gate 8 baseline exactly on every statistic (N=353, all percentiles/buckets, Compound=281/Uniswap=72 breakdowns — see `gate12-result.md` for the full output). **No number changed; nothing required stopping to explain before updating a public claim.**
+
+Assumptions reviewed by reading (not re-deriving) `scripts/verify-historical-baseline.ts` and `scripts/reproduce-historical-baseline.ts`: the migration-boundary exclusion (proposal ids at or below each Governor's `initialProposalId()`), the `eta`-as-eligibility-timestamp source, and the percentile/bucket-boundary implementation were all established and cross-verified independently in Gate 8 (two independently-written scripts sharing zero aggregation code, per that gate's own design) — this gate's contribution is re-confirming the independent verifier still agrees with the committed numbers after all of this gate's unrelated code changes, not re-auditing Gate 8's own methodology from scratch.
+
+Not independently re-examined this gate (out of time budget, and unchanged since Gate 8): RPC log-pagination limits, duplicate/missing-log handling in the original data-collection pass, timestamp timezone handling, integer-overflow risk in the aggregation math (verified in Gate 8 by JS's native double-precision arithmetic, unaffected by any change in this gate), `eta=0`/negative-interval edge cases.

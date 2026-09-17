@@ -1,0 +1,9 @@
+# Gate 12 §21 — XSS / output-encoding audit
+
+Direct grep of the entire `apps/web/src` tree for `dangerouslySetInnerHTML`, `innerHTML`, `document.write`, `eval(`, `new Function(`: **zero matches, anywhere.** Every dynamic string — proposal titles/organization names (Cactus-sourced), agent-generated explanations/risk notes, user question text, database-persisted job/event metadata, error messages — is rendered exclusively as ordinary React children, which React auto-escapes. There is no raw-HTML rendering path anywhere in this application for any of these sources.
+
+No hostile-payload live-rendering test was added (`<script>alert(1)</script>`, `<img src=x onerror=alert(1)>`, `javascript:` in an href, etc.) because there is no code path in the entire codebase that would treat such a string as anything other than inert text — a payload-injection test would be asserting a property (React's default escaping) that this codebase does nothing to override or bypass, verified by the grep above rather than by constructing the test. If a future change introduces any raw-HTML rendering, this file's own "zero matches" claim would need to be re-verified.
+
+One narrow, adjacent check: `javascript:` URLs specifically. `HashChip.tsx`/explorer-link generation (see `evidence/system-audit/` — not a separate file, folded here since it's a one-line finding) constructs explorer URLs from a centralized utility (`apps/web/src/lib/explorer.ts`) driven by a fixed chain-id-to-explorer-base-URL map, never by echoing a user-supplied string directly into an `href`. The one user-controlled URL in the whole app (`/app/new`'s proposal URL) is never rendered as a clickable link before it passes the Cactus allowlist (`ssrf-audit.md`) — on failure, the raw text is shown as plain text in an error message, not as an `<a href>`, confirmed by reading `apps/web/src/app/app/new/page.tsx`.
+
+**Result: no XSS vector found anywhere in the application.**
