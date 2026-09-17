@@ -223,6 +223,15 @@ function extractTextFromOpenRouterResponse(json: unknown): string | null {
  * whose API key is present wins (OpenRouter first, since it is the one
  * proven live in this gate) — never a silent fallback from a free to a
  * paid provider.
+ *
+ * Gate 12 §39/hostile audit — an explicitly-set but unrecognized value
+ * (e.g. a typo like "opentrouter") previously fell through to the same
+ * unset-variable auto-select path below, silently ignoring the operator's
+ * choice rather than reporting the misconfiguration. That's the one case
+ * this function now also fails closed on: a recognized-but-unavailable
+ * selection already correctly returned `null` (proven by
+ * provider.test.ts's "never silently falls back" case); an unrecognized
+ * selection now does too, rather than masquerading as "no preference."
  */
 export function getAgentProvider(): MarkedAgentProvider | null {
   const requested = process.env["MARKED_AGENT_PROVIDER"];
@@ -231,6 +240,7 @@ export function getAgentProvider(): MarkedAgentProvider | null {
 
   if (requested === "openrouter") return openRouterKey ? new OpenRouterAgentProvider(openRouterKey) : null;
   if (requested === "anthropic") return anthropicKey ? new AnthropicAgentProvider(anthropicKey) : null;
+  if (requested) return null; // set, but neither known value — a typo, not "no preference"
 
   if (openRouterKey) return new OpenRouterAgentProvider(openRouterKey);
   if (anthropicKey) return new AnthropicAgentProvider(anthropicKey);

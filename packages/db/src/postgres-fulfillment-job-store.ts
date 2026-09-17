@@ -1,7 +1,7 @@
 import postgres, { type ISql, type Sql } from "postgres";
 import type { FulfillmentJob, FulfillmentJobEvent, FulfillmentJobId, FulfillmentStatus } from "@marked/core";
 import type { CasSaveResult, ExecutionClaim, ExecutionClaimResult, FulfillmentJobStore } from "./fulfillment-job-store";
-import { PersistenceUnavailableError } from "./errors";
+import { PersistenceConfigurationError, PersistenceUnavailableError } from "./errors";
 
 /** A plain JSON round-trip guarantees the value structurally satisfies porsager/postgres's `JSONValue` type — every field of `FulfillmentJob`/`FulfillmentJobEvent` is already plain string/number/boolean/nested-object data (see evidence/production-persistence/current-storage-audit.md §5), so this is lossless, not a lossy normalization. */
 function toJsonValue<T>(value: T): unknown {
@@ -34,15 +34,25 @@ export class PostgresFulfillmentJobStore implements FulfillmentJobStore {
   private readonly sql: Sql;
 
   constructor(connectionString: string) {
-    this.sql = postgres(connectionString, {
-      max: 1,
-      ssl: "require",
-      connect_timeout: 10,
-      // Fails fast with a typed error rather than hanging a serverless invocation past its own timeout.
-      onnotice: () => {
-        /* suppress routine NOTICE spam (e.g. IF NOT EXISTS no-ops during migration) — never logs query parameters */
-      },
-    });
+    try {
+      this.sql = postgres(connectionString, {
+        max: 1,
+        ssl: "require",
+        connect_timeout: 10,
+        // Fails fast with a typed error rather than hanging a serverless invocation past its own timeout.
+        onnotice: () => {
+          /* suppress routine NOTICE spam (e.g. IF NOT EXISTS no-ops during migration) — never logs query parameters */
+        },
+      });
+    } catch (err) {
+      // Gate 12 hostile audit: a malformed connection string (not merely an
+      // unreachable one) makes `postgres()` itself throw synchronously — a
+      // plain, generic `TypeError: Invalid URL` from the driver, previously
+      // uncaught here, which would propagate past this class's typed error
+      // taxonomy entirely. Never includes the connection string in the
+      // message (the driver's own "Invalid URL" message does not either).
+      throw new PersistenceConfigurationError(`DATABASE_URL is not a valid Postgres connection string (${err instanceof Error ? err.message : String(err)}).`);
+    }
   }
 
   private wrapConnectionError(err: unknown): never {

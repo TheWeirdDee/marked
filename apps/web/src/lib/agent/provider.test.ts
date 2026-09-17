@@ -68,6 +68,14 @@ describe("getAgentProvider — provider selection (Gate 10L)", () => {
     const { getAgentProvider } = await import("./provider");
     expect(getAgentProvider()).toBeNull();
   });
+
+  it("Gate 12: a typo'd MARKED_AGENT_PROVIDER value fails closed rather than silently auto-selecting a different provider", async () => {
+    process.env["MARKED_AGENT_PROVIDER"] = "opentrouter"; // typo of "openrouter"
+    process.env["OPENROUTER_API_KEY"] = "test-or-key";
+    process.env["ANTHROPIC_API_KEY"] = "test-anthropic-key";
+    const { getAgentProvider } = await import("./provider");
+    expect(getAgentProvider()).toBeNull();
+  });
 });
 
 describe("OpenRouterAgentProvider — real response shape, mocked fetch (Gate 10L)", () => {
