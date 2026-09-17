@@ -1,0 +1,140 @@
+{
+  "commitment": {
+    "version": 1,
+    "chainId": 11155111,
+    "governor": "0xe86cdc53f3c4f416be42f13f621be96ab9d30727",
+    "governorFamily": "GOVERNOR_BRAVO",
+    "proposalId": "2",
+    "frozenActionAuthorizationHash": "0x2fe3f808910a5d89ff9d233d34ecd53fe66d89d3ce46e340891599e784167a3b",
+    "selectedActionIndexes": [
+      0
+    ],
+    "postconditionBindings": [
+      {
+        "actionIndex": 0,
+        "adapterId": "erc20-transfer",
+        "adapterVersion": "1",
+        "required": true,
+        "bindingParams": [
+          {
+            "key": "token",
+            "value": "0x0136DCDC97d0314Feb27c40b4f4671c9F616f51F"
+          },
+          {
+            "key": "recipient",
+            "value": "0xF02789155998f85D3a0b7dcA1525b059988Ab442"
+          },
+          {
+            "key": "rawAmount",
+            "value": "1000000000000000000000"
+          }
+        ]
+      }
+    ],
+    "fulfillmentMode": "APPROVE",
+    "executionSurfaceId": "keeperhub-direct-contract-call-v1",
+    "executionPolicyVersion": "1"
+  },
+  "fulfillmentCommitmentHash": "0x011a295825915fb42918db175e04153f9714acacde8794ece7fda484443441a4",
+  "eligibility": {
+    "proposalId": "2",
+    "rawState": 5,
+    "stateLabel": "Queued",
+    "eta": "1789556934",
+    "canceled": false,
+    "executed": false,
+    "capturedAtBlock": "11716391",
+    "capturedAtTimestamp": "1789557204",
+    "outcome": "ELIGIBLE_TO_EXECUTE",
+    "reason": "Proposal is Queued and its eta has passed — eligible for execute()."
+  },
+  "executionPlan": {
+    "chainId": 11155111,
+    "governor": "0xe86cdc53f3c4f416be42f13f621be96ab9d30727",
+    "proposalId": "2",
+    "functionName": "execute",
+    "calldata": "0xfe0d94c10000000000000000000000000000000000000000000000000000000000000002",
+    "value": "0",
+    "abi": [
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "proposalId",
+            "type": "uint256"
+          }
+        ],
+        "name": "execute",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "proposalId",
+            "type": "uint256"
+          }
+        ],
+        "name": "queue",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }
+    ],
+    "executionCallHash": "0x42c5e3b76d8c941b2ba450867b21e94f337fc5019ec92fcb6697071b2b055ca6"
+  },
+  "callerCheck": {
+    "keeperHubCaller": "0xeecbc82818e591b92e6dd54aa7589b0b9fed6160",
+    "requiredCallerModel": {
+      "model": "PERMISSIONLESS",
+      "evidence": "Compound's reference GovernorBravoDelegate.sol (contracts/Governance/GovernorBravoDelegate.sol, compound-finance/compound-protocol, read directly in Gate 2): execute(uint proposalId) external payable and queue(uint proposalId) external contain only `require(state(proposalId) == ProposalState.X, ...)` checks — no `require(msg.sender == ...)` or role check of any kind. This describes the reference implementation's source, not a decompiled confirmation of any one specific deployed contract's exact bytecode — a deployment could in principle differ from the reference source."
+    },
+    "deploymentMatchesReferenceSource": true,
+    "simulationConfirmedNoRevert": true,
+    "result": "COMPATIBLE",
+    "evidence": "Reference source is PERMISSIONLESS, the deployed contract's execute/queue functions are confirmed byte-for-byte identical to that source, and a live KeeperHub simulation of execute() from 0xeecbc82818e591b92e6dd54aa7589b0b9fed6160 did not revert — caller compatibility empirically confirmed for this specific deployment."
+  },
+  "policyChecks": {
+    "beforeApproval": {
+      "valid": true
+    },
+    "afterApproval": {
+      "valid": true
+    }
+  },
+  "execution": {
+    "executionId": "wn1mlnlj6kotkxqdjgebz",
+    "status": "completed",
+    "transactionHash": "0x49ac3ebbd7e957cb8b57e0e1dcc0e2e24243b2ae72c34cc1b839c7fe8a81d7cb",
+    "raw": {
+      "executionId": "wn1mlnlj6kotkxqdjgebz",
+      "status": "completed",
+      "transactionHash": "0x49ac3ebbd7e957cb8b57e0e1dcc0e2e24243b2ae72c34cc1b839c7fe8a81d7cb",
+      "transactionLink": "https://sepolia.etherscan.io/tx/0x49ac3ebbd7e957cb8b57e0e1dcc0e2e24243b2ae72c34cc1b839c7fe8a81d7cb"
+    }
+  },
+  "finality": {
+    "inclusionBlock": "11716393",
+    "finalityReachedAtBlock": "11716395"
+  },
+  "governorAfter": {
+    "proposalId": "2",
+    "rawState": 7,
+    "stateLabel": "Executed",
+    "eta": "1789556934",
+    "canceled": false,
+    "executed": true,
+    "capturedAtBlock": "11716395",
+    "capturedAtTimestamp": "1789557252",
+    "outcome": "ALREADY_EXECUTED",
+    "reason": "Proposal has already been executed — must not submit another execution."
+  },
+  "receiptTargetMatchesGovernor": false,
+  "finalJobStatus": "GOVERNOR_EXECUTION_CONFIRMED",
+  "idempotency": {
+    "sameIdentity": true
+  },
+  "note": "GOVERNOR_EXECUTION_CONFIRMED is the strongest status this gate reaches. NOT MARKED ✓. Economic postcondition verification is Gate 6's job."
+}

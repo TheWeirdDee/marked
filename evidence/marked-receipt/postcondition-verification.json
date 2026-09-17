@@ -1,0 +1,60 @@
+{
+  "preState": {
+    "token": "0x0136DCDC97d0314Feb27c40b4f4671c9F616f51F",
+    "recipient": "0xF02789155998f85D3a0b7dcA1525b059988Ab442",
+    "recipientBalanceBefore": "0",
+    "preStateBlock": "11716392"
+  },
+  "expected": {
+    "token": "0x0136DCDC97d0314Feb27c40b4f4671c9F616f51F",
+    "recipient": "0xF02789155998f85D3a0b7dcA1525b059988Ab442",
+    "authorizedAmount": "1000000000000000000000",
+    "expectedRecipientBalanceAfter": "1000000000000000000000"
+  },
+  "observed": {
+    "recipientBalanceAfter": "1000000000000000000000",
+    "observedDelta": "1000000000000000000000",
+    "verificationBlock": "11716393",
+    "balanceDeltaMatches": true,
+    "transferLogMatches": true,
+    "matchedTransferLog": {
+      "logIndex": 237,
+      "tokenAddress": "0x0136dcdc97d0314feb27c40b4f4671c9f616f51f",
+      "from": "0x9959E1c49B68EBc27aAA657F4456399562668F19",
+      "to": "0xF02789155998f85D3a0b7dcA1525b059988Ab442",
+      "amount": "1000000000000000000000"
+    },
+    "reason": "EXACT_MATCH"
+  },
+  "evidence": [
+    {
+      "kind": "RECIPIENT_BALANCE_DELTA",
+      "description": "Recipient's raw token balance delta between pre-state and verification blocks must equal the authorized raw amount.",
+      "passed": true,
+      "details": {
+        "preStateBlock": "11716392",
+        "verificationBlock": "11716393",
+        "recipientBalanceBefore": "0",
+        "recipientBalanceAfter": "1000000000000000000000",
+        "observedDelta": "1000000000000000000000",
+        "expectedDelta": "1000000000000000000000"
+      }
+    },
+    {
+      "kind": "EXECUTION_BOUND_TRANSFER_LOG",
+      "description": "A Transfer(token, recipient, authorizedAmount) log must be present in the execution transaction's own receipt.",
+      "passed": true,
+      "details": {
+        "executionTxHash": "0x49ac3ebbd7e957cb8b57e0e1dcc0e2e24243b2ae72c34cc1b839c7fe8a81d7cb",
+        "matched": {
+          "logIndex": 237,
+          "from": "0x9959E1c49B68EBc27aAA657F4456399562668F19",
+          "to": "0xF02789155998f85D3a0b7dcA1525b059988Ab442",
+          "amount": "1000000000000000000000"
+        },
+        "reason": null
+      }
+    }
+  ],
+  "verified": true
+}

@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "chainId": 1,
+  "governor": "0xc0Da02939E1441F497fd74F78cE7Decb17B66529",
+  "governorFamily": "GOVERNOR_BRAVO",
+  "proposalId": "220",
+  "actions": [
+    {
+      "actionIndex": 0,
+      "target": "0x316f9708bB98af7dA9c68C1C3b5e79039cD336E3",
+      "value": "0",
+      "signature": "setTargetReserves(address,uint104)",
+      "calldata": "0x000000000000000000000000c3d688b66703497daa19211eedff47f25384cdc3000000000000000000000000000000000000000000000000000012309ce54000"
+    },
+    {
+      "actionIndex": 1,
+      "target": "0x1EC63B5883C3481134FD50D5DAebc83Ecd2E8779",
+      "value": "0",
+      "signature": "deployAndUpgradeTo(address,address)",
+      "calldata": "0x000000000000000000000000316f9708bb98af7da9c68c1c3b5e79039cd336e3000000000000000000000000c3d688b66703497daa19211eedff47f25384cdc3"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "name": "@marked/cli",
+  "version": "0.0.0",
+  "private": true,
+  "description": "marked verify <receipt_id> — recomputes a published Marked receipt with no private keys required.",
+  "type": "module",
+  "bin": {
+    "marked": "./src/cli.ts"
+  },
+  "scripts": {
+    "marked": "tsx ./src/cli.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@marked/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.5"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "rpcUrl": "https://ethereum-rpc.publicnode.com",
+  "rpcSource": "public_fallback",
+  "governor": "0x408ED6354d4973f66138C91495F2f2FCbd8724C3",
+  "requestedOnchainProposalId": "20",
+  "result": {
+    "ok": true,
+    "hasCode": true,
+    "proposalReadable": true,
+    "onchainReportedId": "20",
+    "onchainExecuted": true
+  },
+  "checkedAt": "2026-09-15T09:25:01.414Z"
+}

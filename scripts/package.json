@@ -1,0 +1,39 @@
+{
+  "name": "@marked/scripts",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Reproduction scripts for gate evidence. Not part of the shipped product.",
+  "type": "module",
+  "scripts": {
+    "prove:cactus": "tsx prove-cactus-seam.ts",
+    "prove:keeperhub": "tsx prove-keeperhub-seam.ts",
+    "prove:closed-loop": "tsx prove-closed-loop-seam.ts",
+    "prove:governor": "tsx prove-governor-seam.ts",
+    "prove:erc20-postcondition": "tsx prove-erc20-postcondition.ts",
+    "prove:fulfillment-commitment": "tsx prove-fulfillment-commitment.ts",
+    "verify:gate6": "tsx gate6-verify-economic-postcondition.ts",
+    "prove:agent-hardening": "tsx prove-agent-hardening.ts",
+    "prove:agent-live-model": "tsx prove-agent-live-model.ts",
+    "reproduce:historical": "tsx reproduce-historical-baseline.ts",
+    "verify:historical": "tsx verify-historical-baseline.ts",
+    "spot-check:historical": "tsx spot-check-historical-baseline.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@marked/cactus": "workspace:*",
+    "@marked/core": "workspace:*",
+    "@marked/db": "workspace:*",
+    "@marked/governor": "workspace:*",
+    "@marked/keeperhub": "workspace:*",
+    "@marked/postconditions": "workspace:*",
+    "viem": "^2.21.55"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "solc": "0.8.19",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.5"
+  }
+}

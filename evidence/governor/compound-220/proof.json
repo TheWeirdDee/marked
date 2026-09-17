@@ -1,0 +1,38 @@
+{
+  "coordinate": {
+    "chainId": 1,
+    "governor": "0xc0Da02939E1441F497fd74F78cE7Decb17B66529",
+    "proposalId": "220"
+  },
+  "governorFamily": "GOVERNOR_BRAVO",
+  "actionCount": 2,
+  "actionAuthorizationHash": "0x29fab99c1fd3e796981fb2ae34b92280c7405bfafe6ef60882628ddec1dab28d",
+  "lifecycle": {
+    "state": 7,
+    "stateLabel": "Executed"
+  },
+  "resolvedAtBlock": "25990069",
+  "reproducibility": {
+    "firstHash": "0x29fab99c1fd3e796981fb2ae34b92280c7405bfafe6ef60882628ddec1dab28d",
+    "secondHash": "0x29fab99c1fd3e796981fb2ae34b92280c7405bfafe6ef60882628ddec1dab28d",
+    "match": true
+  },
+  "freezeRecheck": {
+    "matches": true,
+    "frozenHash": "0x29fab99c1fd3e796981fb2ae34b92280c7405bfafe6ef60882628ddec1dab28d",
+    "currentHash": "0x29fab99c1fd3e796981fb2ae34b92280c7405bfafe6ef60882628ddec1dab28d"
+  },
+  "callerAuthority": {
+    "model": "PERMISSIONLESS",
+    "evidence": "Compound's reference GovernorBravoDelegate.sol (contracts/Governance/GovernorBravoDelegate.sol, compound-finance/compound-protocol, read directly in Gate 2): execute(uint proposalId) external payable and queue(uint proposalId) external contain only `require(state(proposalId) == ProposalState.X, ...)` checks — no `require(msg.sender == ...)` or role check of any kind. This describes the reference implementation's source, not a decompiled confirmation of any one specific deployed contract's exact bytecode — a deployment could in principle differ from the reference source."
+  },
+  "lifecycleCallPlan": {
+    "stage": "execute",
+    "target": "0xc0Da02939E1441F497fd74F78cE7Decb17B66529",
+    "functionName": "execute",
+    "args": [
+      "220"
+    ],
+    "value": "0"
+  }
+}

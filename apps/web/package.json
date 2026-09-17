@@ -1,0 +1,42 @@
+{
+  "name": "@marked/web",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Marked web app. Governance is not finished when it passes. It is finished when it is Marked.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@marked/cactus": "workspace:*",
+    "@marked/config": "workspace:*",
+    "@marked/core": "workspace:*",
+    "@marked/db": "workspace:*",
+    "@marked/governor": "workspace:*",
+    "@marked/keeperhub": "workspace:*",
+    "@marked/postconditions": "workspace:*",
+    "gsap": "^3.15.0",
+    "lenis": "^1.3.26",
+    "next": "^15.1.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "viem": "^2.21.55"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.2.0",
+    "@types/node": "^22.10.5",
+    "@types/react": "^19.0.4",
+    "@types/react-dom": "^19.0.2",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^9.18.0",
+    "eslint-config-next": "^15.1.4",
+    "postcss": "^8.5.1",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.5"
+  }
+}

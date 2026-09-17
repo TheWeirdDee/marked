@@ -1,0 +1,28 @@
+{
+  "modelOutput": {
+    "question": "What did this proposal approve, and can Marked fulfill it now?",
+    "answer": "The authoritative context shows proposal 220 has two actions but does not describe what they approved. It cannot be fulfilled now because its state is already **Executed**."
+  },
+  "deterministicMarkedResult": {
+    "source": "real live resolution via @marked/cactus + @marked/governor, this run",
+    "chainId": 1,
+    "governor": "0xc0Da02939E1441F497fd74F78cE7Decb17B66529",
+    "proposalId": "220",
+    "governorState": "Executed",
+    "note": "Governor state 'Executed' means Marked will not submit this proposal again — this is a deterministic fact independent of anything the model said."
+  },
+  "context": {
+    "authoritative": {
+      "chainId": 1,
+      "governor": "0xc0Da02939E1441F497fd74F78cE7Decb17B66529",
+      "proposalId": "220",
+      "governorState": "Executed",
+      "actionCount": 2
+    },
+    "descriptive": {
+      "cactusOrganization": "Compound",
+      "cactusProposalTitle": "[Gauntlet] 2023-02-26: Ethereum v3 USDC - targetReserves Recommendations",
+      "cactusReportedStatus": "executed"
+    }
+  }
+}

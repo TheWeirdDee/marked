@@ -1,0 +1,559 @@
+{
+  "dao": "Uniswap",
+  "governor": "0x408ED6354d4973f66138C91495F2f2FCbd8724C3",
+  "fetchedAt": "2026-09-17T05:10:06.052Z",
+  "proposals": {
+    "9": {
+      "state": 7,
+      "eta": "1636763195",
+      "canceled": false,
+      "executed": true
+    },
+    "10": {
+      "state": 7,
+      "eta": "1639984381",
+      "canceled": false,
+      "executed": true
+    },
+    "11": {
+      "state": 7,
+      "eta": "1647035743",
+      "canceled": false,
+      "executed": true
+    },
+    "12": {
+      "state": 2,
+      "eta": "0",
+      "canceled": true,
+      "executed": false
+    },
+    "13": {
+      "state": 7,
+      "eta": "1648663664",
+      "canceled": false,
+      "executed": true
+    },
+    "14": {
+      "state": 7,
+      "eta": "1649707068",
+      "canceled": false,
+      "executed": true
+    },
+    "15": {
+      "state": 2,
+      "eta": "0",
+      "canceled": true,
+      "executed": false
+    },
+    "16": {
+      "state": 7,
+      "eta": "1652302757",
+      "canceled": false,
+      "executed": true
+    },
+    "17": {
+      "state": 2,
+      "eta": "0",
+      "canceled": true,
+      "executed": false
+    },
+    "18": {
+      "state": 2,
+      "eta": "0",
+      "canceled": true,
+      "executed": false
+    },
+    "19": {
+      "state": 7,
+      "eta": "1656165669",
+      "canceled": false,
+      "executed": true
+    },
+    "20": {
+      "state": 7,
+      "eta": "1655734175",
+      "canceled": false,
+      "executed": true
+    },
+    "21": {
+      "state": 2,
+      "eta": "0",
+      "canceled": true,
+      "executed": false
+    },
+    "22": {
+      "state": 7,
+      "eta": "1656320871",
+      "canceled": false,
+      "executed": true
+    },
+    "23": {
+      "state": 7,
+      "eta": "1658096521",
+      "canceled": false,
+      "executed": true
+    },
+    "24": {
+      "state": 7,
+      "eta": "1661484858",
+      "canceled": false,
+      "executed": true
+    },
+    "25": {
+      "state": 7,
+      "eta": "1665897011",
+      "canceled": false,
+      "executed": true
+    },
+    "26": {
+      "state": 2,
+      "eta": "0",
+      "canceled": true,
+      "executed": false
+    },
+    "27": {
+      "state": 2,
+      "eta": "0",
+      "canceled": true,
+      "executed": false
+    },
+    "28": {
+      "state": 2,
+      "eta": "0",
+      "canceled": true,
+      "executed": false
+    },
+    "29": {
+      "state": 7,
+      "eta": "1672045823",
+      "canceled": false,
+      "executed": true
+    },
+    "30": {
+      "state": 7,
+      "eta": "1675502459",
+      "canceled": false,
+      "executed": true
+    },
+    "31": {
+      "state": 7,
+      "eta": "1676210939",
+      "canceled": false,
+      "executed": true
+    },
+    "32": {
+      "state": 7,
+      "eta": "1676647007",
+      "canceled": false,
+      "executed": true
+    },
+    "33": {
+      "state": 7,
+      "eta": "1679231015",
+      "canceled": false,
+      "executed": true
+    },
+    "34": {
+      "state": 7,
+      "eta": "1681644227",
+      "canceled": false,
+      "executed": true
+    },
+    "35": {
+      "state": 2,
+      "eta": "0",
+      "canceled": true,
+      "executed": false
+    },
+    "36": {
+      "state": 7,
+      "eta": "1681817135",
+      "canceled": false,
+      "executed": true
+    },
+    "37": {
+      "state": 7,
+      "eta": "1682215523",
+      "canceled": false,
+      "executed": true
+    },
+    "38": {
+      "state": 7,
+      "eta": "1683379679",
+      "canceled": false,
+      "executed": true
+    },
+    "39": {
+      "state": 7,
+      "eta": "1684502795",
+      "canceled": false,
+      "executed": true
+    },
+    "40": {
+      "state": 7,
+      "eta": "1690765139",
+      "canceled": false,
+      "executed": true
+    },
+    "41": {
+      "state": 2,
+      "eta": "0",
+      "canceled": true,
+      "executed": false
+    },
+    "42": {
+      "state": 7,
+      "eta": "1691161919",
+      "canceled": false,
+      "executed": true
+    },
+    "43": {
+      "state": 7,
+      "eta": "1693486775",
+      "canceled": false,
+      "executed": true
+    },
+    "44": {
+      "state": 2,
+      "eta": "0",
+      "canceled": true,
+      "executed": false
+    },
+    "45": {
+      "state": 7,
+      "eta": "1693666151",
+      "canceled": false,
+      "executed": true
+    },
+    "46": {
+      "state": 2,
+      "eta": "0",
+      "canceled": true,
+      "executed": false
+    },
+    "47": {
+      "state": 7,
+      "eta": "1695365987",
+      "canceled": false,
+      "executed": true
+    },
+    "48": {
+      "state": 2,
+      "eta": "0",
+      "canceled": true,
+      "executed": false
+    },
+    "49": {
+      "state": 3,
+      "eta": "0",
+      "canceled": false,
+      "executed": false
+    },
+    "50": {
+      "state": 7,
+      "eta": "1696769807",
+      "canceled": false,
+      "executed": true
+    },
+    "51": {
+      "state": 7,
+      "eta": "1697794199",
+      "canceled": false,
+      "executed": true
+    },
+    "52": {
+      "state": 7,
+      "eta": "1699509515",
+      "canceled": false,
+      "executed": true
+    },
+    "53": {
+      "state": 2,
+      "eta": "0",
+      "canceled": true,
+      "executed": false
+    },
+    "54": {
+      "state": 7,
+      "eta": "1702646063",
+      "canceled": false,
+      "executed": true
+    },
+    "55": {
+      "state": 7,
+      "eta": "1706533943",
+      "canceled": false,
+      "executed": true
+    },
+    "56": {
+      "state": 7,
+      "eta": "1706533919",
+      "canceled": false,
+      "executed": true
+    },
+    "57": {
+      "state": 7,
+      "eta": "1708345055",
+      "canceled": false,
+      "executed": true
+    },
+    "58": {
+      "state": 7,
+      "eta": "1708445855",
+      "canceled": false,
+      "executed": true
+    },
+    "59": {
+      "state": 7,
+      "eta": "1708964075",
+      "canceled": false,
+      "executed": true
+    },
+    "60": {
+      "state": 7,
+      "eta": "1714534559",
+      "canceled": false,
+      "executed": true
+    },
+    "61": {
+      "state": 7,
+      "eta": "1714560935",
+      "canceled": false,
+      "executed": true
+    },
+    "62": {
+      "state": 7,
+      "eta": "1715059331",
+      "canceled": false,
+      "executed": true
+    },
+    "63": {
+      "state": 7,
+      "eta": "1717126751",
+      "canceled": false,
+      "executed": true
+    },
+    "64": {
+      "state": 7,
+      "eta": "1717463183",
+      "canceled": false,
+      "executed": true
+    },
+    "65": {
+      "state": 7,
+      "eta": "1719919079",
+      "canceled": false,
+      "executed": true
+    },
+    "66": {
+      "state": 7,
+      "eta": "1723875131",
+      "canceled": false,
+      "executed": true
+    },
+    "67": {
+      "state": 7,
+      "eta": "1724482559",
+      "canceled": false,
+      "executed": true
+    },
+    "68": {
+      "state": 7,
+      "eta": "1725508307",
+      "canceled": false,
+      "executed": true
+    },
+    "69": {
+      "state": 7,
+      "eta": "1726380947",
+      "canceled": false,
+      "executed": true
+    },
+    "70": {
+      "state": 7,
+      "eta": "1727256683",
+      "canceled": false,
+      "executed": true
+    },
+    "71": {
+      "state": 3,
+      "eta": "0",
+      "canceled": false,
+      "executed": false
+    },
+    "72": {
+      "state": 7,
+      "eta": "1730130287",
+      "canceled": false,
+      "executed": true
+    },
+    "73": {
+      "state": 7,
+      "eta": "1730343707",
+      "canceled": false,
+      "executed": true
+    },
+    "74": {
+      "state": 7,
+      "eta": "1733044259",
+      "canceled": false,
+      "executed": true
+    },
+    "75": {
+      "state": 2,
+      "eta": "0",
+      "canceled": true,
+      "executed": false
+    },
+    "76": {
+      "state": 7,
+      "eta": "1736679587",
+      "canceled": false,
+      "executed": true
+    },
+    "77": {
+      "state": 7,
+      "eta": "1736741579",
+      "canceled": false,
+      "executed": true
+    },
+    "78": {
+      "state": 7,
+      "eta": "1737325955",
+      "canceled": false,
+      "executed": true
+    },
+    "79": {
+      "state": 7,
+      "eta": "1738115375",
+      "canceled": false,
+      "executed": true
+    },
+    "80": {
+      "state": 7,
+      "eta": "1741258943",
+      "canceled": false,
+      "executed": true
+    },
+    "81": {
+      "state": 2,
+      "eta": "0",
+      "canceled": true,
+      "executed": false
+    },
+    "82": {
+      "state": 7,
+      "eta": "1742539595",
+      "canceled": false,
+      "executed": true
+    },
+    "83": {
+      "state": 7,
+      "eta": "1742548775",
+      "canceled": false,
+      "executed": true
+    },
+    "84": {
+      "state": 7,
+      "eta": "1745554475",
+      "canceled": false,
+      "executed": true
+    },
+    "85": {
+      "state": 7,
+      "eta": "1746168587",
+      "canceled": false,
+      "executed": true
+    },
+    "86": {
+      "state": 7,
+      "eta": "1746818315",
+      "canceled": false,
+      "executed": true
+    },
+    "87": {
+      "state": 7,
+      "eta": "1746887543",
+      "canceled": false,
+      "executed": true
+    },
+    "88": {
+      "state": 3,
+      "eta": "0",
+      "canceled": false,
+      "executed": false
+    },
+    "89": {
+      "state": 7,
+      "eta": "1749368399",
+      "canceled": false,
+      "executed": true
+    },
+    "90": {
+      "state": 7,
+      "eta": "1757472671",
+      "canceled": false,
+      "executed": true
+    },
+    "91": {
+      "state": 3,
+      "eta": "0",
+      "canceled": false,
+      "executed": false
+    },
+    "92": {
+      "state": 7,
+      "eta": "1766735591",
+      "canceled": false,
+      "executed": true
+    },
+    "93": {
+      "state": 7,
+      "eta": "1766867543",
+      "canceled": false,
+      "executed": true
+    },
+    "94": {
+      "state": 7,
+      "eta": "1772779895",
+      "canceled": false,
+      "executed": true
+    },
+    "95": {
+      "state": 7,
+      "eta": "1772892611",
+      "canceled": false,
+      "executed": true
+    },
+    "96": {
+      "state": 7,
+      "eta": "1780287683",
+      "canceled": false,
+      "executed": true
+    },
+    "97": {
+      "state": 7,
+      "eta": "1780297031",
+      "canceled": false,
+      "executed": true
+    },
+    "98": {
+      "state": 7,
+      "eta": "1784029691",
+      "canceled": false,
+      "executed": true
+    },
+    "99": {
+      "state": 7,
+      "eta": "1785136583",
+      "canceled": false,
+      "executed": true
+    },
+    "100": {
+      "state": 7,
+      "eta": "1785137423",
+      "canceled": false,
+      "executed": true
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "fulfillmentCommitmentHash": "0x011a295825915fb42918db175e04153f9714acacde8794ece7fda484443441a4",
+  "frozenActionAuthorizationHash": "0x2fe3f808910a5d89ff9d233d34ecd53fe66d89d3ce46e340891599e784167a3b",
+  "finalGovernorAuthorizationHash": "0x2fe3f808910a5d89ff9d233d34ecd53fe66d89d3ce46e340891599e784167a3b",
+  "chainId": 11155111,
+  "governor": "0xe86cdc53f3c4f416be42f13f621be96ab9d30727",
+  "governorFamily": "GOVERNOR_BRAVO",
+  "proposalId": "2",
+  "actionIndex": 0,
+  "executionTxHash": "0x49ac3ebbd7e957cb8b57e0e1dcc0e2e24243b2ae72c34cc1b839c7fe8a81d7cb",
+  "executionBlock": "11716393",
+  "finalityBlock": "11716395",
+  "governorFinalState": 7,
+  "postconditionCoverage": "FULL",
+  "requiredAssertionsVerified": true,
+  "status": "FULFILLED_VERIFIED",
+  "observedAt": "2026-09-17T10:02:15.084Z"
+}

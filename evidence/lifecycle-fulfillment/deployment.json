@@ -1,0 +1,74 @@
+{
+  "txLog": [
+    {
+      "step": "deploy-token",
+      "hash": "0x71ce0bd667cf370f92925c66e7a8c6748857f9bd2b7c15c1ce6d85bfaa2e5459",
+      "blockNumber": "11716331"
+    },
+    {
+      "step": "deploy-timelock",
+      "hash": "0x69e02675db85a5617ba601b35aefda14c32649f5435261aefd2459fc06634390",
+      "blockNumber": "11716332"
+    },
+    {
+      "step": "deploy-governor",
+      "hash": "0x75100dfd9245c670054f3fc30a98a0864050c765e2d1a9a6cda4a7fe28ffc9ae",
+      "blockNumber": "11716334"
+    },
+    {
+      "step": "self-delegate",
+      "hash": "0x6a8a52e266594dc7c9f7c1169b454951363ffee9ca41e951ad20efc7ce15ff62",
+      "blockNumber": "11716335"
+    },
+    {
+      "step": "fund-treasury",
+      "hash": "0x6993c92b1d4596e8834bb6d3931d1966b05a18fe9c519515c9c04e6ddddc42d4",
+      "blockNumber": "11716336"
+    },
+    {
+      "step": "queue-set-pending-admin",
+      "hash": "0x90d7156b945d4939c25666d61cbafa436c405708cea6376cc09430a5cfdd60a4",
+      "blockNumber": "11716337"
+    },
+    {
+      "step": "execute-set-pending-admin",
+      "hash": "0xa6a8c260ae081b558d628d9f72542f733572db0766f06fba01858a155af13998",
+      "blockNumber": "11716347"
+    },
+    {
+      "step": "initiate",
+      "hash": "0xde1f53bc2c257f1909166182d095eff4bbe1ff7318e68e71a069c59ec3b29fe9",
+      "blockNumber": "11716348"
+    },
+    {
+      "step": "propose",
+      "hash": "0xb267b396c8638acc0d0a74f3f77e71f986ed99fc032779e39917bf762edc5548",
+      "blockNumber": "11716349"
+    },
+    {
+      "step": "vote",
+      "hash": "0xed8109c90fddbe1779795cce3ce221555133bac83bed36589785a9573a65990c",
+      "blockNumber": "11716353"
+    },
+    {
+      "step": "queue",
+      "hash": "0xd7fa7253c1dd34440064339d9c595353c33482fb2a3c4edeefcb0f809492649b",
+      "blockNumber": "11716362"
+    }
+  ],
+  "tokenAddress": "0x0136dcdc97d0314feb27c40b4f4671c9f616f51f",
+  "timelockAddress": "0x9959e1c49b68ebc27aaa657f4456399562668f19",
+  "governorAddress": "0xe86cdc53f3c4f416be42f13f621be96ab9d30727",
+  "recipientAddress": "0xF02789155998f85D3a0b7dcA1525b059988Ab442",
+  "selfDelegated": true,
+  "treasuryFunded": true,
+  "adminTransferQueuedTx": "0x90d7156b945d4939c25666d61cbafa436c405708cea6376cc09430a5cfdd60a4",
+  "adminTransferEta": "1789556640",
+  "adminTransferExecutedTx": "0xa6a8c260ae081b558d628d9f72542f733572db0766f06fba01858a155af13998",
+  "initiatedTx": "0xde1f53bc2c257f1909166182d095eff4bbe1ff7318e68e71a069c59ec3b29fe9",
+  "proposalId": "2",
+  "proposeTx": "0xb267b396c8638acc0d0a74f3f77e71f986ed99fc032779e39917bf762edc5548",
+  "votedTx": "0xed8109c90fddbe1779795cce3ce221555133bac83bed36589785a9573a65990c",
+  "queueEta": "1789556934",
+  "queuedTx": "0xd7fa7253c1dd34440064339d9c595353c33482fb2a3c4edeefcb0f809492649b"
+}

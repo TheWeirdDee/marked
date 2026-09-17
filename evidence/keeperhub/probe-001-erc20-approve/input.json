@@ -1,0 +1,21 @@
+{
+  "chainId": 11155111,
+  "contractAddress": "0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14",
+  "contractLabel": "WETH9 on Ethereum Sepolia (verified real deployed contract, symbol() == \"WETH\")",
+  "calldata": "0x095ea7b3000000000000000000000000000000000000000000000000000000000000dEaD0000000000000000000000000000000000000000000000000000000000000539",
+  "decodedCall": "approve(spender=0x000000000000000000000000000000000000dEaD, amount=1337)",
+  "value": "0",
+  "abi": [
+    {
+      "type": "function",
+      "name": "approve",
+      "inputs": [
+        { "name": "spender", "type": "address" },
+        { "name": "amount", "type": "uint256" }
+      ],
+      "outputs": [{ "name": "", "type": "bool" }],
+      "stateMutability": "nonpayable"
+    }
+  ],
+  "requestHash": "0xf54566b3184c44871673c7bfa5474ca0d23b16d118b4d276cda4761b1291c0ff"
+}

@@ -1,0 +1,6 @@
+{
+  "inclusionBlock": "11716393",
+  "finalityConfirmationsRequired": "2",
+  "finalityReachedAtBlock": "11716395",
+  "note": "Testnet finality threshold documented here is 2 confirmations past inclusion — a deliberate, stated policy for this controlled proof, not a claim of universal/mainnet finality (Gate 5 instructions Part 18)."
+}

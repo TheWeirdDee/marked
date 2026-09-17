@@ -1,0 +1,11 @@
+{
+  "keeperHubCaller": "0xeecbc82818e591b92e6dd54aa7589b0b9fed6160",
+  "requiredCallerModel": {
+    "model": "PERMISSIONLESS",
+    "evidence": "Compound's reference GovernorBravoDelegate.sol (contracts/Governance/GovernorBravoDelegate.sol, compound-finance/compound-protocol, read directly in Gate 2): execute(uint proposalId) external payable and queue(uint proposalId) external contain only `require(state(proposalId) == ProposalState.X, ...)` checks — no `require(msg.sender == ...)` or role check of any kind. This describes the reference implementation's source, not a decompiled confirmation of any one specific deployed contract's exact bytecode — a deployment could in principle differ from the reference source."
+  },
+  "deploymentMatchesReferenceSource": true,
+  "simulationConfirmedNoRevert": true,
+  "result": "COMPATIBLE",
+  "evidence": "Reference source is PERMISSIONLESS, the deployed contract's execute/queue functions are confirmed byte-for-byte identical to that source, and a live KeeperHub simulation of execute() from 0xeecbc82818e591b92e6dd54aa7589b0b9fed6160 did not revert — caller compatibility empirically confirmed for this specific deployment."
+}

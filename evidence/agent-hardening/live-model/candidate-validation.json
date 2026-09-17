@@ -1,0 +1,24 @@
+{
+  "pipeline": "REAL MODEL RESPONSE -> JSON.parse -> CandidateAgentPlanSchema (via validateAgentPlan) -> deterministic checks",
+  "deterministicMarkedResult": {
+    "ok": true,
+    "plan": {
+      "version": 1,
+      "selectedActionIndexes": [
+        0
+      ],
+      "explanation": "Candidate read-only plan covering the proposal's sole supported action. It prepares execution without authorizing or sending a transaction.",
+      "proposalSummary": "One supported action is present: transfer the authorized raw token amount to the authorized recipient.",
+      "executionExplanation": "Prepare action 0 through the governor's authorized execution path only after all applicable proposal and timelock requirements are satisfied. Do not alter any execution parameters.",
+      "verificationExplanation": "After execution, verify that action 0 produced the authorized transfer by checking the exact target, recipient, raw amount, transaction outcome, and relevant token events or balances.",
+      "riskNotes": [
+        "This is a candidate plan, not an authorization.",
+        "No transaction has been sent.",
+        "Do not substitute any recipient, amount, target, calldata, or execution parameter.",
+        "Confirm that every required governance and timelock gate has passed before execution."
+      ],
+      "operatorQuestions": []
+    }
+  },
+  "blockchainWritesPerformed": 0
+}

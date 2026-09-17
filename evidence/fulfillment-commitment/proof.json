@@ -1,0 +1,110 @@
+{
+  "frozenActionAuthorizationHash": "0x29fab99c1fd3e796981fb2ae34b92280c7405bfafe6ef60882628ddec1dab28d",
+  "gate2RegressionPass": true,
+  "postconditionBinding": {
+    "actionIndex": 0,
+    "adapterId": "erc20-transfer",
+    "adapterVersion": "1",
+    "required": true,
+    "bindingParams": [
+      {
+        "key": "token",
+        "value": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
+      },
+      {
+        "key": "recipient",
+        "value": "0x59E0cDA5922eFbA00a57794faF09BF6252d64126"
+      },
+      {
+        "key": "rawAmount",
+        "value": "60000000000"
+      }
+    ]
+  },
+  "commitment": {
+    "version": 1,
+    "chainId": 1,
+    "governor": "0xc0Da02939E1441F497fd74F78cE7Decb17B66529",
+    "governorFamily": "GOVERNOR_BRAVO",
+    "proposalId": "220",
+    "frozenActionAuthorizationHash": "0x29fab99c1fd3e796981fb2ae34b92280c7405bfafe6ef60882628ddec1dab28d",
+    "selectedActionIndexes": [
+      0
+    ],
+    "postconditionBindings": [
+      {
+        "actionIndex": 0,
+        "adapterId": "erc20-transfer",
+        "adapterVersion": "1",
+        "required": true,
+        "bindingParams": [
+          {
+            "key": "token",
+            "value": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
+          },
+          {
+            "key": "recipient",
+            "value": "0x59E0cDA5922eFbA00a57794faF09BF6252d64126"
+          },
+          {
+            "key": "rawAmount",
+            "value": "60000000000"
+          }
+        ]
+      }
+    ],
+    "fulfillmentMode": "APPROVE",
+    "executionSurfaceId": "keeperhub-direct-contract-call-v1",
+    "executionPolicyVersion": "1"
+  },
+  "fulfillmentCommitmentHash": "0x77c70a19f9a2910823e34416b30790c2e683bf2a889d02c414b211cc0fa49358",
+  "reproducibility": {
+    "run1": "0x77c70a19f9a2910823e34416b30790c2e683bf2a889d02c414b211cc0fa49358",
+    "run2": "0x77c70a19f9a2910823e34416b30790c2e683bf2a889d02c414b211cc0fa49358",
+    "match": true
+  },
+  "reviewReadyJob": {
+    "jobId": "example-job-1",
+    "status": "REVIEW_READY",
+    "commitment": {
+      "version": 1,
+      "chainId": 1,
+      "governor": "0xc0Da02939E1441F497fd74F78cE7Decb17B66529",
+      "governorFamily": "GOVERNOR_BRAVO",
+      "proposalId": "220",
+      "frozenActionAuthorizationHash": "0x29fab99c1fd3e796981fb2ae34b92280c7405bfafe6ef60882628ddec1dab28d",
+      "selectedActionIndexes": [
+        0
+      ],
+      "postconditionBindings": [
+        {
+          "actionIndex": 0,
+          "adapterId": "erc20-transfer",
+          "adapterVersion": "1",
+          "required": true,
+          "bindingParams": [
+            {
+              "key": "token",
+              "value": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
+            },
+            {
+              "key": "recipient",
+              "value": "0x59E0cDA5922eFbA00a57794faF09BF6252d64126"
+            },
+            {
+              "key": "rawAmount",
+              "value": "60000000000"
+            }
+          ]
+        }
+      ],
+      "fulfillmentMode": "APPROVE",
+      "executionSurfaceId": "keeperhub-direct-contract-call-v1",
+      "executionPolicyVersion": "1"
+    },
+    "fulfillmentCommitmentHash": "0x77c70a19f9a2910823e34416b30790c2e683bf2a889d02c414b211cc0fa49358",
+    "createdAt": "2026-09-16T12:35:23.794Z",
+    "updatedAt": "2026-09-16T12:35:23.794Z"
+  },
+  "note": "COMPOSED EXAMPLE — not a live observation. Compound #220 did not actually authorize an ERC20 transfer; this commitment illustrates the mechanism only and was never armed, approved, or executed."
+}

@@ -1,0 +1,207 @@
+{
+  "proposal": {
+    "id": "2271393617731913453",
+    "onchainId": "220",
+    "metadata": {
+      "title": "# [Gauntlet] 2023-02-26: Ethereum v3 USDC - targetReserves Recommendations",
+      "description": "# [Gauntlet] 2023-02-26: Ethereum v3 USDC - targetReserves Recommendations\n\n## Simple Summary\nGauntlet recommends the following risk parameter updates for the Ethereum v3 USDC comet:\n\n- Increase TargetReserves from 5M to 20M.\n\n\n## Motivation\nGauntlet recommends increasing the targetReserves in Ethereum v3 USDC from 5M to 20M in order to allow the buyCollateral function to successfully be called in the future even when the comet’s USDC reserves exceed 5M.\n\n\nFor more details, see the full forum post [here](https://www.comp.xyz/t/gauntlet-ethereum-v3-usdc-targetreserves-recommendations-02-21-2024/5002).\n\n## Specification\nThis proposal updates the targetReserves in Ethereum v3 USDC comet\n\n*By approving this proposal, you agree that any services provided by Gauntlet shall be governed by the terms of service available at gauntlet.network/tos.*",
+      "snapshotURL": null,
+      "discourseURL": null
+    },
+    "status": "executed",
+    "voteStats": [
+      {
+        "votesCount": "616096575450925467656329",
+        "votersCount": 10,
+        "type": "for",
+        "percent": 100
+      },
+      {
+        "votesCount": "0",
+        "votersCount": 0,
+        "type": "against",
+        "percent": 0
+      },
+      {
+        "votesCount": "0",
+        "votersCount": 0,
+        "type": "abstain",
+        "percent": 0
+      },
+      {
+        "votesCount": "0",
+        "votersCount": 0,
+        "type": "pendingfor",
+        "percent": 0
+      },
+      {
+        "votesCount": "0",
+        "votersCount": 0,
+        "type": "pendingagainst",
+        "percent": 0
+      },
+      {
+        "votesCount": "0",
+        "votersCount": 0,
+        "type": "pendingabstain",
+        "percent": 0
+      }
+    ],
+    "start": {
+      "timestamp": "2024-03-04T16:32:23Z"
+    },
+    "end": {
+      "timestamp": "2024-03-07T10:14:23Z"
+    },
+    "events": [
+      {
+        "block": {
+          "number": 19314633
+        },
+        "type": "created"
+      },
+      {
+        "block": {
+          "number": 19347487
+        },
+        "type": "queued"
+      },
+      {
+        "block": {
+          "number": 19393409
+        },
+        "type": "executed"
+      }
+    ],
+    "governor": {
+      "id": "eip155:1:0xc0Da02939E1441F497fd74F78cE7Decb17B66529",
+      "chainId": "eip155:1",
+      "token": {
+        "decimals": 18,
+        "symbol": "COMP"
+      },
+      "organization": {
+        "name": "Compound",
+        "metadata": {
+          "icon": "https://static.tally.xyz/bc952927-da93-4cab-b0ce-b5e2f5976b9a_400x400.jpg"
+        }
+      }
+    }
+  },
+  "organization": {
+    "id": "2206072050458560433",
+    "name": "Compound",
+    "slug": "compound",
+    "isArchived": false,
+    "archivedAt": null,
+    "archiveReason": "",
+    "isPaused": false,
+    "pausedAt": null,
+    "pauseReason": "",
+    "chainIds": [
+      "eip155:1"
+    ],
+    "delegatesCount": 21171,
+    "delegatesVotesCount": "3240484446043568714308914",
+    "governorIds": [
+      "eip155:1:0x309a862bbC1A00e45506cB8A802D1ff10004c8C0",
+      "eip155:1:0xc0Da02939E1441F497fd74F78cE7Decb17B66529"
+    ],
+    "hasActiveProposals": false,
+    "proposalsCount": 561,
+    "requiresPasswordToJoin": false,
+    "tokenIds": [
+      "eip155:1/erc20:0xc00e94Cb662C3520282E6f5717214004A7f26888"
+    ],
+    "tokenOwnersCount": 219021,
+    "metadata": {
+      "description": "Compound is an algorithmic, autonomous interest rate protocol built for developers, to unlock a universe of open financial applications.",
+      "icon": "https://static.tally.xyz/bc952927-da93-4cab-b0ce-b5e2f5976b9a_400x400.jpg",
+      "socials": {
+        "website": "https://compound.finance/",
+        "discord": null,
+        "telegram": null,
+        "twitter": null,
+        "discourse": "https://www.comp.xyz/",
+        "others": null
+      },
+      "karmaName": null
+    },
+    "features": [
+      {
+        "name": "EXCLUDE_TALLY_FEE",
+        "enabled": true
+      },
+      {
+        "name": "SHOW_COMPOUND_TREASURY",
+        "enabled": true
+      },
+      {
+        "name": "EXPORT_IMPORT_ACTIONS",
+        "enabled": true
+      }
+    ],
+    "contracts": [],
+    "delegateEligibilityThreshold": null
+  },
+  "governors": [
+    {
+      "id": "eip155:1:0x309a862bbC1A00e45506cB8A802D1ff10004c8C0",
+      "timelockId": "eip155:1:0x6d903f6003cca6255D85CcA4D3B5E5146dC33925",
+      "name": "Compound Governor",
+      "kind": "multiprimary",
+      "quorum": "400000000000000000000000",
+      "isPrimary": true,
+      "chainId": "eip155:1",
+      "type": "openzeppelingovernor",
+      "contracts": {
+        "governor": {
+          "address": "0x309a862bbC1A00e45506cB8A802D1ff10004c8C0",
+          "type": "openzeppelingovernor"
+        },
+        "tokens": [
+          {
+            "address": "0xc00e94Cb662C3520282E6f5717214004A7f26888",
+            "type": "ERC20"
+          }
+        ]
+      },
+      "token": {
+        "id": "eip155:1/erc20:0xc00e94Cb662C3520282E6f5717214004A7f26888",
+        "decimals": 18,
+        "name": "Compound",
+        "symbol": "COMP",
+        "type": "ERC20"
+      }
+    },
+    {
+      "id": "eip155:1:0xc0Da02939E1441F497fd74F78cE7Decb17B66529",
+      "timelockId": "eip155:1:0x6d903f6003cca6255D85CcA4D3B5E5146dC33925",
+      "name": "Compound",
+      "kind": "multiother",
+      "quorum": "400000000000000000000000",
+      "isPrimary": true,
+      "chainId": "eip155:1",
+      "type": "governorbravo",
+      "contracts": {
+        "governor": {
+          "address": "0xc0Da02939E1441F497fd74F78cE7Decb17B66529",
+          "type": "governorbravo"
+        },
+        "tokens": [
+          {
+            "address": "0xc00e94Cb662C3520282E6f5717214004A7f26888",
+            "type": "ERC20"
+          }
+        ]
+      },
+      "token": {
+        "id": "eip155:1/erc20:0xc00e94Cb662C3520282E6f5717214004A7f26888",
+        "decimals": 18,
+        "name": "Compound",
+        "symbol": "COMP",
+        "type": "ERC20"
+      }
+    }
+  ]
+}

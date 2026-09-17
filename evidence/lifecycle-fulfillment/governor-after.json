@@ -1,0 +1,12 @@
+{
+  "proposalId": "2",
+  "rawState": 7,
+  "stateLabel": "Executed",
+  "eta": "1789556934",
+  "canceled": false,
+  "executed": true,
+  "capturedAtBlock": "11716395",
+  "capturedAtTimestamp": "1789557252",
+  "outcome": "ALREADY_EXECUTED",
+  "reason": "Proposal has already been executed — must not submit another execution."
+}

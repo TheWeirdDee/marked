@@ -1,0 +1,659 @@
+{
+  "dao": "Uniswap",
+  "governor": "0x408ED6354d4973f66138C91495F2f2FCbd8724C3",
+  "event": "proposal-queued",
+  "fromBlock": "13059157",
+  "toBlock": "25995025",
+  "chunkBlocks": "80000",
+  "fetchedAt": "2026-09-17T05:11:02.408Z",
+  "logs": [
+    {
+      "args": {
+        "id": "9",
+        "eta": "1636763195"
+      },
+      "blockNumber": "13591709",
+      "transactionHash": "0xe91e2bcb8edfdf815606cf7d9470d6030286cd470e26e5d6ff0adb694dfbc66e",
+      "logIndex": 539
+    },
+    {
+      "args": {
+        "id": "10",
+        "eta": "1639984381"
+      },
+      "blockNumber": "13827677",
+      "transactionHash": "0xa66629d2d1e9c568d22eda96911bddaad84c517f9fab7ca8db303c87f1e196a7",
+      "logIndex": 565
+    },
+    {
+      "args": {
+        "id": "11",
+        "eta": "1647035743"
+      },
+      "blockNumber": "14355132",
+      "transactionHash": "0x86a450c72a343334792b26342cbf1a6d2ea3dbb99e9160ed5b3e41e71cef05d0",
+      "logIndex": 278
+    },
+    {
+      "args": {
+        "id": "13",
+        "eta": "1648663664"
+      },
+      "blockNumber": "14476169",
+      "transactionHash": "0xbc84001a6dc11cad9369cb9cb8a9cc776433a64082baad6315c576703d6225fa",
+      "logIndex": 148
+    },
+    {
+      "args": {
+        "id": "14",
+        "eta": "1649707068"
+      },
+      "blockNumber": "14553555",
+      "transactionHash": "0xb8711af162afd9aa83813c256452f5e603c484119907f3108dff29662228d037",
+      "logIndex": 297
+    },
+    {
+      "args": {
+        "id": "16",
+        "eta": "1652302757"
+      },
+      "blockNumber": "14744592",
+      "transactionHash": "0x5419e71a0bd15ba9109cc317292109c0355e2430963fb8e20aa3abf5bf88b7e3",
+      "logIndex": 238
+    },
+    {
+      "args": {
+        "id": "20",
+        "eta": "1655734175"
+      },
+      "blockNumber": "14985406",
+      "transactionHash": "0x9d2522758a7d91b95d0117ed2a134664a5b6373ef4432518c4dc4e0731bb29ae",
+      "logIndex": 6
+    },
+    {
+      "args": {
+        "id": "19",
+        "eta": "1656165669"
+      },
+      "blockNumber": "15013298",
+      "transactionHash": "0x32ed62ec5c8eb56e8474a220cecee9b709c8adfa05bc26a5b61edb83f10fe4a1",
+      "logIndex": 435
+    },
+    {
+      "args": {
+        "id": "22",
+        "eta": "1656320871"
+      },
+      "blockNumber": "15022949",
+      "transactionHash": "0xfe82ebce602ffae323e6b71c97f8741d0616bc2aa350da687f2a04b9cc4a054c",
+      "logIndex": 373
+    },
+    {
+      "args": {
+        "id": "23",
+        "eta": "1658096521"
+      },
+      "blockNumber": "15149937",
+      "transactionHash": "0xa6635d7bce762ea6541cf4263b0fcbd655d3803610c986bd0b257f050f569c90",
+      "logIndex": 386
+    },
+    {
+      "args": {
+        "id": "24",
+        "eta": "1661484858"
+      },
+      "blockNumber": "15400579",
+      "transactionHash": "0x8445f25a59db26c53401aa684b3b278dbe605314cfea0b888dfc51be1c7442e8",
+      "logIndex": 106
+    },
+    {
+      "args": {
+        "id": "25",
+        "eta": "1665897011"
+      },
+      "blockNumber": "15744171",
+      "transactionHash": "0x95f8be05025d403d96fa253e4684fdcba3291fedbfea914034dfeee70f386081",
+      "logIndex": 242
+    },
+    {
+      "args": {
+        "id": "29",
+        "eta": "1672045823"
+      },
+      "blockNumber": "16253609",
+      "transactionHash": "0x5eebcfc7bd5eab1a333de78aeda5f8c8d5d46d7cf8c2aa8602388e43182e6671",
+      "logIndex": 29
+    },
+    {
+      "args": {
+        "id": "30",
+        "eta": "1675502459"
+      },
+      "blockNumber": "16540187",
+      "transactionHash": "0x3cbd498fb38b2bd4b2d583848aeaeb260f9f790b0452a5db3ff606563be551c0",
+      "logIndex": 339
+    },
+    {
+      "args": {
+        "id": "31",
+        "eta": "1676210939"
+      },
+      "blockNumber": "16598858",
+      "transactionHash": "0x1b258218958b26b3b00b5639da96a5285ce4618df38669980dc34175d6802b43",
+      "logIndex": 243
+    },
+    {
+      "args": {
+        "id": "32",
+        "eta": "1676647007"
+      },
+      "blockNumber": "16634977",
+      "transactionHash": "0xd209021beff53275786a0a93aff911cd39de3582ff0625c796c6900d79b75a9a",
+      "logIndex": 88
+    },
+    {
+      "args": {
+        "id": "33",
+        "eta": "1679231015"
+      },
+      "blockNumber": "16847705",
+      "transactionHash": "0x79cc4fd06ae47e55022ada486e7bdb9047a0ed7ea07de73fa1feed2c707ca88a",
+      "logIndex": 70
+    },
+    {
+      "args": {
+        "id": "34",
+        "eta": "1681644227"
+      },
+      "blockNumber": "17045101",
+      "transactionHash": "0x27e4b9512d78c1522c026a12c6d8f526198941744db210c6e76f18b5ce4f343a",
+      "logIndex": 105
+    },
+    {
+      "args": {
+        "id": "36",
+        "eta": "1681817135"
+      },
+      "blockNumber": "17059142",
+      "transactionHash": "0xde274562bd9db592dc7b5208eadb763b2f4866b56f9222ca253fd537a5de9cab",
+      "logIndex": 61
+    },
+    {
+      "args": {
+        "id": "37",
+        "eta": "1682215523"
+      },
+      "blockNumber": "17091692",
+      "transactionHash": "0xd31cd3d3e4706a1fc319925a8a687c96a97fb81ddae514a67ab378aa59624e35",
+      "logIndex": 342
+    },
+    {
+      "args": {
+        "id": "38",
+        "eta": "1683379679"
+      },
+      "blockNumber": "17187598",
+      "transactionHash": "0x9b32b2f103e5f94304afbd7c2e4655cb17c72303578753a51dc34d0ddcea7d6f",
+      "logIndex": 206
+    },
+    {
+      "args": {
+        "id": "39",
+        "eta": "1684502795"
+      },
+      "blockNumber": "17279638",
+      "transactionHash": "0x1701d35c88b3c70a2d242a953129637bc1ea5b5e851cf596e25a9587546217c5",
+      "logIndex": 209
+    },
+    {
+      "args": {
+        "id": "40",
+        "eta": "1690765139"
+      },
+      "blockNumber": "17795275",
+      "transactionHash": "0x7a0d0ce8976c1d9c732c08ff0d6084ca73729b3b48f8a42c5bbfd764c86b486e",
+      "logIndex": 21
+    },
+    {
+      "args": {
+        "id": "42",
+        "eta": "1691161919"
+      },
+      "blockNumber": "17828122",
+      "transactionHash": "0x1b127467bf87f876b061c999a80876dfbcca72b4c7aa5e655fc9a4f73d9856af",
+      "logIndex": 243
+    },
+    {
+      "args": {
+        "id": "43",
+        "eta": "1693486775"
+      },
+      "blockNumber": "18020427",
+      "transactionHash": "0x15c6a5339b5c02defe881e1110c5081ccccb0ebdd146db9298deae522059d533",
+      "logIndex": 424
+    },
+    {
+      "args": {
+        "id": "45",
+        "eta": "1693666151"
+      },
+      "blockNumber": "18035259",
+      "transactionHash": "0xeccd8d43d624a2206c63d34e98eac4e89385da3a89025a994e8c1f4fec320fbf",
+      "logIndex": 39
+    },
+    {
+      "args": {
+        "id": "47",
+        "eta": "1695365987"
+      },
+      "blockNumber": "18175471",
+      "transactionHash": "0xd60e41c20eab95b37a907594a244cedb6e3df12dc52c0e3367d8a63efc3711d1",
+      "logIndex": 672
+    },
+    {
+      "args": {
+        "id": "50",
+        "eta": "1696769807"
+      },
+      "blockNumber": "18291601",
+      "transactionHash": "0x9e1a4ca0af32f7d760ce64299e6d0b3005d1ddbe6167f95ac1d4d1d5632f99e8",
+      "logIndex": 381
+    },
+    {
+      "args": {
+        "id": "51",
+        "eta": "1697794199"
+      },
+      "blockNumber": "18376356",
+      "transactionHash": "0x8bb59ff3877f5e2b65f8e2f151c75a4667df295a17d88be19d5f2646028558dc",
+      "logIndex": 145
+    },
+    {
+      "args": {
+        "id": "52",
+        "eta": "1699509515"
+      },
+      "blockNumber": "18518145",
+      "transactionHash": "0xec26bb5c9c7405d02ea1ecdd1a58706945003a21f9b8b2e243f1f9db373ad711",
+      "logIndex": 160
+    },
+    {
+      "args": {
+        "id": "54",
+        "eta": "1702646063"
+      },
+      "blockNumber": "18777477",
+      "transactionHash": "0x503f52733ee7458e94a9d50fd53cf839bec15547d4793de36b869c693bfb97cf",
+      "logIndex": 221
+    },
+    {
+      "args": {
+        "id": "56",
+        "eta": "1706533919"
+      },
+      "blockNumber": "19098132",
+      "transactionHash": "0xf6eec3101ab9becc0b8c890dbbb2db7242b627b17780d48c9a4a652111e34d96",
+      "logIndex": 186
+    },
+    {
+      "args": {
+        "id": "55",
+        "eta": "1706533943"
+      },
+      "blockNumber": "19098134",
+      "transactionHash": "0x15bd94b08aaa1cccf74867eee45b4434dc0d2b1f7ca14f47fc7222cd5947f191",
+      "logIndex": 161
+    },
+    {
+      "args": {
+        "id": "57",
+        "eta": "1708345055"
+      },
+      "blockNumber": "19247526",
+      "transactionHash": "0xf51a269ba07fb776e6956544572593625d158359a586af21bf3393b5d86270d0",
+      "logIndex": 192
+    },
+    {
+      "args": {
+        "id": "58",
+        "eta": "1708445855"
+      },
+      "blockNumber": "19255819",
+      "transactionHash": "0x42c8fe132198e83691bfb023abe45a40bd43d418aa56e53dbfd7e3e3eec4ca50",
+      "logIndex": 124
+    },
+    {
+      "args": {
+        "id": "59",
+        "eta": "1708964075"
+      },
+      "blockNumber": "19298569",
+      "transactionHash": "0x85402e133ab904a92d00bb66b9f7dfc54a1fa68cd5ac3fffffa3d60363a0710a",
+      "logIndex": 386
+    },
+    {
+      "args": {
+        "id": "60",
+        "eta": "1714534559"
+      },
+      "blockNumber": "19758324",
+      "transactionHash": "0x341e2c63ab636c5b509d8f83df02800dbe2367bc7b2f56de3c5d7c63277a14e5",
+      "logIndex": 196
+    },
+    {
+      "args": {
+        "id": "61",
+        "eta": "1714560935"
+      },
+      "blockNumber": "19760510",
+      "transactionHash": "0x1e7c419f8a29371b6ac7951029e99079613482713f68303dda2ca760023be7a8",
+      "logIndex": 444
+    },
+    {
+      "args": {
+        "id": "62",
+        "eta": "1715059331"
+      },
+      "blockNumber": "19801776",
+      "transactionHash": "0xd9ed904c0961d84fb6197867d36a7267dfac029c040d00c4fe1f5e56d9804574",
+      "logIndex": 170
+    },
+    {
+      "args": {
+        "id": "63",
+        "eta": "1717126751"
+      },
+      "blockNumber": "19972890",
+      "transactionHash": "0x16ad6d0da9cd4d3e48be993bf99d66b16f5d88721f0af6c6698f9cb1da9e401b",
+      "logIndex": 303
+    },
+    {
+      "args": {
+        "id": "64",
+        "eta": "1717463183"
+      },
+      "blockNumber": "20000746",
+      "transactionHash": "0x51a0084db4424d353878f6c67f1d96c9bfb559c8163c0bd601c91a20226f7ab1",
+      "logIndex": 162
+    },
+    {
+      "args": {
+        "id": "65",
+        "eta": "1719919079"
+      },
+      "blockNumber": "20204152",
+      "transactionHash": "0xc6eeb4712d87f3dbbf801a1dc43bce17587dd274f002d04e9788f647054ad5d1",
+      "logIndex": 351
+    },
+    {
+      "args": {
+        "id": "66",
+        "eta": "1723875131"
+      },
+      "blockNumber": "20532161",
+      "transactionHash": "0x3b4cb3b0ed81d05536f147143c09a691917f9a88a397c5c61d8bfa949bfce054",
+      "logIndex": 146
+    },
+    {
+      "args": {
+        "id": "67",
+        "eta": "1724482559"
+      },
+      "blockNumber": "20582495",
+      "transactionHash": "0x2de9983552869e5685dcfd9f7080654631a2b9811095f6956c864dd96fca5349",
+      "logIndex": 614
+    },
+    {
+      "args": {
+        "id": "68",
+        "eta": "1725508307"
+      },
+      "blockNumber": "20667481",
+      "transactionHash": "0x18dc98afb6dfc7a086f99247a7f72bfe8b3a62713f4a5bffd780d206ce5c2b82",
+      "logIndex": 98
+    },
+    {
+      "args": {
+        "id": "69",
+        "eta": "1726380947"
+      },
+      "blockNumber": "20739841",
+      "transactionHash": "0x4c8f2418a5f681e8cb61737408ee640e4a7ceca1593344cb6c14022a19cc5e83",
+      "logIndex": 267
+    },
+    {
+      "args": {
+        "id": "70",
+        "eta": "1727256683"
+      },
+      "blockNumber": "20812407",
+      "transactionHash": "0x7e5842d7432d4b0116686891594377deafd37b137b398d6453b34a3398801ed1",
+      "logIndex": 181
+    },
+    {
+      "args": {
+        "id": "72",
+        "eta": "1730130287"
+      },
+      "blockNumber": "21050771",
+      "transactionHash": "0xd057bda077f954e98b3ae67d5e20db679367f037a47a9cda8adffd2cd42385f0",
+      "logIndex": 180
+    },
+    {
+      "args": {
+        "id": "73",
+        "eta": "1730343707"
+      },
+      "blockNumber": "21068474",
+      "transactionHash": "0xe16971ae87f810777edcd78543bc2619ee7c5e99daafa5817826f84155964d5e",
+      "logIndex": 41
+    },
+    {
+      "args": {
+        "id": "74",
+        "eta": "1733044259"
+      },
+      "blockNumber": "21292371",
+      "transactionHash": "0x6827bc99e251ecd949e837081a099b211be4e8ff01ada4b5326fa3e94cfc2518",
+      "logIndex": 73
+    },
+    {
+      "args": {
+        "id": "76",
+        "eta": "1736679587"
+      },
+      "blockNumber": "21593636",
+      "transactionHash": "0x577de4383546b117e382e0650f153faebf2b9a3a1843952279d0cb1d79e76b17",
+      "logIndex": 29
+    },
+    {
+      "args": {
+        "id": "77",
+        "eta": "1736741579"
+      },
+      "blockNumber": "21598779",
+      "transactionHash": "0x46bbf1df2262ed1732c2467f78f90e0110896f847dc41db4784552c11176c7b4",
+      "logIndex": 312
+    },
+    {
+      "args": {
+        "id": "78",
+        "eta": "1737325955"
+      },
+      "blockNumber": "21647221",
+      "transactionHash": "0x461fd374a2c59316641085861314f1e19423e980880a4a0f7a6d9c094d619f81",
+      "logIndex": 185
+    },
+    {
+      "args": {
+        "id": "79",
+        "eta": "1738115375"
+      },
+      "blockNumber": "21712677",
+      "transactionHash": "0xad02683aa03fac9cd285ffb3bab94009e3e4e49d967b9d68cddc28c08d06040b",
+      "logIndex": 289
+    },
+    {
+      "args": {
+        "id": "80",
+        "eta": "1741258943"
+      },
+      "blockNumber": "21973098",
+      "transactionHash": "0x40531a6e77b196f0516da859a1861b4166cdd27e7d728d45def885288473e05e",
+      "logIndex": 46
+    },
+    {
+      "args": {
+        "id": "82",
+        "eta": "1742539595"
+      },
+      "blockNumber": "22079218",
+      "transactionHash": "0xa8f465545163e35baaba08b7f6e410ef7bef2f91a3b54d108b8625ee52c254c5",
+      "logIndex": 23
+    },
+    {
+      "args": {
+        "id": "83",
+        "eta": "1742548775"
+      },
+      "blockNumber": "22079980",
+      "transactionHash": "0xf578f9263db275b7cfd6c1b2af177a409cdc92a9bb2368882ab8d338e9277978",
+      "logIndex": 142
+    },
+    {
+      "args": {
+        "id": "84",
+        "eta": "1745554475"
+      },
+      "blockNumber": "22329251",
+      "transactionHash": "0x3ceb44cf2d0aeaa3bf3abfbf1e8b48507cec46a7d793e33750506f39c01329bd",
+      "logIndex": 32
+    },
+    {
+      "args": {
+        "id": "85",
+        "eta": "1746168587"
+      },
+      "blockNumber": "22380181",
+      "transactionHash": "0x0ecec49b8a34613efcc62c6a337811b6816ef6a2022a8d3557ec44518c8497ef",
+      "logIndex": 39
+    },
+    {
+      "args": {
+        "id": "86",
+        "eta": "1746818315"
+      },
+      "blockNumber": "22433763",
+      "transactionHash": "0x9f82784cfcedda231183df389873f2de839831fc4d430b629d3e4662a530793a",
+      "logIndex": 130
+    },
+    {
+      "args": {
+        "id": "87",
+        "eta": "1746887543"
+      },
+      "blockNumber": "22439422",
+      "transactionHash": "0x542e7b204f5dc6dfe68ff46a7a7b0fed9e52cf1b5ac57c35f6a41f2c3d55447f",
+      "logIndex": 237
+    },
+    {
+      "args": {
+        "id": "89",
+        "eta": "1749368399"
+      },
+      "blockNumber": "22644126",
+      "transactionHash": "0x200c1a667f34518399271d6b0ab2c803061084334f1f234ed223eeca7efb190c",
+      "logIndex": 214
+    },
+    {
+      "args": {
+        "id": "90",
+        "eta": "1757472671"
+      },
+      "blockNumber": "23315505",
+      "transactionHash": "0x704e5600489908982d9fc24ba1e4036b75733573f48e1b8760c55200bcf26820",
+      "logIndex": 19
+    },
+    {
+      "args": {
+        "id": "92",
+        "eta": "1766735591"
+      },
+      "blockNumber": "24081108",
+      "transactionHash": "0xb2b799b8ee413a588f9785646911c85a967ee979df364539429021fe96da1acd",
+      "logIndex": 30
+    },
+    {
+      "args": {
+        "id": "93",
+        "eta": "1766867543"
+      },
+      "blockNumber": "24092049",
+      "transactionHash": "0x3110da56ba91cc17fe20be37f18356f423cc8407084ed8b54213434f41e6f09f",
+      "logIndex": 1159
+    },
+    {
+      "args": {
+        "id": "94",
+        "eta": "1772779895"
+      },
+      "blockNumber": "24582415",
+      "transactionHash": "0xf40c97353d0d31a1b2ad018d7a58b7baa740bbb6503c6ca542cca303d9c272c8",
+      "logIndex": 81
+    },
+    {
+      "args": {
+        "id": "95",
+        "eta": "1772892611"
+      },
+      "blockNumber": "24591778",
+      "transactionHash": "0xe436d76a375c0fb2f21fc70118aab8aeb19219cc1df582178ba8de3b34ac3ebc",
+      "logIndex": 262
+    },
+    {
+      "args": {
+        "id": "96",
+        "eta": "1780287683"
+      },
+      "blockNumber": "25205766",
+      "transactionHash": "0x740132f3ed9c4b393a16b914e25fe434af5b2b6b2585b87896357d52afaaff73",
+      "logIndex": 795
+    },
+    {
+      "args": {
+        "id": "97",
+        "eta": "1780297031"
+      },
+      "blockNumber": "25206539",
+      "transactionHash": "0xbaef153b0c0912440e10ce2309b908b6ba95e217ee97a85f531a9b1642edb93f",
+      "logIndex": 513
+    },
+    {
+      "args": {
+        "id": "98",
+        "eta": "1784029691"
+      },
+      "blockNumber": "25516341",
+      "transactionHash": "0x9ecb66d21ee7e81f844a9037239c3753a87c85f56e5dc82eb351f79b1efb9323",
+      "logIndex": 623
+    },
+    {
+      "args": {
+        "id": "99",
+        "eta": "1785136583"
+      },
+      "blockNumber": "25608228",
+      "transactionHash": "0xdb3a9bdbd429b812de64e19076dbe2ef5bc769e3aafce94533904655a67480a2",
+      "logIndex": 916
+    },
+    {
+      "args": {
+        "id": "100",
+        "eta": "1785137423"
+      },
+      "blockNumber": "25608297",
+      "transactionHash": "0xe6499cc2e740c9548ac28cafea1e235fc6c9f305e444c2b412124fa066748d90",
+      "logIndex": 482
+    }
+  ]
+}

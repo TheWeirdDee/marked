@@ -1,0 +1,862 @@
+{
+  "generatedAt": "2026-09-17T05:43:38.373Z",
+  "byDao": {
+    "Compound": {
+      "MIGRATION_BOUNDARY": 42,
+      "CANCELED": 37,
+      "NOT_SUCCEEDED": 33
+    },
+    "Uniswap": {
+      "MIGRATION_BOUNDARY": 8,
+      "CANCELED": 16,
+      "NOT_SUCCEEDED": 4
+    }
+  },
+  "overall": {
+    "MIGRATION_BOUNDARY": 50,
+    "CANCELED": 53,
+    "NOT_SUCCEEDED": 37
+  },
+  "records": [
+    {
+      "dao": "Compound",
+      "proposalId": "1",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "2",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "3",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "4",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "5",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "6",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "7",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "8",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "9",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "10",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "11",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "12",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "13",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "14",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "15",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "16",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "17",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "18",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "19",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "20",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "21",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "22",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "23",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "24",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "25",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "26",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "27",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "28",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "29",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "30",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "31",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "32",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "33",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "34",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "35",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "36",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "37",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "38",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "39",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "40",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "41",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "42",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (42) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "48",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "55",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "63",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "67",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "70",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "75",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "77",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "78",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "79",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "80",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "84",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "86",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "88",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "91",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "93",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "94",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "95",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "99",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "100",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "106",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "109",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "114",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "118",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "120",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "121",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "127",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "134",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "142",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "148",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "155",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "158",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "166",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "175",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "179",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "183",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "191",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "196",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "202",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "208",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "209",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "221",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "222",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "228",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "232",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "234",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "240",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "246",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "247",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "248",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "253",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "257",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "266",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "267",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "270",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "271",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "279",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "289",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "290",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "291",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "300",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "325",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "346",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "347",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "348",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "364",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "372",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "373",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "381",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "384",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Compound",
+      "proposalId": "390",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Uniswap",
+      "proposalId": "1",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (8) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Uniswap",
+      "proposalId": "2",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (8) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Uniswap",
+      "proposalId": "3",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (8) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Uniswap",
+      "proposalId": "4",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (8) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Uniswap",
+      "proposalId": "5",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (8) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Uniswap",
+      "proposalId": "6",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (8) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Uniswap",
+      "proposalId": "7",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (8) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Uniswap",
+      "proposalId": "8",
+      "reason": "MIGRATION_BOUNDARY",
+      "detail": "Proposal id <= initialProposalId (8) belongs to a prior Governor deployment (e.g. GovernorAlpha), not this Bravo contract — out of scope for this gate."
+    },
+    {
+      "dao": "Uniswap",
+      "proposalId": "12",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Uniswap",
+      "proposalId": "15",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Uniswap",
+      "proposalId": "17",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Uniswap",
+      "proposalId": "18",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Uniswap",
+      "proposalId": "21",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Uniswap",
+      "proposalId": "26",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Uniswap",
+      "proposalId": "27",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Uniswap",
+      "proposalId": "28",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Uniswap",
+      "proposalId": "35",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Uniswap",
+      "proposalId": "41",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Uniswap",
+      "proposalId": "44",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Uniswap",
+      "proposalId": "46",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Uniswap",
+      "proposalId": "48",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Uniswap",
+      "proposalId": "49",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Uniswap",
+      "proposalId": "53",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Uniswap",
+      "proposalId": "71",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Uniswap",
+      "proposalId": "75",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Uniswap",
+      "proposalId": "81",
+      "reason": "CANCELED",
+      "detail": "Governor state() reports Canceled."
+    },
+    {
+      "dao": "Uniswap",
+      "proposalId": "88",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    },
+    {
+      "dao": "Uniswap",
+      "proposalId": "91",
+      "reason": "NOT_SUCCEEDED",
+      "detail": "Governor state() reports Defeated — never passed voting."
+    }
+  ]
+}

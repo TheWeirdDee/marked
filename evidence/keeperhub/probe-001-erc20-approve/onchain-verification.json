@@ -1,0 +1,31 @@
+{
+  "rpc": "https://ethereum-sepolia-rpc.publicnode.com",
+  "allowanceBefore": { "value": "0", "verifiedAt": "eth_call, block: latest, before any KeeperHub call" },
+  "allowanceAfterSimulation": { "value": "0", "note": "zero mutation from simulation, independently confirmed" },
+  "allowanceAfterExecution": { "value": "1337", "note": "matches authorized amount exactly" },
+  "allowanceAfterIdempotentReplay": { "value": "1337", "note": "unchanged — confirms no duplicate transaction was broadcast" },
+  "transaction": {
+    "hash": "0x674e6ee957e8d2470e8120cad36f0e3325309d158b364a76d9c3f0aa023f95be",
+    "type": "0x2",
+    "chainId": "0xaa36a7",
+    "blockNumber": "0xb2ac74",
+    "from": "0xa17cb6adb58277e5b4a44b8c1ecb449bb6614e87",
+    "to": "0x5af5194b4b0909eb978e3cf1e25333852277f07d",
+    "value": "0x0"
+  },
+  "receipt": {
+    "status": "0x1",
+    "gasUsed": "0x109fb",
+    "logs": [
+      {
+        "address": "0xfff9976782d46cc05630d1f6ebab18b2324d6b14",
+        "event": "Approval(address indexed owner, address indexed spender, uint256 value)",
+        "owner": "0xeecbc82818e591b92e6dd54aa7589b0b9fed6160",
+        "spender": "0x000000000000000000000000000000000000dead",
+        "value": "1337"
+      }
+    ]
+  },
+  "ownerEoaNonceAfter": "1",
+  "conclusion": "The Approval event's indexed 'owner' equals the KeeperHub org wallet's own address, not the relayer's or router's address. Since ERC20 approve() emits Approval(msg.sender, spender, amount), this is direct on-chain proof that the target contract observed msg.sender == the wallet's own address. See evidence/keeperhub/wallet-model.md."
+}

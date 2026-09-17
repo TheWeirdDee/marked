@@ -1,0 +1,500 @@
+[
+  {
+    "id": "44lgxni4vkr1s7fle8r6w",
+    "name": "Aave Health Factor Monitor",
+    "description": "Check your Aave v3 health factor hourly, and when it drops below the 1.5 safety threshold alert both Discord and email.",
+    "userId": "NUNTVo3ZpnXAXnvz30lciE54Wg4UiW7O",
+    "organizationId": "28fbcb43-3eee-483b-97b6-2d1227ccbecd",
+    "isAnonymous": false,
+    "featured": false,
+    "featuredOrder": 0,
+    "featuredProtocol": null,
+    "featuredProtocolOrder": 0,
+    "projectId": null,
+    "tagId": null,
+    "nodes": [
+      {
+        "id": "trigger-1",
+        "data": {
+          "type": "trigger",
+          "label": "Trigger",
+          "config": {
+            "triggerType": "Schedule",
+            "scheduleCron": "0 * * * *",
+            "scheduleTimezone": "UTC"
+          },
+          "status": "idle"
+        },
+        "type": "trigger",
+        "position": {
+          "x": 0,
+          "y": 116
+        }
+      },
+      {
+        "id": "step-1",
+        "data": {
+          "type": "action",
+          "label": "Get Aave Health Factor",
+          "config": {
+            "user": "",
+            "network": "1",
+            "actionType": "aave-v3/get-user-account-data",
+            "_protocolMeta": "{\"protocolSlug\":\"aave-v3\",\"contractKey\":\"pool\",\"functionName\":\"getUserAccountData\",\"actionType\":\"read\"}"
+          },
+          "status": "idle",
+          "description": "Read the health factor from Aave v3 for the monitored wallet"
+        },
+        "type": "action",
+        "position": {
+          "x": 252,
+          "y": 116
+        }
+      },
+      {
+        "id": "step-2",
+        "data": {
+          "type": "action",
+          "label": "Condition",
+          "config": {
+            "group": {
+              "id": "group-1",
+              "logic": "AND",
+              "rules": [
+                {
+                  "id": "rule-1",
+                  "operator": "<",
+                  "leftOperand": "{{@step-1:Get Aave Health Factor.healthFactor}}",
+                  "rightOperand": "1500000000000000000"
+                }
+              ]
+            },
+            "condition": "{{@step-1:Get Aave Health Factor.healthFactor}} < 1500000000000000000",
+            "actionType": "Condition"
+          },
+          "status": "idle"
+        },
+        "type": "action",
+        "position": {
+          "x": 504,
+          "y": 116
+        }
+      },
+      {
+        "id": "step-3",
+        "data": {
+          "type": "action",
+          "label": "Send Discord Alert",
+          "config": {
+            "actionType": "discord/send-message",
+            "integrationId": "",
+            "discordMessage": "Aave v3 health factor dropped to {{step-1.healthFactor}}, below the 1.5 safety threshold. Consider adding collateral or repaying debt."
+          },
+          "status": "idle",
+          "description": "Send a notification to a Discord channel"
+        },
+        "type": "action",
+        "position": {
+          "x": 756,
+          "y": 0
+        }
+      },
+      {
+        "id": "step-4",
+        "data": {
+          "type": "action",
+          "label": "Send Email Alert",
+          "config": {
+            "emailTo": "",
+            "emailBody": "Your Aave v3 health factor is {{step-1.healthFactor}}, below the 1.5 safety threshold. Consider adding collateral or repaying debt to avoid liquidation.",
+            "actionType": "sendgrid/send-email",
+            "emailSubject": "Aave health factor alert",
+            "useKeeperHubApiKey": true
+          },
+          "status": "idle",
+          "description": "Send an email notification"
+        },
+        "type": "action",
+        "position": {
+          "x": 756,
+          "y": 232
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "e-trigger-1-step-1",
+        "source": "trigger-1",
+        "target": "step-1"
+      },
+      {
+        "id": "e-step-1-step-2",
+        "source": "step-1",
+        "target": "step-2"
+      },
+      {
+        "id": "e-step-2-step-3",
+        "source": "step-2",
+        "target": "step-3",
+        "sourceHandle": "true"
+      },
+      {
+        "id": "e-step-2-step-4",
+        "source": "step-2",
+        "target": "step-4",
+        "sourceHandle": "true"
+      }
+    ],
+    "visibility": "private",
+    "enabled": false,
+    "sourceWorkflowId": null,
+    "createdAt": "2026-09-15T10:06:18.082Z",
+    "updatedAt": "2026-09-15T10:06:18.082Z",
+    "seededAt": null,
+    "isListed": false,
+    "listedSlug": null,
+    "listedAt": null,
+    "shareExecutionStatus": false,
+    "inputSchema": null,
+    "outputMapping": null,
+    "priceUsdcPerCall": null,
+    "workflowType": "read",
+    "category": null,
+    "chain": null,
+    "listingVersion": 1,
+    "deletedAt": null,
+    "deactivatedAt": null
+  },
+  {
+    "id": "ypp6waw79s6cxel90pvdn",
+    "name": "Aave Health Factor Monitor (Sepolia)",
+    "description": "Check your Aave v3 health factor hourly, and when it drops below the 1.5 safety threshold alert both Discord and email.",
+    "userId": "NUNTVo3ZpnXAXnvz30lciE54Wg4UiW7O",
+    "organizationId": "28fbcb43-3eee-483b-97b6-2d1227ccbecd",
+    "isAnonymous": false,
+    "featured": false,
+    "featuredOrder": 0,
+    "featuredProtocol": null,
+    "featuredProtocolOrder": 0,
+    "projectId": null,
+    "tagId": null,
+    "nodes": [
+      {
+        "id": "trigger-1",
+        "data": {
+          "type": "trigger",
+          "label": "Trigger",
+          "config": {
+            "triggerType": "Schedule",
+            "scheduleCron": "0 * * * *",
+            "scheduleTimezone": "UTC"
+          },
+          "status": "idle"
+        },
+        "type": "trigger",
+        "position": {
+          "x": 0,
+          "y": 116
+        }
+      },
+      {
+        "id": "step-1",
+        "data": {
+          "type": "action",
+          "label": "Get Aave Health Factor",
+          "config": {
+            "user": "",
+            "network": "11155111",
+            "actionType": "aave-v3/get-user-account-data",
+            "_protocolMeta": "{\"protocolSlug\":\"aave-v3\",\"contractKey\":\"pool\",\"functionName\":\"getUserAccountData\",\"actionType\":\"read\"}"
+          },
+          "status": "idle",
+          "description": "Read the health factor from Aave v3 for the monitored wallet"
+        },
+        "type": "action",
+        "position": {
+          "x": 252,
+          "y": 116
+        }
+      },
+      {
+        "id": "step-2",
+        "data": {
+          "type": "action",
+          "label": "Condition",
+          "config": {
+            "group": {
+              "id": "group-1",
+              "logic": "AND",
+              "rules": [
+                {
+                  "id": "rule-1",
+                  "operator": "<",
+                  "leftOperand": "{{@step-1:Get Aave Health Factor.healthFactor}}",
+                  "rightOperand": "1500000000000000000"
+                }
+              ]
+            },
+            "condition": "{{@step-1:Get Aave Health Factor.healthFactor}} < 1500000000000000000",
+            "actionType": "Condition"
+          },
+          "status": "idle"
+        },
+        "type": "action",
+        "position": {
+          "x": 504,
+          "y": 116
+        }
+      },
+      {
+        "id": "step-3",
+        "data": {
+          "type": "action",
+          "label": "Send Discord Alert",
+          "config": {
+            "actionType": "discord/send-message",
+            "integrationId": "",
+            "discordMessage": "Aave v3 health factor dropped to {{step-1.healthFactor}}, below the 1.5 safety threshold. Consider adding collateral or repaying debt."
+          },
+          "status": "idle",
+          "description": "Send a notification to a Discord channel"
+        },
+        "type": "action",
+        "position": {
+          "x": 756,
+          "y": 0
+        }
+      },
+      {
+        "id": "step-4",
+        "data": {
+          "type": "action",
+          "label": "Send Email Alert",
+          "config": {
+            "emailTo": "",
+            "emailBody": "Your Aave v3 health factor is {{step-1.healthFactor}}, below the 1.5 safety threshold. Consider adding collateral or repaying debt to avoid liquidation.",
+            "actionType": "sendgrid/send-email",
+            "emailSubject": "Aave health factor alert",
+            "useKeeperHubApiKey": true
+          },
+          "status": "idle",
+          "description": "Send an email notification"
+        },
+        "type": "action",
+        "position": {
+          "x": 756,
+          "y": 232
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "e-trigger-1-step-1",
+        "source": "trigger-1",
+        "target": "step-1"
+      },
+      {
+        "id": "e-step-1-step-2",
+        "source": "step-1",
+        "target": "step-2"
+      },
+      {
+        "id": "e-step-2-step-3",
+        "source": "step-2",
+        "target": "step-3",
+        "sourceHandle": "true"
+      },
+      {
+        "id": "e-step-2-step-4",
+        "source": "step-2",
+        "target": "step-4",
+        "sourceHandle": "true"
+      }
+    ],
+    "visibility": "private",
+    "enabled": false,
+    "sourceWorkflowId": null,
+    "createdAt": "2026-09-15T10:06:18.083Z",
+    "updatedAt": "2026-09-15T10:06:18.083Z",
+    "seededAt": null,
+    "isListed": false,
+    "listedSlug": null,
+    "listedAt": null,
+    "shareExecutionStatus": false,
+    "inputSchema": null,
+    "outputMapping": null,
+    "priceUsdcPerCall": null,
+    "workflowType": "read",
+    "category": null,
+    "chain": null,
+    "listingVersion": 1,
+    "deletedAt": null,
+    "deactivatedAt": null
+  },
+  {
+    "id": "fjcekqfv8xl7kp83zvcse",
+    "name": "Aave Health Factor Monitor (Base Sepolia)",
+    "description": "Check your Aave v3 health factor hourly, and when it drops below the 1.5 safety threshold alert both Discord and email.",
+    "userId": "NUNTVo3ZpnXAXnvz30lciE54Wg4UiW7O",
+    "organizationId": "28fbcb43-3eee-483b-97b6-2d1227ccbecd",
+    "isAnonymous": false,
+    "featured": false,
+    "featuredOrder": 0,
+    "featuredProtocol": null,
+    "featuredProtocolOrder": 0,
+    "projectId": null,
+    "tagId": null,
+    "nodes": [
+      {
+        "id": "trigger-1",
+        "data": {
+          "type": "trigger",
+          "label": "Trigger",
+          "config": {
+            "triggerType": "Schedule",
+            "scheduleCron": "0 * * * *",
+            "scheduleTimezone": "UTC"
+          },
+          "status": "idle"
+        },
+        "type": "trigger",
+        "position": {
+          "x": 0,
+          "y": 116
+        }
+      },
+      {
+        "id": "step-1",
+        "data": {
+          "type": "action",
+          "label": "Get Aave Health Factor",
+          "config": {
+            "user": "",
+            "network": "84532",
+            "actionType": "aave-v3/get-user-account-data",
+            "_protocolMeta": "{\"protocolSlug\":\"aave-v3\",\"contractKey\":\"pool\",\"functionName\":\"getUserAccountData\",\"actionType\":\"read\"}"
+          },
+          "status": "idle",
+          "description": "Read the health factor from Aave v3 for the monitored wallet"
+        },
+        "type": "action",
+        "position": {
+          "x": 252,
+          "y": 116
+        }
+      },
+      {
+        "id": "step-2",
+        "data": {
+          "type": "action",
+          "label": "Condition",
+          "config": {
+            "group": {
+              "id": "group-1",
+              "logic": "AND",
+              "rules": [
+                {
+                  "id": "rule-1",
+                  "operator": "<",
+                  "leftOperand": "{{@step-1:Get Aave Health Factor.healthFactor}}",
+                  "rightOperand": "1500000000000000000"
+                }
+              ]
+            },
+            "condition": "{{@step-1:Get Aave Health Factor.healthFactor}} < 1500000000000000000",
+            "actionType": "Condition"
+          },
+          "status": "idle"
+        },
+        "type": "action",
+        "position": {
+          "x": 504,
+          "y": 116
+        }
+      },
+      {
+        "id": "step-3",
+        "data": {
+          "type": "action",
+          "label": "Send Discord Alert",
+          "config": {
+            "actionType": "discord/send-message",
+            "integrationId": "",
+            "discordMessage": "Aave v3 health factor dropped to {{step-1.healthFactor}}, below the 1.5 safety threshold. Consider adding collateral or repaying debt."
+          },
+          "status": "idle",
+          "description": "Send a notification to a Discord channel"
+        },
+        "type": "action",
+        "position": {
+          "x": 756,
+          "y": 0
+        }
+      },
+      {
+        "id": "step-4",
+        "data": {
+          "type": "action",
+          "label": "Send Email Alert",
+          "config": {
+            "emailTo": "",
+            "emailBody": "Your Aave v3 health factor is {{step-1.healthFactor}}, below the 1.5 safety threshold. Consider adding collateral or repaying debt to avoid liquidation.",
+            "actionType": "sendgrid/send-email",
+            "emailSubject": "Aave health factor alert",
+            "useKeeperHubApiKey": true
+          },
+          "status": "idle",
+          "description": "Send an email notification"
+        },
+        "type": "action",
+        "position": {
+          "x": 756,
+          "y": 232
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "e-trigger-1-step-1",
+        "source": "trigger-1",
+        "target": "step-1"
+      },
+      {
+        "id": "e-step-1-step-2",
+        "source": "step-1",
+        "target": "step-2"
+      },
+      {
+        "id": "e-step-2-step-3",
+        "source": "step-2",
+        "target": "step-3",
+        "sourceHandle": "true"
+      },
+      {
+        "id": "e-step-2-step-4",
+        "source": "step-2",
+        "target": "step-4",
+        "sourceHandle": "true"
+      }
+    ],
+    "visibility": "private",
+    "enabled": false,
+    "sourceWorkflowId": null,
+    "createdAt": "2026-09-15T10:06:18.084Z",
+    "updatedAt": "2026-09-15T10:06:18.084Z",
+    "seededAt": null,
+    "isListed": false,
+    "listedSlug": null,
+    "listedAt": null,
+    "shareExecutionStatus": false,
+    "inputSchema": null,
+    "outputMapping": null,
+    "priceUsdcPerCall": null,
+    "workflowType": "read",
+    "category": null,
+    "chain": null,
+    "listingVersion": 1,
+    "deletedAt": null,
+    "deactivatedAt": null
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "proposalId": "2",
+  "rawState": 5,
+  "stateLabel": "Queued",
+  "eta": "1789556934",
+  "canceled": false,
+  "executed": false,
+  "capturedAtBlock": "11716391",
+  "capturedAtTimestamp": "1789557204",
+  "outcome": "ELIGIBLE_TO_EXECUTE",
+  "reason": "Proposal is Queued and its eta has passed — eligible for execute()."
+}

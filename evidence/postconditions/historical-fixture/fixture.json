@@ -1,0 +1,18 @@
+{
+  "chain": "ethereum-mainnet",
+  "chainId": 1,
+  "token": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+  "tokenSymbol": "USDC",
+  "tokenDecimals": 6,
+  "executionTxHash": "0xe604c01ee06183082d827a1872b94ebc0669849ece2f0549ea2ed5f53331d9ca",
+  "executionBlock": "25883473",
+  "preStateBlock": "25883472",
+  "sender": "0x55fe002aeff02f77364de339a1292923a15844b8",
+  "recipient": "0x59E0cDA5922eFbA00a57794faF09BF6252d64126",
+  "rawTxInput": "0xa9059cbb00000000000000000000000059e0cda5922efba00a57794faf09bf6252d641260000000000000000000000000000000000000000000000000000000df8475800",
+  "bravoStyleCalldata": "0x00000000000000000000000059e0cda5922efba00a57794faf09bf6252d641260000000000000000000000000000000000000000000000000000000df8475800",
+  "signature": "transfer(address,uint256)",
+  "authorizedAmountRaw": "60000000000",
+  "authorizedAmountDisplay": "60000 USDC",
+  "rpcUrl": "https://rpc.mevblocker.io"
+}

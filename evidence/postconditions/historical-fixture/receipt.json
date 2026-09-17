@@ -1,0 +1,20 @@
+{
+  "transactionHash": "0xe604c01ee06183082d827a1872b94ebc0669849ece2f0549ea2ed5f53331d9ca",
+  "status": "success",
+  "blockNumber": "25883473",
+  "blockHash": "0xb656e03c990c501717e937d3af003e050db2d01b7813b6f15930c79f461f0de3",
+  "gasUsed": "45160",
+  "logCount": 1,
+  "logs": [
+    {
+      "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "topics": [
+        "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+        "0x00000000000000000000000055fe002aeff02f77364de339a1292923a15844b8",
+        "0x00000000000000000000000059e0cda5922efba00a57794faf09bf6252d64126"
+      ],
+      "data": "0x0000000000000000000000000000000000000000000000000000000df8475800",
+      "logIndex": 19
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "@marked/governor",
+  "version": "0.0.0",
+  "private": true,
+  "description": "GovernorAdapter — reads authoritative onchain proposal state and actions, and constructs lifecycle calls. The only execution authorization source.",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@marked/core": "workspace:*",
+    "viem": "^2.21.55"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.5"
+  }
+}

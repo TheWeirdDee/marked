@@ -1,0 +1,26 @@
+{
+  "organization": {
+    "id": "2206072050458560434",
+    "slug": "uniswap",
+    "name": "Uniswap"
+  },
+  "proposal": {
+    "title": "Deploy Uniswap v3 on Gnosis Chain",
+    "onchainProposalId": "20",
+    "url": "https://www.tally.xyz/gov/uniswap/proposal/20",
+    "status": "executed"
+  },
+  "chain": {
+    "chainId": 1
+  },
+  "governor": {
+    "address": "0x408ED6354d4973f66138C91495F2f2FCbd8724C3",
+    "kind": "governorbravo"
+  },
+  "provenance": {
+    "endpoint": "https://www.tally.xyz/gov/uniswap/proposal/20",
+    "fetchedAt": "2026-09-15T09:25:00.857Z",
+    "sourceClassification": "CURRENT_CACTUS",
+    "resolutionMethod": "ssr_fallback"
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "proposal": {
+    "id": "1795827820463653889",
+    "onchainId": "20",
+    "metadata": {
+      "title": "# Deploy Uniswap v3 on Gnosis Chain",
+      "description": "# Deploy Uniswap v3 on Gnosis Chain\nContext\n-------\n\nAfter passing the [Temperature Check vote](https://snapshot.org/#/uniswap/proposal/0xb328c7583c0f1ea85f8a273dd36977c95e47c3713744caf7143e68b65efcc8a5) with 7M UNI voting in favor of deploying Uniswap v3 on Gnosis Chain (GC), and [Consensus Check](https://snapshot.org/#/uniswap/proposal/0x729c19f1cafab8ed884914549e147ef401532cf6680e340a1aa0c8cc65f35f09) with 14M UNI voting, we are now posting this proposal as an on-chain governance proposal. To ensure the proposal executes as expected, we have provided [a simulation of hte transactions](https://github.com/gnosis/uniswap_proposal_simulation).\n\nHere is a link to the [Consensus Check Discussion](https://gov.uniswap.org/t/consensus-check-should-uniswap-v3-be-deployed-to-gnosis-chain/16663).\n\nAbout Gnosis Chain\n------------------\n\nIn production since 2018 (as the xDai Chain), the rebranded [Gnosis Chain](https://www.gnosischain.com/) is rapidly evolving with a new focus and mission. Gnosis Chain (GC) provides a real-world value chain that closely mirrors the Ethereum 2.0 ecosystem. This includes a beacon chain framework, rollups, and other vital functionality. GC will serve in a front-running capacity for important Ethereum 2.0 updates.\n\nTuned parameters on Gnosis Chain enable faster blocks and epochs, low-cost stable transactions, and the opportunity to construct trustless bridges and conduct seamless transfers between GC and the Ethereum 2.0 mainnet.\n\nProposal\n--------\n\nThe Gnosis Chain team is committed to ecosystem development, adoption, and growth as the Eth2.0 landscape comes into focus. With a mission to \"accelerate Ethereum,\" Gnosis Chain is poised for expansion. With this in mind, we propose a Uniswap v3 deployment to Gnosis Chain. We believe there are many benefits for both Uniswap Labs and Uniswap users, some of which include:\n\n1.  A DeFi ecosystem primed for growth. Once deployed, Uniswap would become a cornerstone DeFi engine for protocols using and interacting within the ecosystem. Perpetual Protocol is a flagship protocol on GC that relies on Uniswap v3. This deployment will enable Perpetual to continue to flourish on the Gnosis Chain. Additional bluechip app deployments with growing TVL include Curve, Sushiswap, and Tornado Cash, with many new and promising DeFi projects choosing Gnosis Chain as their home base. A list of current projects is available at [https://gnosischain.world/](gnosischain.world)\n\n2.  An iterative environment. Uniswap Labs can experiment with new functionality and alpha test new features in a real-value environment (which differs from a test environment in that users behave differently with value on the line, token supply is limited, real adversaries exist, etc). Uniswap can spot and remediate any final potential issues stemming from important Ethereum updates prior to mainnet activation and take advantage of optimized slot and epoch times for faster iteration.\n\n3.  Tight Ethereum compatibility. Tools, resources, projects, and protocols supported by Ethereum are already supported on Gnosis Chain, with more onboarding regularly. Gnosis Safe is facilitating daily operations for many existing projects. [A trustless bridge architecture designed to connect Ethereum and Gnosis Chain is in the works](https://hackmd.io/g8TK7IzYQjClTTaor-ypIQ). The [Gnosis Beacon Chain validator set](https://beacon.gnosischain.com/) is expanding rapidly bringing massive decentralization to the chain.\\\n    The primary differences separating the GBC from the Ethereum Beacon chain include 5-second blocks and < 2-minute epochs, stable transactions with a max target of $.01 per 100K gas, and an economically and geographically diverse validator set, and a lower-stakes, lower-TVL environment.\n\n4.  Unique chain characteristics. Stable, low-cost transactions provide unique opportunities for Uniswap users. When gas costs are known and have a low impact on trade decisions, new strategies and approaches emerge which are currently untenable on the Ethereum mainnet or other chains with wide-ranging fee variability.\n\n5.  User incentives. A large directive for the Gnosis Chain is to increase the user base and on-chain activity by strategically allocating funds from the GnosisDAO treasury to promote adoption. An ecosystem fund has been created for this purpose, and we propose to use a portion of these funds to promote Uniswap v3 on Gnosis Chain. We propose providing up to $10M to incentivize the adoption of Uniswap v3 on Gnosis Chain.\n\nDetails for incentivized Adoption of Uniswap v3\n------------------------------------------------\n\nThe $10M will be provided in GNO to foster the usage of Uniswap v3 on Gnosis Chain. The incentives should be designed together with other projects, which are operating on top of Uniswap v3 such as Perpetual Protocol, Gelato, or Stakewise. This should allow for more sustainable utilization of Uniswap as Gnosis Chain doesn't have a team dedicated to Uniswap v3. The GNO can be used to incentivize liquidity but should not be limited to this use case. Anything increasing usage of Uniswap v3, including building new applications on top of Uniswap v3 should be supported. The goal is to spend the $10M in the time period of 2 years. Funds not used after two years would go back to GnosisDAO. The spending is limited to $10M and the transferred amount of GNO as part of the proposal. GnosisDAO can decide to top up this amount based on the outcome of this initiative.\n\nCross-Chain Governance with Nomad\n---------------------------------\n\nSince the Temperature Check, we have discussed with stakeholders within the Uniswap ecosystem, who have expressed a desire to see trust-minimized bridges used for governance for new Uniswap v3 deployments. In addition, we've also seen the [Nomad](http://nomad.xyz/) team's proposal to [deploy v3 on Moonbeam](https://gov.uniswap.org/t/consensus-check-deploy-uniswap-v3-to-moonbeam/16624), which includes a section addressing this, as well as documenting the current fragmented approach to governance across various v3 deployments.\n\nIn the interest of taking a standardized approach to cross-chain governance of v3 deployments moving forward, we've partnered with the Nomad team to leverage the Nomad generalized message passing channels to manage the governance of the Uniswap v3 deployment on Gnosis Chain.\n\nWe believe that Nomad is the best solution for cross-chain governance, as it:\n\n-   [Supports generalized messages](https://docs.nomad.xyz/) between chains\n-   Does not rely on a multi-sig or validator set, but rather leverages an optimistic mechanism that allows bad messages to be challenged via fraud proofs\n\nNomad will be deployed on Gnosis Chain shortly and will leverage [Gnosis Zodiac Modules](https://github.com/gnosis/zodiac) as part of its governance stack.\n\nWe are excited about partnering with Nomad to create a trust-minimized governance stack that can offer a standard for the Uniswap ecosystem.\n\nLicense Exemption\n-----------------\n\nWe are requesting an exemption that will allow Gnosis Ltd. to use the Licensed Work to deploy it on Gnosis Chain, a layer 1 blockchain with deep connections to Ethereum, provided that the deployment is subject to Ethereum layer 1 Uniswap Protocol governance and control.\n\nTimeline\n--------\n\nFollowing the Consensus Check phase, we will submit this proposal shortly after to an on-chain vote. Provided that the proposal passes both steps, and all governance systems have been built and audited, we will be ready to move forward with the Uniswap v3 deployment on Gnosis Chain.\n\nProposal Acceptance and Execution\n---------------------------------\n\nAs the proposal funding has to come from GnosisDAO, this proposal has to be accepted by both: UNI and GNO token holders. The execution of this proposal is dependent also on the acceptance of the proposal by GnosisDAO. The GnosisDAO proposal has to include the setup of the multi-sig and the allocation of GNO and would be executed once it is accepted by GNO token holders. Two singers from the Uniswap community and two singers from the GnosisDAO community should be selected to participate in the multisig wallet.\n\nConclusion\n----------\n\nThe Gnosis Chain is preparing for substantial growth in the coming year. We have implemented an aggressive infrastructure grants program including large grants to Nethermind, Lighthouse and Erigon client teams to support base-layer functionality and security. The [ecosystem fund](https://forum.gnosis.io/t/gip-16-gnosis-chain-xdai-gnosis-merge/1904) will bring in many new projects, and we feel Uniswap v3 is an essential component that will serve as a foundational layer for this growth.\n\nWe welcome any questions and comments and are happy to provide any clarifications as needed. We are excited to submit this proposal to the Uniswap community and look forward to your feedback! Thank you.",
+      "snapshotURL": null,
+      "discourseURL": null
+    },
+    "status": "executed",
+    "voteStats": [
+      {
+        "votesCount": "46069208595768571304109744",
+        "votersCount": 661,
+        "type": "for",
+        "percent": 99.99331880294338
+      },
+      {
+        "votesCount": "3078180268000000000000",
+        "votersCount": 2,
+        "type": "against",
+        "percent": 0.006681197056624165
+      },
+      {
+        "votesCount": "0",
+        "votersCount": 0,
+        "type": "abstain",
+        "percent": 0
+      },
+      {
+        "votesCount": "0",
+        "votersCount": 0,
+        "type": "pendingfor",
+        "percent": 0
+      },
+      {
+        "votesCount": "0",
+        "votersCount": 0,
+        "type": "pendingagainst",
+        "percent": 0
+      },
+      {
+        "votesCount": "0",
+        "votersCount": 0,
+        "type": "pendingabstain",
+        "percent": 0
+      }
+    ],
+    "start": {
+      "timestamp": "2022-06-10T14:33:47Z"
+    },
+    "end": {
+      "timestamp": "2022-06-16T04:57:47Z"
+    },
+    "events": [
+      {
+        "block": {
+          "number": 14756440
+        },
+        "type": "created"
+      },
+      {
+        "block": {
+          "number": 14985406
+        },
+        "type": "queued"
+      },
+      {
+        "block": {
+          "number": 15048760
+        },
+        "type": "executed"
+      }
+    ],
+    "governor": {
+      "id": "eip155:1:0x408ED6354d4973f66138C91495F2f2FCbd8724C3",
+      "chainId": "eip155:1",
+      "token": {
+        "decimals": 18,
+        "symbol": "UNI"
+      },
+      "organization": {
+        "name": "Uniswap",
+        "metadata": {
+          "icon": "https://static.tally.xyz/d9e8442f-5cb7-4357-9567-3cdd7ae5930e_400x400.jpg"
+        }
+      }
+    }
+  },
+  "organization": {
+    "id": "2206072050458560434",
+    "name": "Uniswap",
+    "slug": "uniswap",
+    "isArchived": false,
+    "archivedAt": null,
+    "archiveReason": "",
+    "isPaused": false,
+    "pausedAt": null,
+    "pauseReason": "",
+    "chainIds": [
+      "eip155:1"
+    ],
+    "delegatesCount": 52915,
+    "delegatesVotesCount": "163102733006682055288654347",
+    "governorIds": [
+      "eip155:1:0x408ED6354d4973f66138C91495F2f2FCbd8724C3"
+    ],
+    "hasActiveProposals": false,
+    "proposalsCount": 93,
+    "requiresPasswordToJoin": false,
+    "tokenIds": [
+      "eip155:1/erc20:0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984"
+    ],
+    "tokenOwnersCount": 381832,
+    "metadata": {
+      "description": "Uniswap is a decentralized protocol for automated liquidity provision on Ethereum.",
+      "icon": "https://static.tally.xyz/d9e8442f-5cb7-4357-9567-3cdd7ae5930e_400x400.jpg",
+      "socials": {
+        "website": "https://uniswap.org/",
+        "discord": null,
+        "telegram": null,
+        "twitter": null,
+        "discourse": "https://gov.uniswap.org/",
+        "others": null
+      },
+      "karmaName": null
+    },
+    "features": [
+      {
+        "name": "EXCLUDE_TALLY_FEE",
+        "enabled": true
+      },
+      {
+        "name": "SHOW_UNISTAKER",
+        "enabled": false
+      },
+      {
+        "name": "HIDE_STAKE",
+        "enabled": true
+      }
+    ],
+    "contracts": [],
+    "delegateEligibilityThreshold": null
+  },
+  "governors": [
+    {
+      "id": "eip155:1:0x408ED6354d4973f66138C91495F2f2FCbd8724C3",
+      "timelockId": "eip155:1:0x1a9C8182C09F50C8318d769245beA52c32BE35BC",
+      "name": "Uniswap",
+      "kind": "single",
+      "quorum": "40000000000000000000000000",
+      "isPrimary": true,
+      "chainId": "eip155:1",
+      "type": "governorbravo",
+      "contracts": {
+        "governor": {
+          "address": "0x408ED6354d4973f66138C91495F2f2FCbd8724C3",
+          "type": "governorbravo"
+        },
+        "tokens": [
+          {
+            "address": "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984",
+            "type": "ERC20"
+          }
+        ]
+      },
+      "token": {
+        "id": "eip155:1/erc20:0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984",
+        "decimals": 18,
+        "name": "Uniswap",
+        "symbol": "UNI",
+        "type": "ERC20"
+      }
+    }
+  ]
+}

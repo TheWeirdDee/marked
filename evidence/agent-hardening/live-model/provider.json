@@ -1,0 +1,6 @@
+{
+  "provider": "openrouter",
+  "model": "nex-agi/nex-n2.5-pro:free",
+  "selectedBecause": "Verified live against OpenRouter's own /models pricing endpoint (prompt+completion price both 0) and hand-tested for reliable strict-JSON output before being fixed as the one model this gate uses. No fallback list exists — see evidence/agent-hardening/live-model/README.md.",
+  "startedAt": "2026-09-17T04:23:36.671Z"
+}

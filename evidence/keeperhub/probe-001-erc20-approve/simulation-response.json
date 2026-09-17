@@ -1,0 +1,16 @@
+{
+  "success": true,
+  "wouldRevert": false,
+  "gasEstimate": "46170",
+  "simulatedReturnValue": true,
+  "raw": {
+    "success": true,
+    "status": "simulated",
+    "from": "0xeecbc82818e591b92e6dd54aa7589b0b9fed6160",
+    "to": "0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14",
+    "value": "0",
+    "gasEstimate": "46170",
+    "simulatedReturnValue": true,
+    "wouldRevert": false
+  }
+}

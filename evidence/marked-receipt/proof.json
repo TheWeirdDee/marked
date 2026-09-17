@@ -1,0 +1,71 @@
+{
+  "identity": {
+    "chainId": 11155111,
+    "governor": "0xe86cdc53f3c4f416be42f13f621be96ab9d30727",
+    "proposalId": "2",
+    "executionTxHash": "0x49ac3ebbd7e957cb8b57e0e1dcc0e2e24243b2ae72c34cc1b839c7fe8a81d7cb"
+  },
+  "authorization": {
+    "frozen": "0x2fe3f808910a5d89ff9d233d34ecd53fe66d89d3ce46e340891599e784167a3b",
+    "atExecution": "0x2fe3f808910a5d89ff9d233d34ecd53fe66d89d3ce46e340891599e784167a3b",
+    "final": "0x2fe3f808910a5d89ff9d233d34ecd53fe66d89d3ce46e340891599e784167a3b"
+  },
+  "decodedAction": {
+    "token": "0x0136DCDC97d0314Feb27c40b4f4671c9F616f51F",
+    "recipient": "0xF02789155998f85D3a0b7dcA1525b059988Ab442",
+    "rawAmount": "1000000000000000000000"
+  },
+  "postcondition": {
+    "preState": {
+      "token": "0x0136DCDC97d0314Feb27c40b4f4671c9F616f51F",
+      "recipient": "0xF02789155998f85D3a0b7dcA1525b059988Ab442",
+      "recipientBalanceBefore": "0",
+      "preStateBlock": "11716392"
+    },
+    "observed": {
+      "recipientBalanceAfter": "1000000000000000000000",
+      "observedDelta": "1000000000000000000000",
+      "verificationBlock": "11716393",
+      "balanceDeltaMatches": true,
+      "transferLogMatches": true,
+      "matchedTransferLog": {
+        "logIndex": 237,
+        "tokenAddress": "0x0136dcdc97d0314feb27c40b4f4671c9f616f51f",
+        "from": "0x9959E1c49B68EBc27aAA657F4456399562668F19",
+        "to": "0xF02789155998f85D3a0b7dcA1525b059988Ab442",
+        "amount": "1000000000000000000000"
+      },
+      "reason": "EXACT_MATCH"
+    },
+    "verified": true
+  },
+  "sourceCorroboration": {
+    "source": "0x9959E1c49B68EBc27aAA657F4456399562668F19",
+    "sourceBalanceBefore": "100000000000000000000000",
+    "sourceBalanceAfter": "99000000000000000000000"
+  },
+  "reconciliation": {
+    "verified": true
+  },
+  "receipt": {
+    "version": 1,
+    "fulfillmentCommitmentHash": "0x011a295825915fb42918db175e04153f9714acacde8794ece7fda484443441a4",
+    "frozenActionAuthorizationHash": "0x2fe3f808910a5d89ff9d233d34ecd53fe66d89d3ce46e340891599e784167a3b",
+    "finalGovernorAuthorizationHash": "0x2fe3f808910a5d89ff9d233d34ecd53fe66d89d3ce46e340891599e784167a3b",
+    "chainId": 11155111,
+    "governor": "0xe86cdc53f3c4f416be42f13f621be96ab9d30727",
+    "governorFamily": "GOVERNOR_BRAVO",
+    "proposalId": "2",
+    "actionIndex": 0,
+    "executionTxHash": "0x49ac3ebbd7e957cb8b57e0e1dcc0e2e24243b2ae72c34cc1b839c7fe8a81d7cb",
+    "executionBlock": "11716393",
+    "finalityBlock": "11716395",
+    "governorFinalState": 7,
+    "postconditionCoverage": "FULL",
+    "requiredAssertionsVerified": true,
+    "status": "FULFILLED_VERIFIED",
+    "observedAt": "2026-09-17T10:02:15.084Z"
+  },
+  "receiptHash": "0x332ea2320ba4a0af131cfbfd78bfd55418b2eca6746df3d722c9eed2c77219c4",
+  "finalStatus": "FULFILLED_VERIFIED"
+}

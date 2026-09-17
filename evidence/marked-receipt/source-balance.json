@@ -1,0 +1,7 @@
+{
+  "source": "0x9959E1c49B68EBc27aAA657F4456399562668F19",
+  "sourceDerivedFrom": "Governor.timelock() — a live on-chain read, not guessed or taken from Gate 5 logs",
+  "sourceBalanceBefore": "100000000000000000000000",
+  "sourceBalanceAfter": "99000000000000000000000",
+  "sourceDelta": "-1000000000000000000000"
+}

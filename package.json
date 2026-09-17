@@ -1,0 +1,37 @@
+{
+  "name": "marked",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Deterministic governance fulfillment for Cactus-indexed DAOs, executed by KeeperHub, verified by Marked.",
+  "engines": {
+    "node": ">=22.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@11.5.0",
+  "scripts": {
+    "dev": "pnpm --filter @marked/web dev",
+    "build": "pnpm --filter @marked/web build",
+    "lint": "eslint . && pnpm --filter @marked/web lint",
+    "typecheck": "pnpm -r run typecheck",
+    "test": "pnpm -r run test",
+    "marked": "pnpm --filter @marked/cli marked",
+    "prove:cactus": "pnpm --filter @marked/scripts prove:cactus",
+    "prove:keeperhub": "pnpm --filter @marked/scripts prove:keeperhub",
+    "prove:closed-loop": "pnpm --filter @marked/scripts prove:closed-loop",
+    "prove:governor": "pnpm --filter @marked/scripts prove:governor",
+    "prove:erc20-postcondition": "pnpm --filter @marked/scripts prove:erc20-postcondition",
+    "prove:fulfillment-commitment": "pnpm --filter @marked/scripts prove:fulfillment-commitment",
+    "verify:gate6": "pnpm --filter @marked/scripts verify:gate6",
+    "prove:agent-hardening": "pnpm --filter @marked/scripts prove:agent-hardening",
+    "prove:agent-live-model": "pnpm --filter @marked/scripts prove:agent-live-model",
+    "reproduce:historical": "pnpm --filter @marked/scripts reproduce:historical",
+    "verify:historical": "pnpm --filter @marked/scripts verify:historical",
+    "spot-check:historical": "pnpm --filter @marked/scripts spot-check:historical"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.18.0",
+    "eslint": "^9.18.0",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.20.0"
+  }
+}

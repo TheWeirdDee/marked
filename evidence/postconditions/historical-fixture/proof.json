@@ -1,0 +1,74 @@
+{
+  "ctx": {
+    "chainId": 1,
+    "governor": "0x0000000000000000000000000000000000000000",
+    "proposalId": "N/A — standalone adapter fixture, not a governance proposal",
+    "actionIndex": 0,
+    "target": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+    "value": "0",
+    "signature": "transfer(address,uint256)",
+    "calldata": "0x00000000000000000000000059e0cda5922efba00a57794faf09bf6252d641260000000000000000000000000000000000000000000000000000000df8475800",
+    "authorizationHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "preStateBlock": "25883472",
+    "executionBlock": "25883473",
+    "executionTxHash": "0xe604c01ee06183082d827a1872b94ebc0669849ece2f0549ea2ed5f53331d9ca",
+    "verificationBlock": "25883473"
+  },
+  "expected": {
+    "token": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+    "recipient": "0x59E0cDA5922eFbA00a57794faF09BF6252d64126",
+    "authorizedAmount": "60000000000",
+    "expectedRecipientBalanceAfter": "1216027789181"
+  },
+  "observed": {
+    "recipientBalanceAfter": "1216027789181",
+    "observedDelta": "60000000000",
+    "verificationBlock": "25883473",
+    "balanceDeltaMatches": true,
+    "transferLogMatches": true,
+    "matchedTransferLog": {
+      "logIndex": 19,
+      "from": "0x55FE002aefF02F77364de339a1292923A15844B8",
+      "to": "0x59E0cDA5922eFbA00a57794faF09BF6252d64126",
+      "amount": "60000000000"
+    },
+    "reason": "EXACT_MATCH"
+  },
+  "verified": true,
+  "evidence": [
+    {
+      "kind": "RECIPIENT_BALANCE_DELTA",
+      "description": "Recipient's raw token balance delta between pre-state and verification blocks must equal the authorized raw amount.",
+      "passed": true,
+      "details": {
+        "preStateBlock": "25883472",
+        "verificationBlock": "25883473",
+        "recipientBalanceBefore": "1156027789181",
+        "recipientBalanceAfter": "1216027789181",
+        "observedDelta": "60000000000",
+        "expectedDelta": "60000000000"
+      }
+    },
+    {
+      "kind": "EXECUTION_BOUND_TRANSFER_LOG",
+      "description": "A Transfer(token, recipient, authorizedAmount) log must be present in the execution transaction's own receipt.",
+      "passed": true,
+      "details": {
+        "executionTxHash": "0xe604c01ee06183082d827a1872b94ebc0669849ece2f0549ea2ed5f53331d9ca",
+        "matched": {
+          "logIndex": 19,
+          "from": "0x55FE002aefF02F77364de339a1292923A15844B8",
+          "to": "0x59E0cDA5922eFbA00a57794faF09BF6252d64126",
+          "amount": "60000000000"
+        },
+        "reason": null
+      }
+    }
+  ],
+  "reproducibility": {
+    "run1Verified": true,
+    "run2Verified": true,
+    "match": true
+  },
+  "resultLabel": "ADAPTER VERIFICATION: PASS — this is an adapter correctness proof, not a Marked product receipt. MARKED ✓ is not claimed here."
+}

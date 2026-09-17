@@ -1,0 +1,79 @@
+MARKED — GATE 8 SPOT-CHECK
+Using independent RPC endpoint: https://eth.drpc.org (NOT the endpoint the primary pipeline used)
+
+--- Compound #220 (required case study (§18): a severe multi-day case) ---
+  interval: 381828s | eligible: 1709555375 | executed: 1709937203
+  PASS  execution block timestamp == executedAt
+        block 19393409 timestamp=1709937203 vs record executedAt=1709937203
+  PASS  execution tx succeeded and governor emitted ProposalExecuted(id)
+        status=success to=0xc0da02939e1441f497fd74f78ce7decb17b66529 governorEmittedProposalExecuted=true blockNumber=19393409 (expected block 19393409)
+  PASS  queue tx succeeded and governor emitted ProposalQueued(id)
+        status=success to=0xc0da02939e1441f497fd74f78ce7decb17b66529 governorEmittedProposalQueued=true blockNumber=19347487 (expected block 19347487)
+  PASS  ProposalQueued event eta == executionEligibleAt
+        emitted eta=1709555375 vs record executionEligibleAt=1709555375
+  PASS  current proposals(id).eta == executionEligibleAt
+        on-chain eta=1709555375 vs record executionEligibleAt=1709555375
+  PASS  executedAt - executionEligibleAt == fulfillmentIntervalSeconds
+        1709937203 - 1709555375 = 381828 vs recorded 381828
+
+--- Uniswap #20 (required case study (§18): the longest interval in the dataset) ---
+  interval: 832115s | eligible: 1655734175 | executed: 1656566290
+  PASS  execution block timestamp == executedAt
+        block 15048760 timestamp=1656566290 vs record executedAt=1656566290
+  PASS  execution tx succeeded and governor emitted ProposalExecuted(id)
+        status=success to=0x408ed6354d4973f66138c91495f2f2fcbd8724c3 governorEmittedProposalExecuted=true blockNumber=15048760 (expected block 15048760)
+  PASS  queue tx succeeded and governor emitted ProposalQueued(id)
+        status=success to=0x408ed6354d4973f66138c91495f2f2fcbd8724c3 governorEmittedProposalQueued=true blockNumber=14985406 (expected block 14985406)
+  PASS  ProposalQueued event eta == executionEligibleAt
+        emitted eta=1655734175 vs record executionEligibleAt=1655734175
+  PASS  current proposals(id).eta == executionEligibleAt
+        on-chain eta=1655734175 vs record executionEligibleAt=1655734175
+  PASS  executedAt - executionEligibleAt == fulfillmentIntervalSeconds
+        1656566290 - 1655734175 = 832115 vs recorded 832115
+
+--- Compound #150 (near-zero interval (12s, tied for the dataset minimum)) ---
+  interval: 12s | eligible: 1677923411 | executed: 1677923423
+  PASS  execution block timestamp == executedAt
+        block 16754298 timestamp=1677923423 vs record executedAt=1677923423
+  PASS  execution tx succeeded and governor emitted ProposalExecuted(id)
+        status=success to=0x02777053d6764996e594c3e88af1d58d5363a2e6 governorEmittedProposalExecuted=true blockNumber=16754298 (expected block 16754298)
+  PASS  queue tx succeeded and governor emitted ProposalQueued(id)
+        status=success to=0x02777053d6764996e594c3e88af1d58d5363a2e6 governorEmittedProposalQueued=true blockNumber=16740100 (expected block 16740100)
+  PASS  ProposalQueued event eta == executionEligibleAt
+        emitted eta=1677923411 vs record executionEligibleAt=1677923411
+  PASS  current proposals(id).eta == executionEligibleAt
+        on-chain eta=1677923411 vs record executionEligibleAt=1677923411
+  PASS  executedAt - executionEligibleAt == fulfillmentIntervalSeconds
+        1677923423 - 1677923411 = 12 vs recorded 12
+
+--- Compound #176 (>24h interval (94488s / ~26.25h), not one of the top-10 longest) ---
+  interval: 94488s | eligible: 1692633995 | executed: 1692728483
+  PASS  execution block timestamp == executedAt
+        block 17972006 timestamp=1692728483 vs record executedAt=1692728483
+  PASS  execution tx succeeded and governor emitted ProposalExecuted(id)
+        status=success to=0xc0da02939e1441f497fd74f78ce7decb17b66529 governorEmittedProposalExecuted=true blockNumber=17972006 (expected block 17972006)
+  PASS  queue tx succeeded and governor emitted ProposalQueued(id)
+        status=success to=0xc0da02939e1441f497fd74f78ce7decb17b66529 governorEmittedProposalQueued=true blockNumber=17949901 (expected block 17949901)
+  PASS  ProposalQueued event eta == executionEligibleAt
+        emitted eta=1692633995 vs record executionEligibleAt=1692633995
+  PASS  current proposals(id).eta == executionEligibleAt
+        on-chain eta=1692633995 vs record executionEligibleAt=1692633995
+  PASS  executedAt - executionEligibleAt == fulfillmentIntervalSeconds
+        1692728483 - 1692633995 = 94488 vs recorded 94488
+
+--- Compound #129 (median-ish interval (108s, close to the overall median of 132s)) ---
+  interval: 108s | eligible: 1665934343 | executed: 1665934451
+  PASS  execution block timestamp == executedAt
+        block 15761599 timestamp=1665934451 vs record executedAt=1665934451
+  PASS  execution tx succeeded and governor emitted ProposalExecuted(id)
+        status=success to=0xc0da02939e1441f497fd74f78ce7decb17b66529 governorEmittedProposalExecuted=true blockNumber=15761599 (expected block 15761599)
+  PASS  queue tx succeeded and governor emitted ProposalQueued(id)
+        status=success to=0xc0da02939e1441f497fd74f78ce7decb17b66529 governorEmittedProposalQueued=true blockNumber=15747264 (expected block 15747264)
+  PASS  ProposalQueued event eta == executionEligibleAt
+        emitted eta=1665934343 vs record executionEligibleAt=1665934343
+  PASS  current proposals(id).eta == executionEligibleAt
+        on-chain eta=1665934343 vs record executionEligibleAt=1665934343
+  PASS  executedAt - executionEligibleAt == fulfillmentIntervalSeconds
+        1665934451 - 1665934343 = 108 vs recorded 108
+
+=== ALL SPOT-CHECKS PASS — independent RPC confirms the committed dataset ===
