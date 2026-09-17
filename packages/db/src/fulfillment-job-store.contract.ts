@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import type { ArmEvent, FulfillmentCommitment, FulfillmentJob } from "@marked/core";
 import type { FulfillmentJobStore } from "./fulfillment-job-store";
 
@@ -44,12 +44,40 @@ const ARM_EVENT: ArmEvent = {
  * actual proof that the abstraction is interchangeable — not merely that
  * two unrelated test suites happen to both be green.
  *
- * `newStore()` must return a fresh, empty store on every call.
+ * `newStore()` must return a store on every call. Against SQLite this is a
+ * fresh, empty file per call, which gives every test free isolation. A
+ * shared hosted Postgres database has no such isolation (every test hits
+ * the SAME tables), so callers that pass one MUST also pass
+ * `resetBeforeEach` — a hook that wipes `fulfillment_jobs`, `job_events`,
+ * and `execution_claims` before every test. Without it, fixed test ids
+ * (e.g. `"contract-job-1"`) and fixed hashes (e.g. `"0xcontracthash"`)
+ * leak across tests in the same run AND across repeated runs against the
+ * same durable database (Gate 11 hosted-proof finding — see
+ * evidence/production-persistence/hosted-production-proof.md).
+ *
  * `disposeStore(store)` is called after each test to release the
- * connection/handle.
+ * connection/handle. `testTimeout` (ms) lets a real network-backed
+ * implementation raise vitest's 5000ms default for genuinely
+ * latency-bound round trips without weakening any assertion.
  */
-export function runFulfillmentJobStoreContractTests(label: string, newStore: () => Promise<FulfillmentJobStore>, disposeStore: (store: FulfillmentJobStore) => Promise<void>) {
+export function runFulfillmentJobStoreContractTests(
+  label: string,
+  newStore: () => Promise<FulfillmentJobStore>,
+  disposeStore: (store: FulfillmentJobStore) => Promise<void>,
+  options: { testTimeout?: number; resetBeforeEach?: () => Promise<void> } = {},
+) {
+  const { testTimeout, resetBeforeEach } = options;
+
   describe(`FulfillmentJobStore contract — ${label}`, () => {
+    if (resetBeforeEach) {
+      // vitest's hook timeout is a SEPARATE budget from the test timeout
+      // (default 10000ms) — three sequential DELETE round trips against a
+      // real network-latency-bound database can exceed it even when
+      // `testTimeout` above was already raised (Gate 11 hosted-proof
+      // finding). Reuse the same, generous testTimeout for the hook.
+      beforeEach(resetBeforeEach, testTimeout);
+    }
+
     it("returns null for a job that was never saved", async () => {
       const store = await newStore();
       try {
@@ -57,7 +85,7 @@ export function runFulfillmentJobStoreContractTests(label: string, newStore: () 
       } finally {
         await disposeStore(store);
       }
-    });
+    }, testTimeout);
 
     it("round-trips a saved job exactly", async () => {
       const store = await newStore();
@@ -67,7 +95,7 @@ export function runFulfillmentJobStoreContractTests(label: string, newStore: () 
       } finally {
         await disposeStore(store);
       }
-    });
+    }, testTimeout);
 
     it("save overwrites an existing job (upsert)", async () => {
       const store = await newStore();
@@ -78,7 +106,7 @@ export function runFulfillmentJobStoreContractTests(label: string, newStore: () 
       } finally {
         await disposeStore(store);
       }
-    });
+    }, testTimeout);
 
     it("appendEvents preserves order across multiple calls, and getEvents returns [] for a job with none", async () => {
       const store = await newStore();
@@ -93,7 +121,7 @@ export function runFulfillmentJobStoreContractTests(label: string, newStore: () 
       } finally {
         await disposeStore(store);
       }
-    });
+    }, testTimeout);
 
     it("listJobs returns every saved job, most-recently-updated first", async () => {
       const store = await newStore();
@@ -105,7 +133,7 @@ export function runFulfillmentJobStoreContractTests(label: string, newStore: () 
       } finally {
         await disposeStore(store);
       }
-    });
+    }, testTimeout);
 
     it("saveJobAndEvents persists both halves atomically", async () => {
       const store = await newStore();
@@ -116,7 +144,7 @@ export function runFulfillmentJobStoreContractTests(label: string, newStore: () 
       } finally {
         await disposeStore(store);
       }
-    });
+    }, testTimeout);
 
     it("saveWithCas succeeds when expectedCurrentStatus matches, refuses without writing when it doesn't", async () => {
       const store = await newStore();
@@ -131,7 +159,7 @@ export function runFulfillmentJobStoreContractTests(label: string, newStore: () 
       } finally {
         await disposeStore(store);
       }
-    });
+    }, testTimeout);
 
     it("tryClaimExecution: first caller claims, second caller for the same hash is refused and told who holds it", async () => {
       const store = await newStore();
@@ -143,7 +171,7 @@ export function runFulfillmentJobStoreContractTests(label: string, newStore: () 
       } finally {
         await disposeStore(store);
       }
-    });
+    }, testTimeout);
 
     it("getExecutionClaim reads back a claim by request hash", async () => {
       const store = await newStore();
@@ -155,7 +183,7 @@ export function runFulfillmentJobStoreContractTests(label: string, newStore: () 
       } finally {
         await disposeStore(store);
       }
-    });
+    }, testTimeout);
 
     it("getExecutionClaim returns null for an unclaimed hash", async () => {
       const store = await newStore();
@@ -164,6 +192,6 @@ export function runFulfillmentJobStoreContractTests(label: string, newStore: () 
       } finally {
         await disposeStore(store);
       }
-    });
+    }, testTimeout);
   });
 }

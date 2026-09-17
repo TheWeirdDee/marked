@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { describe, it } from "vitest";
+import { afterAll, describe, it } from "vitest";
 import postgres from "postgres";
 import { PostgresFulfillmentJobStore } from "./postgres-fulfillment-job-store";
 import { runFulfillmentJobStoreContractTests } from "./fulfillment-job-store.contract";
@@ -24,8 +24,22 @@ import { runFulfillmentJobStoreContractTests } from "./fulfillment-job-store.con
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DATABASE_URL = process.env["DATABASE_URL"];
 
+/**
+ * Real hosted Postgres round trips run 3-4s each (Neon, network-bound —
+ * see evidence/production-persistence/hosted-production-proof.md), and
+ * several of these tests are two or more sequential round trips. Vitest's
+ * 5000ms default timeout is a tooling limit, not a correctness bound;
+ * this raises it for this file only. SQLite's contract test file is
+ * unaffected — its round trips are sub-millisecond.
+ */
+const LIVE_TEST_TIMEOUT_MS = 20_000;
+
 async function probeAndMigrate(url: string): Promise<{ ok: true } | { ok: false; reason: string }> {
-  const sql = postgres(url, { max: 1, ssl: "require", connect_timeout: 5 });
+  // 15s, not 5s: a hosted Neon compute that scaled to zero needs real wake-up
+  // time on the first connection of a run — a tight probe timeout here was
+  // observed to produce a false SKIPPED verdict against a genuinely reachable
+  // database (Gate 11 hosted-proof finding), not a correctness signal.
+  const sql = postgres(url, { max: 1, ssl: "require", connect_timeout: 15 });
   try {
     await sql`SELECT 1`;
     const migrationSql = readFileSync(join(__dirname, "..", "migrations", "0001_init.sql"), "utf8");
@@ -41,11 +55,29 @@ async function probeAndMigrate(url: string): Promise<{ ok: true } | { ok: false;
 const probe = DATABASE_URL ? await probeAndMigrate(DATABASE_URL) : ({ ok: false, reason: "DATABASE_URL is not set" } as const);
 
 if (probe.ok && DATABASE_URL) {
+  // A dedicated connection just for wiping the shared tables between tests
+  // (Gate 11 hosted-proof finding: fixed contract ids/hashes leak across
+  // tests, and across repeated runs, against a real persistent database —
+  // SQLite never surfaced this because every `newStore()` call there gets
+  // a brand-new temp file). No FKs in this schema, so order doesn't matter.
+  const adminSql = postgres(DATABASE_URL, { max: 1, ssl: "require", connect_timeout: 15 });
+  afterAll(async () => {
+    await adminSql.end({ timeout: 1 });
+  });
+
   runFulfillmentJobStoreContractTests(
     "PostgresFulfillmentJobStore (live)",
     async () => new PostgresFulfillmentJobStore(DATABASE_URL),
     async (store) => {
       await store.close();
+    },
+    {
+      testTimeout: LIVE_TEST_TIMEOUT_MS,
+      resetBeforeEach: async () => {
+        await adminSql`DELETE FROM job_events`;
+        await adminSql`DELETE FROM execution_claims`;
+        await adminSql`DELETE FROM fulfillment_jobs`;
+      },
     },
   );
 } else {
