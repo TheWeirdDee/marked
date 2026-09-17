@@ -527,6 +527,7 @@ Every claim below maps to a committed artifact and a reproduction command — th
 | Real live LLM proof | PROVEN (recorded) | `evidence/agent-hardening/live-model/` | `pnpm prove:agent-live-model` (needs `OPENROUTER_API_KEY`) |
 | Hosted Postgres persistence | PROVEN | `evidence/production-persistence/hosted-production-proof.md` | See `docs/TESTING.md` |
 | Gate 12 hostile audit | PROVEN (11 findings, 8 fixed, 3 documented) | `evidence/system-audit/` | See `evidence/system-audit/gate12-result.md` |
+| Live Cactus compatibility across 9 real, distinct DAOs (Governor Bravo, OpenZeppelin Governor, GovernorAlpha, and a custom Aave governor) | PROVEN | `evidence/system-audit/cactus-live-compatibility.md` | `MARKED_RUN_LIVE_CACTUS_TESTS=true pnpm --filter @marked/cactus test` |
 
 ## Canonical proof
 
@@ -628,6 +629,8 @@ Production storage **must** be Postgres — the default (SQLite) does not surviv
 **Has Marked executed a real DAO proposal?** No — see [Mode C](#mode-c--current-limitations). It has executed one controlled Sepolia test fixture and independently verified it.
 
 **Can I use another Governor implementation?** Not yet — Governor Bravo only. See `docs/ARCHITECTURE.md` §32 for the extension point.
+
+**I pasted a real Cactus proposal and Marked says it can't fulfill it — is that a bug?** Usually not. Across a real, 9-DAO live compatibility check (`evidence/system-audit/cactus-live-compatibility.md`), Cactus resolution succeeded 9/9 times, but only 2/9 had a Governor Bravo implementation Marked can currently fulfill — the rest (OpenZeppelin Governor, GovernorAlpha, and others, including two DAOs Cactus itself labels "governorbravo" but whose live contracts don't actually respond to Marked's Bravo probe) are correctly, honestly reported as `UNSUPPORTED_AUTHORIZATION`, never silently failed. That is Marked doing its job, not failing at it — Cactus resolution and Governor support are two separate questions, and Marked always answers the first even when the answer to the second is no.
 
 **Can I reproduce the proof?** Yes — `pnpm verify:gate6` and `pnpm verify:historical` are read-only and independently re-derive the canonical numbers from live/committed sources.
 

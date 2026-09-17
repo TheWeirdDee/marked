@@ -18,7 +18,7 @@
 ## apps/web routes
 
 - **Static/marketing (`○`):** `/`, `/demo`, `/docs`, `/docs/[slug]` (SSG), `/evidence`.
-- **Dynamic, server-rendered (`ƒ`):** `/app`, `/app/fulfillments/[id]`, `/app/new`, `/proof/[id]`, and the four API routes below — all carry `export const dynamic = "force-dynamic"` (Gate 11 §21's build-time-DB-side-effect fix, re-confirmed this gate via a fresh `pnpm build` + `.data/` check).
+- **Dynamic, server-rendered (`ƒ`):** `/app`, `/app/fulfillments/[id]`, `/app/new`, `/proof/[id]`, and the four API routes below. **Correction (Gate 12 CACTUS-LIVE-001 investigation):** this file originally claimed all of these already carried the explicit `export const dynamic = "force-dynamic"` marker (Gate 11 §21's build-time-DB-side-effect fix); `/app/new/page.tsx` was in fact missing it — reading `searchParams` already made Next.js treat the route as dynamic in practice (confirmed `ƒ` in every build output this project has produced), so this was not a live bug, but the marker is now present there too, for consistency and explicitness, and this claim is corrected accordingly. See `evidence/system-audit/findings.md` CACTUS-LIVE-001 and `evidence/system-audit/cactus-live-compatibility.md`.
 - **API routes (Route Handlers, not Server Actions):** `GET /api/fulfillment/state` (public, read-only, no auth), `POST /api/fulfillment/{arm,disarm,approve}` (each authenticates via `armJob`/`disarmJob`/`approveJob` before mutating).
 - **Server Actions (`"use server"`):** `apps/web/src/app/app/actions.ts` (`enterDemoWorkspace`, `exitDemoWorkspace`, `armJobAction`, `disarmJobAction`, `approveJobAction`, `resolveAndOpenAction`), `apps/web/src/lib/agent/actions.ts` (`askAboutProposal`, `prepareCandidatePlan`, `askAboutFulfillment`, `askAboutReceipt`).
 
