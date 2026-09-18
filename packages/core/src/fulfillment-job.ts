@@ -4,6 +4,7 @@ import type { FulfillmentCommitment } from "./fulfillment-commitment";
 import { computeFulfillmentCommitmentHash } from "./fulfillment-commitment";
 import type { FulfillmentStatus } from "./status";
 import { transition } from "./fulfillment-state-machine";
+import type { MarkedReceipt } from "./receipt";
 
 /**
  * Gate 4 domain layer: the job aggregate plus the only three operations
@@ -22,6 +23,43 @@ export type FulfillmentJob = {
   fulfillmentCommitmentHash: Hex;
   createdAt: string;
   updatedAt: string;
+  /**
+   * Populated only once a live execution pipeline reaches FULFILLED_VERIFIED
+   * (or FULFILLED_UNVERIFIED) for this job — never assembled from a partial
+   * signal. Absent for every job that has not completed real economic
+   * verification, including the recovery-sandbox job, which never executes.
+   * Stored on the job itself (not a separate table) because `FulfillmentJob`
+   * is already persisted as a single JSON document by every store
+   * implementation — no schema/migration change needed.
+   */
+  receipt?: MarkedReceipt | undefined;
+  /**
+   * Mutable, execution-in-progress observations *about* this commitment —
+   * never part of the commitment hash itself (see the doc comment on
+   * `FulfillmentCommitment` above: "no state, ETA, block, gas estimate,
+   * execution ID, or tx hash belongs [in the commitment]"). Carries the
+   * pre-state balance snapshot captured at CAPTURING_PRESTATE forward to the
+   * later VERIFYING_POSTCONDITION step (a separate request/click in the live
+   * app, unlike the one-shot proof scripts), plus the idempotency/dispatch
+   * identity needed to safely resume after a crash, timeout, or restart
+   * instead of ever dispatching a second execution for the same job.
+   */
+  executionState?: FulfillmentExecutionState | undefined;
+};
+
+export type FulfillmentExecutionState = {
+  /** Raw decimal strings — bigints are not JSON-safe across the store's JSON persistence. */
+  preStateBlock: string;
+  recipientBalanceBefore: string;
+  token: string;
+  recipient: string;
+  authorizedAmount: string;
+  /** Set once a dispatch is attempted — the KeeperHub Idempotency-Key / local dedup identity for this exact frozen call. */
+  requestHash?: string | undefined;
+  executionId?: string | undefined;
+  transactionHash?: string | undefined;
+  inclusionBlock?: string | undefined;
+  finalityBlock?: string | undefined;
 };
 
 type BaseEvent = {

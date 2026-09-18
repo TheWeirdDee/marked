@@ -1,16 +1,19 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import type { FulfillmentStatus } from "@marked/core";
 import { getAppStore, RECOVERY_SANDBOX_JOB_ID } from "@/lib/job-store";
 import { Card, CardLabel } from "@/components/ui/Card";
-import { StatusBadge } from "@/components/ui/StatusBadge";
+import { StatusBadge, statusLabel } from "@/components/ui/StatusBadge";
 import { HashChip } from "@/components/ui/HashChip";
 import { formatRawTokenAmount } from "@/lib/format";
-import { armJobAction, disarmJobAction, approveJobAction } from "@/app/app/actions";
+import { armJobAction, disarmJobAction, approveJobAction, prepareForApprovalAction, continueReconciliationAction } from "@/app/app/actions";
+import { isLiveExecutionEnabled } from "@/lib/execution/keeperhub-config";
 import { AgentPanel } from "@/components/agent/AgentPanel";
 import { askAboutFulfillment } from "@/lib/agent/actions";
 import { isAgentAvailable } from "@/lib/agent/provider";
 
 const DISARMABLE = new Set(["ARMED", "WAITING_ELIGIBILITY", "ELIGIBLE", "AWAITING_APPROVAL"]);
+const RECONCILABLE = new Set<FulfillmentStatus>(["EXECUTING", "RECONCILING", "UNKNOWN_RECONCILING", "WAITING_FINALITY", "VERIFYING_GOVERNOR_STATE", "VERIFYING_POSTCONDITION"]);
 
 /** Gate 11 §21 — never attempt a build-time static render for this DB-backed route; see apps/web/src/app/app/page.tsx's doc comment for why. */
 export const dynamic = "force-dynamic";
@@ -26,6 +29,9 @@ export default async function FulfillmentDetailPage({ params }: { params: Promis
   const armAction = armJobAction.bind(null, id);
   const disarmAction = disarmJobAction.bind(null, id);
   const approveAction = approveJobAction.bind(null, id);
+  const prepareAction = prepareForApprovalAction.bind(null, id);
+  const reconcileAction = continueReconciliationAction.bind(null, id);
+  const liveExecutionEnabled = isLiveExecutionEnabled();
 
   const rawAmount = job.commitment.postconditionBindings[0]?.bindingParams.find((p) => p.key === "rawAmount")?.value;
   const recipient = job.commitment.postconditionBindings[0]?.bindingParams.find((p) => p.key === "recipient")?.value;
@@ -49,7 +55,20 @@ export default async function FulfillmentDetailPage({ params }: { params: Promis
         </Card>
       ) : null}
 
-      <NextActionBanner status={job.status} armAction={armAction} approveAction={approveAction} />
+      <NextActionBanner
+        status={job.status}
+        isSandbox={isSandbox}
+        liveExecutionEnabled={liveExecutionEnabled}
+        armAction={armAction}
+        prepareAction={prepareAction}
+        approveAction={approveAction}
+        reconcileAction={reconcileAction}
+        governor={job.commitment.governor}
+        proposalId={job.commitment.proposalId}
+        chainId={job.commitment.chainId}
+        rawAmount={rawAmount}
+        recipient={recipient}
+      />
 
       <AgentPanel
         available={isAgentAvailable()}
@@ -99,20 +118,6 @@ export default async function FulfillmentDetailPage({ params }: { params: Promis
       </Card>
 
       <div className="flex flex-wrap gap-3">
-        {job.status === "REVIEW_READY" ? (
-          <form action={armAction}>
-            <button type="submit" className="rounded-lg bg-[var(--accent-strong)] px-5 py-2.5 text-sm font-medium text-black transition hover:bg-[var(--accent)]">
-              Arm fulfillment
-            </button>
-          </form>
-        ) : null}
-        {job.status === "AWAITING_APPROVAL" ? (
-          <form action={approveAction}>
-            <button type="submit" className="rounded-lg bg-[var(--accent-strong)] px-5 py-2.5 text-sm font-medium text-black transition hover:bg-[var(--accent)]">
-              Approve exact execution
-            </button>
-          </form>
-        ) : null}
         {DISARMABLE.has(job.status) ? (
           <form action={disarmAction} className="flex items-center gap-2">
             <input
@@ -149,14 +154,34 @@ export default async function FulfillmentDetailPage({ params }: { params: Promis
   );
 }
 
+type BannerAction = (formData: FormData) => Promise<void>;
+
 function NextActionBanner({
   status,
+  isSandbox,
+  liveExecutionEnabled,
   armAction,
+  prepareAction,
   approveAction,
+  reconcileAction,
+  governor,
+  proposalId,
+  chainId,
+  rawAmount,
+  recipient,
 }: {
-  status: string;
-  armAction: (formData: FormData) => Promise<void>;
-  approveAction: (formData: FormData) => Promise<void>;
+  status: FulfillmentStatus;
+  isSandbox: boolean;
+  liveExecutionEnabled: boolean;
+  armAction: BannerAction;
+  prepareAction: BannerAction;
+  approveAction: BannerAction;
+  reconcileAction: BannerAction;
+  governor: string;
+  proposalId: string;
+  chainId: number;
+  rawAmount: string | undefined;
+  recipient: string | undefined;
 }) {
   if (status === "REVIEW_READY") {
     return (
@@ -170,38 +195,122 @@ function NextActionBanner({
       </Banner>
     );
   }
+
   if (status === "ARMED") {
+    if (isSandbox) {
+      return (
+        <Banner tone="warn">
+          Armed. This sandbox job demonstrates commitment-freezing and the auth + persistence engine — it never calls
+          KeeperHub, by design. The one fulfillment this submission proves end-to-end through real KeeperHub execution
+          is the recorded{" "}
+          <Link href="/demo" className="underline">
+            Gate 5/6 proof
+          </Link>
+          .
+        </Banner>
+      );
+    }
     return (
       <Banner tone="warn">
-        Armed. This scoped repair demonstrates commitment-freezing and the auth + persistence engine for any resolved
-        proposal — the live eligibility-to-execution orchestration for a newly-armed real proposal is out of scope
-        here. The one fulfillment this submission proves end-to-end through real KeeperHub execution is the recorded{" "}
-        <Link href="/demo" className="underline">
-          Gate 5/6 proof
-        </Link>
-        .
-      </Banner>
-    );
-  }
-  if (status === "AWAITING_APPROVAL") {
-    return (
-      <Banner tone="accent">
-        Ready for approval.
-        <form action={approveAction} className="mt-3">
+        Armed. Next: independently re-check eligibility, live authorization, and simulate the exact Governor call
+        through KeeperHub — before anything can be approved.
+        <form action={prepareAction} className="mt-3">
           <button type="submit" className="rounded-lg bg-[var(--accent-strong)] px-4 py-2 text-sm font-medium text-black">
-            Approve exact execution
+            Check eligibility &amp; simulate
           </button>
         </form>
       </Banner>
     );
   }
+
+  if (status === "AWAITING_APPROVAL") {
+    return (
+      <Banner tone="accent">
+        <p className="font-display text-sm font-bold uppercase tracking-wide">Ready to execute</p>
+        <div className="mt-3 space-y-1.5 text-sm">
+          <Row label="Governor" value={<span className="font-mono-num">{short(governor)}</span>} />
+          <Row label="Proposal" value={proposalId} />
+          <Row label="Network" value={chainId === 11155111 ? "Sepolia (testnet)" : chainId === 1 ? "Ethereum mainnet" : String(chainId)} />
+          <Row label="Authorized action" value="Governor execute(proposalId) — never a target contract directly" />
+          {rawAmount && recipient ? (
+            <Row label="Expected economic outcome" value={`${formatRawTokenAmount(rawAmount)} MTGT → ${short(recipient)}`} />
+          ) : null}
+        </div>
+        <p className="mt-3 text-xs text-[var(--muted)]">
+          Authorized by Governor. Simulation already succeeded through KeeperHub. Approving submits the real
+          execution — never something Marked&apos;s agent invented or requested on its own.
+        </p>
+        {liveExecutionEnabled ? (
+          <form action={approveAction} className="mt-3">
+            <button type="submit" className="rounded-lg bg-[var(--accent-strong)] px-4 py-2 text-sm font-medium text-black">
+              Execute via KeeperHub
+            </button>
+          </form>
+        ) : (
+          <p className="mt-3 rounded-lg border border-amber-800/40 bg-[var(--warn-dim)] px-3 py-2 text-xs text-[var(--muted-strong)]">
+            Live execution is disabled on this deployment pending demo-authentication hardening (a disclosed,
+            deliberate limitation — see F-03) — not a bug. The wiring above is real and tested; only the final
+            KeeperHub dispatch is withheld.
+          </p>
+        )}
+      </Banner>
+    );
+  }
+
+  if (status === "EXECUTING") {
+    return <Banner tone="warn">Executing via KeeperHub…</Banner>;
+  }
+
+  if (RECONCILABLE.has(status)) {
+    const label =
+      status === "VERIFYING_GOVERNOR_STATE" || status === "VERIFYING_POSTCONDITION"
+        ? "Verifying outcome…"
+        : "Reconciling execution…";
+    return (
+      <Banner tone="warn">
+        {label} {statusLabel(status)}. Execution submitted — this never means failed, and this control never
+        blindly resends it.
+        <form action={reconcileAction} className="mt-3">
+          <button type="submit" className="rounded-lg border border-[var(--border-strong)] px-4 py-2 text-sm font-medium transition hover:border-[var(--muted-strong)]">
+            Refresh status
+          </button>
+        </form>
+      </Banner>
+    );
+  }
+
   if (status === "DISARMED_BY_USER") {
     return <Banner tone="neutral">Disarmed. This does not alter the underlying governance proposal.</Banner>;
   }
+
   if (status === "FULFILLED_VERIFIED") {
-    return <Banner tone="accent">MARKED ✓ — governance fulfilled and independently verified.</Banner>;
+    return <Banner tone="accent">MARKED ✓ — executed via KeeperHub and independently verified.</Banner>;
   }
-  return null;
+
+  if (status === "FULFILLED_UNVERIFIED") {
+    return (
+      <Banner tone="warn">
+        Execution succeeded, but the required economic postcondition did not independently verify. Not MARKED ✓ — see
+        the events below.
+      </Banner>
+    );
+  }
+
+  if (status === "FULFILLED_EXTERNALLY_VERIFIED" || status === "FULFILLED_EXTERNALLY_UNVERIFIED") {
+    return (
+      <Banner tone="accent">
+        This proposal was already executed outside Marked — governance was still fulfilled; Marked simply
+        wasn&apos;t the one that dispatched it. {status === "FULFILLED_EXTERNALLY_UNVERIFIED" ? "The economic outcome was not independently re-verified." : ""}
+      </Banner>
+    );
+  }
+
+  // Every refusal/blocked terminal state — a clear, named product result, never a silent dead end.
+  return <Banner tone="warn">{statusLabel(status)}. See the events below for the exact reason.</Banner>;
+}
+
+function short(address: string): string {
+  return `${address.slice(0, 6)}…${address.slice(-4)}`;
 }
 
 function Banner({ tone, children }: { tone: "accent" | "warn" | "neutral"; children: React.ReactNode }) {

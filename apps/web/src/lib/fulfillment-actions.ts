@@ -34,7 +34,8 @@ import { refreshAuthorizationHash } from "./governance";
 
 export type AuthParams = { providedToken: string | null | undefined; actorId: string | null | undefined };
 
-function authenticate(params: AuthParams): AuthenticatedActor {
+/** Exported so the execution-pipeline modules (apps/web/src/lib/execution/*) authenticate through this exact same check, never a second copy of the env-var read. */
+export function authenticate(params: AuthParams): AuthenticatedActor {
   return requireAuthenticatedActor({
     providedToken: params.providedToken,
     expectedToken: process.env["MARKED_DEMO_SESSION_TOKEN"] ?? "",
@@ -63,14 +64,15 @@ export class ConcurrentJobModificationError extends Error {
   }
 }
 
-async function saveWithCasOrThrow(store: FulfillmentJobStore, jobId: string, expectedCurrentStatus: FulfillmentJob["status"], nextJob: FulfillmentJob, event: FulfillmentJobEvent): Promise<void> {
-  const result = await store.saveWithCas(nextJob, [event], expectedCurrentStatus);
+/** Exported so the execution-pipeline modules (apps/web/src/lib/execution/*) can persist their own CAS-guarded transitions through this same guard, rather than re-implementing it. */
+export async function saveWithCasOrThrow(store: FulfillmentJobStore, jobId: string, expectedCurrentStatus: FulfillmentJob["status"], nextJob: FulfillmentJob, events: readonly FulfillmentJobEvent[] = []): Promise<void> {
+  const result = await store.saveWithCas(nextJob, events, expectedCurrentStatus);
   if (!result.ok) {
     throw new ConcurrentJobModificationError(jobId, expectedCurrentStatus, result.actualStatus);
   }
 }
 
-async function getJobOrThrow(store: FulfillmentJobStore, jobId: string): Promise<FulfillmentJob> {
+export async function getJobOrThrow(store: FulfillmentJobStore, jobId: string): Promise<FulfillmentJob> {
   const job = await store.get(jobId);
   if (!job) throw new JobNotFoundError(jobId);
   return job;
@@ -98,7 +100,7 @@ export async function armJob(store: FulfillmentJobStore, jobId: string, auth: Au
     now: new Date().toISOString(),
   });
 
-  await saveWithCasOrThrow(store, jobId, job.status, nextJob, event);
+  await saveWithCasOrThrow(store, jobId, job.status, nextJob, [event]);
   return { job: nextJob, event };
 }
 
@@ -118,7 +120,7 @@ export async function disarmJob(
     now: new Date().toISOString(),
   });
 
-  await saveWithCasOrThrow(store, jobId, job.status, nextJob, event);
+  await saveWithCasOrThrow(store, jobId, job.status, nextJob, [event]);
   return { job: nextJob, event };
 }
 
@@ -133,7 +135,7 @@ export async function approveJob(store: FulfillmentJobStore, jobId: string, auth
     now: new Date().toISOString(),
   });
 
-  await saveWithCasOrThrow(store, jobId, job.status, nextJob, event);
+  await saveWithCasOrThrow(store, jobId, job.status, nextJob, [event]);
   return { job: nextJob, event };
 }
 
@@ -158,7 +160,7 @@ export async function armDemoJob(store: FulfillmentJobStore, auth: AuthParams) {
     actor: actor.actorId,
     now: new Date().toISOString(),
   });
-  await saveWithCasOrThrow(store, job.jobId, job.status, nextJob, event);
+  await saveWithCasOrThrow(store, job.jobId, job.status, nextJob, [event]);
   return { job: nextJob, event };
 }
 

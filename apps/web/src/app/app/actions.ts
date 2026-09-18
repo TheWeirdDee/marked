@@ -4,10 +4,12 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { SESSION_COOKIE, ACTOR_COOKIE, sessionAuthParams } from "@/lib/session";
-import { getAppStore } from "@/lib/job-store";
+import { getAppStore, RECOVERY_SANDBOX_JOB_ID } from "@/lib/job-store";
 import { armJob, disarmJob, approveJob } from "@/lib/fulfillment-actions";
 import { resolveGovernanceIntake } from "@/lib/governance";
 import { ensureReviewReadyJob, jobIdForCoordinate } from "@/lib/job-store";
+import { prepareJobForApproval } from "@/lib/execution/prepare";
+import { approveAndExecuteJob, continueReconciliation } from "@/lib/execution/approve-and-execute";
 
 /**
  * Gate 9R Part 33 — the demo-session login. The judge never sees or types
@@ -58,9 +60,37 @@ export async function disarmJobAction(jobId: string, formData: FormData) {
   revalidatePath("/app");
 }
 
+/**
+ * The recovery-sandbox job never calls KeeperHub, by design — see
+ * job-store.ts's own doc comment ("It never calls KeeperHub"). Routing on
+ * `jobId` here, rather than inside `approveAndExecuteJob`, keeps that
+ * guarantee visible at the one call site that decides which pipeline a job
+ * enters, instead of a special-case buried inside the execution module
+ * itself.
+ */
 export async function approveJobAction(jobId: string, _formData: FormData) {
   const auth = await sessionAuthParams();
-  await approveJob(getAppStore(), jobId, auth);
+  if (jobId === RECOVERY_SANDBOX_JOB_ID) {
+    await approveJob(getAppStore(), jobId, auth);
+  } else {
+    await approveAndExecuteJob(getAppStore(), jobId, auth);
+  }
+  revalidatePath(`/app/fulfillments/${jobId}`);
+  revalidatePath("/app");
+}
+
+/** ARMED -> AWAITING_APPROVAL (or a refusal/externally-fulfilled terminal state) via the real eligibility/lifecycle/authorization/simulation pipeline — see apps/web/src/lib/execution/prepare.ts. Never callable for the recovery-sandbox job (it never leaves ARMED by design). */
+export async function prepareForApprovalAction(jobId: string, _formData: FormData) {
+  const auth = await sessionAuthParams();
+  await prepareJobForApproval(getAppStore(), jobId, auth);
+  revalidatePath(`/app/fulfillments/${jobId}`);
+  revalidatePath("/app");
+}
+
+/** Resumes a job sitting at EXECUTING/RECONCILING/WAITING_FINALITY/VERIFYING_GOVERNOR_STATE/VERIFYING_POSTCONDITION — never dispatches, only observes and verifies. The UI's "Refresh status" control for a job that did not finish resolving within one approveAndExecuteJob call. */
+export async function continueReconciliationAction(jobId: string, _formData: FormData) {
+  const auth = await sessionAuthParams();
+  await continueReconciliation(getAppStore(), jobId, auth);
   revalidatePath(`/app/fulfillments/${jobId}`);
   revalidatePath("/app");
 }

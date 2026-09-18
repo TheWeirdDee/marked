@@ -38,14 +38,28 @@ import type { PostconditionBinding } from "@marked/core";
  * for "which chains can a real RPC client be opened against" — see
  * `packages/governor/src/supported-chains.ts`.
  */
-function rpcUrlFor(chainId: number): string | undefined {
+/** Exported so the execution-pipeline modules (apps/web/src/lib/execution/*) build RPC clients against the exact same URL resolution — never a second, independently-drifting copy (the CACTUS-LIVE-001 lesson). */
+export function rpcUrlFor(chainId: number): string | undefined {
   if (chainId === 1) return process.env["ETHEREUM_RPC_URL"];
   if (chainId === 11155111) return process.env["SEPOLIA_RPC_URL"];
   if (chainId === 10) return process.env["OPTIMISM_RPC_URL"];
   return undefined;
 }
 
-function buildClient(chainId: number): PublicClient {
+/**
+ * Test-only hook, matching the established pattern already used elsewhere in
+ * this app (`resetAppStoreForTests`, `resetRateLimitStateForTests`): lets a
+ * test inject a fake `PublicClient` instead of a real one, without adding a
+ * test-only parameter to every function that calls `buildClient`. Never
+ * referenced by production code paths.
+ */
+let clientOverrideForTests: ((chainId: number) => PublicClient) | null = null;
+export function setClientOverrideForTests(fn: ((chainId: number) => PublicClient) | null): void {
+  clientOverrideForTests = fn;
+}
+
+export function buildClient(chainId: number): PublicClient {
+  if (clientOverrideForTests) return clientOverrideForTests(chainId);
   const chain = chainById(chainId);
   if (!chain) throw new GovernorResolutionError("UNSUPPORTED_CHAIN", `chainId ${chainId} is not supported.`);
   return createPublicClient({ chain, transport: http(rpcUrlFor(chainId)) });

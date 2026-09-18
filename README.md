@@ -185,7 +185,7 @@ Marked's v1 execution surface is KeeperHub's direct execution endpoint (Option B
 
 **KeeperHub always calls the Governor's own lifecycle entrypoint** (e.g. Bravo's `execute(proposalId)`) — **never a target contract directly**, no matter how confident Marked is about what that call would do.
 
-**Important, and load-bearing for how to read every security claim in this document**: the deployed web app's code has no path to `executeContractCall` at all — repo-wide grep confirms it. The controlled Sepolia execution this project proved was run by a developer invoking an offline script directly, never by the live app. See [Security Model](#security-model).
+**Important, and load-bearing for how to read every security claim in this document**: the deployed web app's code now has a real path to `executeContractCall` (`apps/web/src/lib/execution/approve-and-execute.ts`), reusing the exact KeeperHub client and execution semantics `scripts/gate5-keeperhub-execute.ts`'s offline proof already established — this replaces an earlier, now-stale claim that no such path existed. What actually prevents a public visitor from reaching it today is a single, independent, default-off feature flag (`MARKED_ENABLE_KEEPERHUB_EXECUTION`), left unset on this deployment specifically because the demo-auth boundary (see [Security Model](#security-model)) is not yet a safe gate for a real write. Every browser request into this path carries only a job id — target, calldata, value, chain, and proposal id are always rebuilt server-side from the job's frozen commitment, never accepted from the request. See [Security Model](#security-model) and `DECISIONS.md` DEC-030.
 
 ## Execution sequence
 
@@ -378,14 +378,14 @@ Full document: [`docs/SECURITY.md`](docs/SECURITY.md) — fed directly by the [G
 
 - **Authority separation**: Cactus identifies, the Governor authorizes, the agent only advises (structurally — the schema has no authority field), KeeperHub only fulfills an already-frozen authorization.
 - **Commitment revalidation**: every ARM re-reads the Governor live and compares against the frozen hash; approval binds to the exact commitment hash, never "whatever is current."
-- **Caller-authority check, simulation-before-execution, idempotency key**: all real, all in `packages/keeperhub` — but currently unreachable from the deployed app (see [KeeperHub execution](#keeperhub-execution)).
+- **Caller-authority check, simulation-before-execution, idempotency key**: all real, all in `packages/keeperhub`. Simulation is now reachable from the deployed app (an ARMED job can be walked to `AWAITING_APPROVAL` with a real KeeperHub simulation); the real write (`executeContractCall`) is wired but gated off by default — see [KeeperHub execution](#keeperhub-execution).
 - **Compare-and-set concurrency**: ARM/APPROVE/DISARM and the execution-claim layer both use a real atomic guard — a genuine race (two concurrent requests from the same read snapshot both silently "succeeding") was found and fixed in Gate 12.
 - **Unknown-outcome reconciliation, economic postcondition, finality**: see the sections above.
 - **SSRF controls**: a strict host allowlist on the one user-controlled URL in the app; one known, documented gap (redirect-destination re-validation) — see `docs/SECURITY.md`.
 - **Production DB test isolation**: see [Persistence architecture](#persistence-architecture) above.
 - **Secret handling**: no real secret has ever been found in this repository's tracked tree or git history, at any gate, including this one.
 
-**Authentication — corrected claim, read this before trusting an older statement anywhere else**: ARM/APPROVE/DISARM always authenticate before any mutation, and the raw-header auth path genuinely requires knowing the real session secret (now constant-time compared). **However, the cookie/UI login path ("Enter demo workspace") does not require the visitor to know that secret at all** — it is a name-only form by deliberate design (a judge should never need the real token), and any visitor who reaches `/app` can self-issue a session and mutate any job by id. This is disclosed, not hidden, and — because the deployed app has no path to a real blockchain write at all (see [KeeperHub execution](#keeperhub-execution)) — it cannot produce an unauthorized on-chain effect. It is a real, open product-design question, not a silently-accepted bug. See `docs/SECURITY.md` §Authentication and `evidence/system-audit/findings.md` finding F-03.
+**Authentication — corrected claim, read this before trusting an older statement anywhere else**: ARM/APPROVE/DISARM always authenticate before any mutation, and the raw-header auth path genuinely requires knowing the real session secret (now constant-time compared). **However, the cookie/UI login path ("Enter demo workspace") does not require the visitor to know that secret at all** — it is a name-only form by deliberate design (a judge should never need the real token), and any visitor who reaches `/app` can self-issue a session and mutate any job by id. This is disclosed, not hidden. **Updated claim, corrected again here rather than left stale**: the deployed app *now has* a real KeeperHub execution code path (see [KeeperHub execution](#keeperhub-execution)) — it is not true anymore that no path exists. What currently prevents this auth gap from producing an unauthorized on-chain effect is a single, independent, default-off feature flag (`MARKED_ENABLE_KEEPERHUB_EXECUTION`), deliberately left unset on this deployment for exactly this reason. This is a real, open product-design question, not a silently-accepted bug, and enabling that flag without first closing this gap is explicitly not authorized (see `DECISIONS.md` DEC-030). See `docs/SECURITY.md` §Authentication and `evidence/system-audit/findings.md` finding F-03.
 
 ## Trust boundaries
 
@@ -475,7 +475,8 @@ Full audited matrix, generated from actual source usage: [`VERCEL_ENVIRONMENT.md
 | `MARKED_ALLOW_DESTRUCTIVE_DB_TESTS` | Second opt-in for the live-Postgres test suite (Gate 12) | Only when running that suite | No | No |
 | `CACTUS_API_KEY` | Official authenticated Cactus GraphQL path | No — public SSR resolution works without it | No | Yes |
 | `OPENROUTER_API_KEY` / `ANTHROPIC_API_KEY` | Agent panel | No — agent shows "unavailable" without it | No | Yes |
-| `KEEPERHUB_API_KEY` | Only consumed by offline proof scripts | No (unless running those scripts) | No — never read by the deployed app | Yes |
+| `KEEPERHUB_API_KEY` | Authenticates every KeeperHub call from the deployed app (simulation always; execution only if `MARKED_ENABLE_KEEPERHUB_EXECUTION=true`) | Only to exercise "check eligibility & simulate" on an ARMED job | Yes, for that same step | Yes |
+| `MARKED_ENABLE_KEEPERHUB_EXECUTION` | The dedicated, independent, default-off gate for the real KeeperHub write (`executeContractCall`) — see [Security model](#security-model) | No | No — deliberately unset on this deployment | No |
 
 There is no separate `TEST_DATABASE_URL` — `DATABASE_URL` itself is what the guarded live-Postgres tests read, gated by `MARKED_ALLOW_DESTRUCTIVE_DB_TESTS`. See [`docs/TESTING.md`](docs/TESTING.md).
 
@@ -559,7 +560,7 @@ Also true, as of this document:
 - No real DAO treasury payout has ever occurred through Marked.
 - Exactly one controlled `MARKED ✓` fixture exists.
 - No model-provider API key ships with a fresh clone — the agent defaults to "unavailable."
-- **The deployed web app has no code path to a real blockchain write at all** — every proven KeeperHub execution was run by an offline script, not the live app.
+- **The deployed web app now has a real KeeperHub execution code path** (ARM → eligibility → lifecycle → authorization → simulation → AWAITING_APPROVAL → APPROVE → `executeContractCall` → reconciliation → finality → postcondition verification → `MARKED ✓`, see [KeeperHub execution](#keeperhub-execution)) — but the real write step is gated behind `MARKED_ENABLE_KEEPERHUB_EXECUTION`, left unset on this deployment because the demo-auth boundary above is not yet a safe gate for it. Additionally, caller-authority verification (a real, human-performed source diff per deployment) exists today for exactly one governor — Gate 5's controlled one — so no other real-world proposal can currently reach `AWAITING_APPROVAL` even with the flag on.
 - A `next@15.5.25`-bundled internal `postcss` dependency carries known CVEs (build-time only, not runtime-reachable) — no same-line patch exists yet.
 - One SSRF gap: the Cactus SSR-fallback fetch does not re-validate redirect destinations against its host allowlist.
 
