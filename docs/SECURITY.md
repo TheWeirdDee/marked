@@ -40,7 +40,7 @@ Marked's auth is intentionally a demo session-token scheme, not SIWE/wallet auth
 
 ## SSRF controls
 
-The one user-controlled URL in the app (`/app/new`'s Cactus proposal URL) passes a strict `https:`-only, exact-hostname allowlist (4 fixed hosts) before any outbound fetch; the fetched URL is rebuilt from only `hostname`+`pathname`, discarding userinfo/query/fragment. Tested against: localhost/private-IP/link-local-metadata targets, `file:`/`data:`/`javascript:` schemes, embedded userinfo, mixed-case/lookalike/subdomain-confusion hostnames — all rejected. **Known, documented gap**: the SSR-fallback fetch follows redirects (`redirect: "follow"`) without re-validating the final destination against the allowlist — not an arbitrary-host SSRF (the *initial* target is still constrained to the 4 allowlisted hosts), but a real gap if one of those hosts ever issued a malicious redirect. See `evidence/system-audit/ssrf-audit.md` (finding F-11), not yet fixed.
+The one user-controlled URL in the app (`/app/new`'s Cactus proposal URL) passes a strict `https:`-only, exact-hostname allowlist (4 fixed hosts) before any outbound fetch; the fetched URL is rebuilt from only `hostname`+`pathname`, discarding userinfo/query/fragment. Tested against: localhost/private-IP/link-local-metadata targets, `file:`/`data:`/`javascript:` schemes, embedded userinfo, mixed-case/lookalike/subdomain-confusion hostnames — all rejected. **Fixed 2026-09-19**: the SSR-fallback fetch now uses `redirect: "manual"` and re-validates every redirect hop's destination against the exact same allowlist before following it (bounded to 5 hops) — previously it used `redirect: "follow"` without re-checking the final destination. Live-verified against the real Cactus site, which genuinely issues a same-host redirect on every normal request (`308` → `?govId=...`), to confirm the fix doesn't break real resolution. See `evidence/system-audit/ssrf-audit.md` (finding F-11).
 
 ## Secret handling
 
@@ -81,7 +81,6 @@ Sepolia proofs use a stated 2-confirmation threshold, explicitly labeled as a po
 ## Known limitations (as of Gate 12)
 
 - The demo login's cookie path provides no real secret-knowledge gate (see Authentication above) — open, pending a product decision, not a hidden bug.
-- SSR-fallback Cactus fetch does not re-validate redirect destinations against its host allowlist.
 - No Content-Security-Policy (four other safe headers — `X-Content-Type-Options`, `Referrer-Policy`, `X-Frame-Options`, `Permissions-Policy` — were added Gate 12; a CSP needs real browser testing this project has not yet run against Next.js's own inline hydration injection).
 - `next@15.5.25` bundles an internal, hard-pinned `postcss@8.4.31` with known CVEs (source-map path traversal, CSS-stringify XSS) — build-time only, not reachable at runtime by this app; no same-line Next.js patch exists yet.
 - No fetch timeout on Cactus or LLM-provider requests (bounded only by the platform's own default).

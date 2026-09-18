@@ -32,6 +32,9 @@ const FINALITY_CONFIRMATIONS = 2n;
 const MAX_FINALITY_POLL_ATTEMPTS = 10;
 const FINALITY_POLL_INTERVAL_MS = 6000;
 const RECEIPT_WAIT_TIMEOUT_MS = 60000;
+/** Bounds retrying the post-execution Governor-state read against read-after-write RPC lag before accepting whatever state is actually observed — never retried indefinitely, and never used to avoid recording a genuine disagreement. */
+const GOVERNOR_STATE_RECHECK_ATTEMPTS = 3;
+const GOVERNOR_STATE_RECHECK_INTERVAL_MS = 3000;
 
 export type ExecutionOutcome = { job: FulfillmentJob; reason: string };
 
@@ -289,15 +292,29 @@ export async function continueReconciliation(store: FulfillmentJobStore, jobId: 
   }
 
   if (job.status === "VERIFYING_GOVERNOR_STATE") {
-    const eligibilityAfter = await resolveBravoLifecycleEligibility(client, { governor: coordinate.governor, proposalId: BigInt(coordinate.proposalId) });
-    const confirmed = eligibilityAfter.executed && eligibilityAfter.rawState === 7;
-    if (!confirmed) {
-      // Genuinely unhandled by the existing, proven design (scripts/gate5-keeperhub-execute.ts
-      // only ever observed the success case) — no REFUSAL edge exists from this status. Reported
-      // honestly as a real, narrow gap rather than inventing a new state transition here.
-      return { job, reason: `Governor does not yet report Executed (state ${eligibilityAfter.rawState}, executed=${eligibilityAfter.executed}). Staying at VERIFYING_GOVERNOR_STATE — this needs manual reconciliation if it does not resolve on its own.` };
+    // A mined, successful receipt (already confirmed by the finality wait above) and the
+    // Governor's own state() disagreeing is not expected for a well-formed Bravo deployment —
+    // execute() sets `executed = true` atomically in the same transaction. The one legitimate
+    // cause is read-after-write lag on the RPC endpoint serving this particular call, so a few
+    // short retries are tried before treating a disagreement as real, never as a way to keep
+    // silently waiting forever.
+    let eligibilityAfter = await resolveBravoLifecycleEligibility(client, { governor: coordinate.governor, proposalId: BigInt(coordinate.proposalId) });
+    for (let attempt = 0; !eligibilityAfter.executed && attempt < GOVERNOR_STATE_RECHECK_ATTEMPTS - 1; attempt++) {
+      await sleep(GOVERNOR_STATE_RECHECK_INTERVAL_MS);
+      eligibilityAfter = await resolveBravoLifecycleEligibility(client, { governor: coordinate.governor, proposalId: BigInt(coordinate.proposalId) });
     }
-    const next: FulfillmentJob = { ...job, status: transition("VERIFYING_GOVERNOR_STATE", "VERIFYING_POSTCONDITION"), updatedAt: new Date().toISOString() };
+
+    // Always proceed to VERIFYING_POSTCONDITION (a legal edge regardless) carrying the truly
+    // observed state forward — never a hardcoded "it must have been 7". `reconcileForMarkedReceipt`
+    // already has its own strict `governorFinalState !== requiredGovernorExecutedState` gate; a
+    // real disagreement here reaches it honestly and produces FULFILLED_UNVERIFIED, never a false
+    // FULFILLED_VERIFIED. This reuses that existing gate instead of inventing a new terminal state.
+    const next: FulfillmentJob = {
+      ...job,
+      status: transition("VERIFYING_GOVERNOR_STATE", "VERIFYING_POSTCONDITION"),
+      updatedAt: new Date().toISOString(),
+      executionState: { ...job.executionState!, governorFinalState: eligibilityAfter.rawState, governorExecuted: eligibilityAfter.executed },
+    };
     await saveWithCasOrThrow(store, jobId, "VERIFYING_GOVERNOR_STATE", next);
     job = next;
   }
@@ -330,6 +347,11 @@ async function finalizePostconditionVerification(
     return { job, reason: "Missing execution identity — cannot verify postcondition." };
   }
 
+  if (executionState.governorFinalState === undefined) {
+    return { job, reason: "Missing observed Governor state — cannot verify postcondition." };
+  }
+  const governorFinalState = executionState.governorFinalState;
+
   const authorization = await resolveGovernorAuthorization(coordinate, { rpcUrl: rpcUrlFor(coordinate.chainId), clientOverride: client });
   const actionIndex = commitment.selectedActionIndexes[0]!;
   const action = authorization.authorization.actions[actionIndex]!;
@@ -361,7 +383,7 @@ async function finalizePostconditionVerification(
     finalAuthorizationHash: authorization.actionAuthorizationHash,
     selectedActionIndex: actionIndex,
     postconditionBindingActionIndex: commitment.postconditionBindings[0]?.actionIndex ?? actionIndex,
-    governorFinalState: 7,
+    governorFinalState,
     requiredGovernorExecutedState: 7,
     postconditionCoverage: "FULL",
     requiredAssertionsVerified: result.verified,
@@ -382,7 +404,7 @@ async function finalizePostconditionVerification(
     executionTxHash: executionState.transactionHash as `0x${string}`,
     executionBlock: executionState.inclusionBlock,
     finalityBlock: executionState.finalityBlock ?? executionState.inclusionBlock,
-    governorFinalState: 7,
+    governorFinalState,
     postconditionCoverage: "FULL",
     requiredAssertionsVerified: result.verified,
     status: finalStatus as MarkedReceipt["status"],

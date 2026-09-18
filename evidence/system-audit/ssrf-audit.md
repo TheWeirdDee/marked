@@ -22,10 +22,10 @@ const PROPOSAL_PATH_PATTERN = /^\/gov\/([a-z0-9-]+)\/proposal\/([a-zA-Z0-9_-]+)\
 | `cactus.example.com`, `evilcactus.com`, `tally.xyz.evil.com` | Rejected — exact-match host check, no suffix matching |
 | Encoded slashes/host characters in the path | Path regex is strict (`[a-z0-9-]`/`[a-zA-Z0-9_-]` only) — anything encoded/unexpected fails the regex |
 | Huge URL | Not explicitly length-capped, but bounded in practice by the strict path regex + Next.js's own request-size limits; not treated as a distinct finding |
-| A URL that redirects elsewhere | **Followed (`redirect: "follow"`) by the SSR-fallback path, and the final destination is NOT re-validated against the allowlist — this is a real, if narrow, gap. See finding F-11.** |
+| A URL that redirects elsewhere | **FIXED (2026-09-19).** `redirect: "manual"` + per-hop re-validation against the same allowlist, live-verified to still correctly follow the real Cactus site's own same-host redirect. See finding F-11. |
 
 ## Cactus-resolution-failure never falls back to raw coordinates
 
 Traced the full path: `resolveGovernanceIntake` only ever builds a `GovernanceCoordinate` from a *successful* `resolveCactusProposal` result; every failure mode throws a typed `CactusResolutionError` that `resolveAndOpenAction` catches and redirects to an error state — there is no branch anywhere that constructs a job/commitment from the raw, unvalidated `proposalUrl` string. `assertNoAuthorityLeak` (a test helper in `governance-coordinate.ts`) further structurally enforces that a `GovernanceCoordinate` can never carry calldata/authorization fields — Cactus only ever supplies "where to look," never "what was authorized." The authorization itself is always independently re-derived via a direct RPC call (`refreshAuthorizationHash`), never via Cactus.
 
-**Result: the allowlist is real and correctly implemented for the initial request. The one gap (F-11, redirect-destination re-validation) is documented, not silently fixed, given it requires a behavior change to a load-bearing external-data path this audit did not have time to test safely against the real Tally/Cactus site.**
+**Result: the allowlist is real and correctly implemented for the initial request, and, as of the 2026-09-19 final-audit pass, for every redirect hop too — see finding F-11's updated record for the fix, its regression tests, and its live-network verification against the real Cactus site.**

@@ -236,4 +236,35 @@ describe("continueReconciliation", () => {
     const outcome = await continueReconciliation(store, waitingFinality.jobId, AUTH);
     expect(outcome.job.status).toBe("FULFILLED_VERIFIED");
   });
+
+  it("a Governor that never confirms Executed after a mined receipt reaches FULFILLED_UNVERIFIED with the truly observed state — never stuck forever, never a false FULFILLED_VERIFIED", async () => {
+    const armed = buildArmedJob();
+    const waitingFinality = {
+      ...armed,
+      status: "WAITING_FINALITY" as const,
+      executionState: {
+        preStateBlock: "999",
+        recipientBalanceBefore: "0",
+        token: armed.commitment.postconditionBindings[0]!.bindingParams.find((p) => p.key === "token")!.value,
+        recipient: armed.commitment.postconditionBindings[0]!.bindingParams.find((p) => p.key === "recipient")!.value,
+        authorizedAmount: "1000000000000000000",
+        requestHash: "0xaaaa",
+        transactionHash: "0x" + "1".repeat(64),
+        inclusionBlock: "1000",
+      },
+    };
+    await store.save(waitingFinality);
+    // state never reports 7 (Executed), across every retry — even though the receipt itself
+    // (mocked separately, already "success") was already accepted as final at WAITING_FINALITY.
+    setClientOverrideForTests(() => fakeClient({ state: 5, eta: 1n, blockTimestamp: 1000n, blockNumber: 1005n, balanceOfSequence: [1_000_000_000_000_000_000n] }));
+
+    const outcome = await continueReconciliation(store, waitingFinality.jobId, AUTH);
+
+    expect(outcome.job.status).toBe("FULFILLED_UNVERIFIED");
+    expect(outcome.job.status).not.toBe("VERIFYING_GOVERNOR_STATE");
+    expect(outcome.job.receipt).toBeDefined();
+    // The receipt honestly attests to the real observed state (5), never a hardcoded 7.
+    expect(outcome.job.receipt?.governorFinalState).toBe(5);
+    expect(outcome.job.receipt?.status).toBe("FULFILLED_UNVERIFIED");
+  }, 20000);
 });

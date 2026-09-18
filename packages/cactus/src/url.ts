@@ -15,6 +15,16 @@ const ALLOWED_HOSTS = new Set([
 
 const PROPOSAL_PATH_PATTERN = /^\/gov\/([a-z0-9-]+)\/proposal\/([a-zA-Z0-9_-]+)\/?$/;
 
+/**
+ * Exported so any code that follows a redirect off an already-validated
+ * Cactus URL (`ssr-fallback.ts`) can re-check the actual destination against
+ * this exact same allowlist, rather than trusting that a redirect from an
+ * allowlisted host can only ever lead somewhere safe — see finding F-11.
+ */
+export function isAllowedCactusHost(hostname: string): boolean {
+  return ALLOWED_HOSTS.has(hostname);
+}
+
 export type ParsedCactusProposalUrl = {
   host: string;
   organizationSlug: string;

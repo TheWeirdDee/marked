@@ -1,7 +1,60 @@
 import type { HexAddress } from "@marked/core";
 import { parseEip155GovernorId } from "./caip";
 import { CactusResolutionError } from "./errors";
+import { isAllowedCactusHost } from "./url";
 import type { ResolvedCactusProposal } from "./types";
+
+/** Bounds a redirect chain — a real Cactus/Tally redirect (e.g. the tally.xyz -> cactushq.xyz domain migration) is at most one or two hops; anything longer is treated as suspicious rather than followed indefinitely. */
+const MAX_REDIRECTS = 5;
+
+/**
+ * Fetches with `redirect: "manual"` and re-validates every hop's destination
+ * against the exact same `https:` + allowlisted-host check the *initial*
+ * URL already passed (`parseCactusProposalUrl`) — never `redirect: "follow"`,
+ * which would trust that a redirect from an allowlisted host can only ever
+ * lead somewhere safe. See finding F-11: the initial target being
+ * allowlisted says nothing about where that host's own redirect (if it ever
+ * issued a malicious or compromised one) might point.
+ */
+async function fetchFollowingValidatedRedirects(startUrl: string): Promise<Response> {
+  let currentUrl = startUrl;
+  for (let hop = 0; hop <= MAX_REDIRECTS; hop++) {
+    let response: Response;
+    try {
+      response = await fetch(currentUrl, { redirect: "manual" });
+    } catch (cause) {
+      throw new CactusResolutionError("CACTUS_RESPONSE_INVALID", `Network error fetching Cactus proposal page: ${currentUrl}`, cause);
+    }
+
+    const isRedirect = response.status >= 300 && response.status < 400;
+    if (!isRedirect) return response;
+
+    const location = response.headers.get("location");
+    if (!location) {
+      throw new CactusResolutionError("CACTUS_RESPONSE_INVALID", `Redirect response (${response.status}) from ${currentUrl} had no Location header.`);
+    }
+
+    let nextUrl: URL;
+    try {
+      // Resolved against the current URL — a relative Location header is legal and common.
+      nextUrl = new URL(location, currentUrl);
+    } catch (cause) {
+      throw new CactusResolutionError("CACTUS_RESPONSE_INVALID", `Redirect Location header from ${currentUrl} was not a valid URL: ${location}`, cause);
+    }
+
+    if (nextUrl.protocol !== "https:" || !isAllowedCactusHost(nextUrl.hostname)) {
+      throw new CactusResolutionError(
+        "CACTUS_HOST_NOT_ALLOWED",
+        `Redirect from ${currentUrl} pointed to a non-allowlisted destination (${nextUrl.protocol}//${nextUrl.hostname}) — refusing to follow it. This is exactly the SSRF-via-redirect case finding F-11 flagged.`,
+      );
+    }
+
+    // Rebuilt from only protocol+host+pathname+search, discarding any embedded userinfo —
+    // matching the same "never trust userinfo/fragment" discipline parseCactusProposalUrl uses.
+    currentUrl = `${nextUrl.protocol}//${nextUrl.hostname}${nextUrl.pathname}${nextUrl.search}`;
+  }
+  throw new CactusResolutionError("CACTUS_RESPONSE_INVALID", `More than ${MAX_REDIRECTS} redirects following ${startUrl} — refusing to follow further.`);
+}
 
 const NEXT_DATA_PATTERN = /<script id="__NEXT_DATA__"[^>]*>([\s\S]*?)<\/script>/;
 
@@ -53,16 +106,7 @@ export async function resolveViaSsrFallback(params: {
   url: string;
   onchainProposalId: string;
 }): Promise<SsrFallbackResult> {
-  let response: Response;
-  try {
-    response = await fetch(params.url, { redirect: "follow" });
-  } catch (cause) {
-    throw new CactusResolutionError(
-      "CACTUS_RESPONSE_INVALID",
-      `Network error fetching Cactus proposal page: ${params.url}`,
-      cause,
-    );
-  }
+  const response = await fetchFollowingValidatedRedirects(params.url);
 
   if (response.status === 404) {
     throw new CactusResolutionError("CACTUS_PROPOSAL_NOT_FOUND", `Proposal page not found: ${params.url}`);

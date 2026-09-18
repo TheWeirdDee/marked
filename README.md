@@ -381,7 +381,7 @@ Full document: [`docs/SECURITY.md`](docs/SECURITY.md) — fed directly by the [G
 - **Caller-authority check, simulation-before-execution, idempotency key**: all real, all in `packages/keeperhub`. Simulation is now reachable from the deployed app (an ARMED job can be walked to `AWAITING_APPROVAL` with a real KeeperHub simulation); the real write (`executeContractCall`) is wired but gated off by default — see [KeeperHub execution](#keeperhub-execution).
 - **Compare-and-set concurrency**: ARM/APPROVE/DISARM and the execution-claim layer both use a real atomic guard — a genuine race (two concurrent requests from the same read snapshot both silently "succeeding") was found and fixed in Gate 12.
 - **Unknown-outcome reconciliation, economic postcondition, finality**: see the sections above.
-- **SSRF controls**: a strict host allowlist on the one user-controlled URL in the app; one known, documented gap (redirect-destination re-validation) — see `docs/SECURITY.md`.
+- **SSRF controls**: a strict host allowlist on the one user-controlled URL in the app, including every redirect hop (fixed 2026-09-19 — see `docs/SECURITY.md`).
 - **Production DB test isolation**: see [Persistence architecture](#persistence-architecture) above.
 - **Secret handling**: no real secret has ever been found in this repository's tracked tree or git history, at any gate, including this one.
 
@@ -562,7 +562,6 @@ Also true, as of this document:
 - No model-provider API key ships with a fresh clone — the agent defaults to "unavailable."
 - **The deployed web app now has a real KeeperHub execution code path** (ARM → eligibility → lifecycle → authorization → simulation → AWAITING_APPROVAL → APPROVE → `executeContractCall` → reconciliation → finality → postcondition verification → `MARKED ✓`, see [KeeperHub execution](#keeperhub-execution)) — but the real write step is gated behind `MARKED_ENABLE_KEEPERHUB_EXECUTION`, left unset on this deployment because the demo-auth boundary above is not yet a safe gate for it. Additionally, caller-authority verification (a real, human-performed source diff per deployment) exists today for exactly one governor — Gate 5's controlled one — so no other real-world proposal can currently reach `AWAITING_APPROVAL` even with the flag on.
 - A `next@15.5.25`-bundled internal `postcss` dependency carries known CVEs (build-time only, not runtime-reachable) — no same-line patch exists yet.
-- One SSRF gap: the Cactus SSR-fallback fetch does not re-validate redirect destinations against its host allowlist.
 
 ## Decision records
 

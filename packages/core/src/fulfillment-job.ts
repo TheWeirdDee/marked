@@ -60,6 +60,17 @@ export type FulfillmentExecutionState = {
   transactionHash?: string | undefined;
   inclusionBlock?: string | undefined;
   finalityBlock?: string | undefined;
+  /**
+   * The Governor's own post-execution `state()` value and `executed` flag, as
+   * actually observed — never assumed to be the required "Executed" (7)
+   * value. Carried forward so the receipt this job eventually produces
+   * always attests to what was truly observed, not to what a happy path
+   * would produce; `reconcileForMarkedReceipt` is the gate that turns a
+   * disagreement here into `FULFILLED_UNVERIFIED` rather than a false
+   * `FULFILLED_VERIFIED` claim.
+   */
+  governorFinalState?: number | undefined;
+  governorExecuted?: boolean | undefined;
 };
 
 type BaseEvent = {

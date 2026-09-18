@@ -236,3 +236,63 @@ describe("resolveViaSsrFallback — real-shaped ENS/Optimism fixtures (Gate 12 C
     expect(resolved.organization.pauseReason).toBe("Custom governance not currently supported");
   });
 });
+
+/** Finding F-11 — a redirect off an already-allowlisted host must be re-validated at its actual destination, never trusted just because the initial host was allowlisted. */
+describe("resolveViaSsrFallback — redirect re-validation (F-11)", () => {
+  const params = { url: "https://www.tally.xyz/gov/compound/proposal/220", onchainProposalId: "220" };
+
+  function mockFetchSequence(...responses: { status: number; location?: string; body?: string | object }[]) {
+    const fn = vi.fn();
+    for (const r of responses) {
+      const bodyText = r.body === undefined ? "" : typeof r.body === "string" ? r.body : JSON.stringify(r.body);
+      fn.mockResolvedValueOnce({
+        ok: r.status >= 200 && r.status < 300,
+        status: r.status,
+        headers: { get: (name: string) => (name.toLowerCase() === "location" ? (r.location ?? null) : null) },
+        text: () => Promise.resolve(bodyText),
+        json: () => Promise.resolve(bodyText ? JSON.parse(bodyText) : {}),
+      } as unknown as Response);
+    }
+    vi.stubGlobal("fetch", fn);
+    return fn;
+  }
+
+  it("follows a redirect to another allowlisted Cactus host (the real tally.xyz -> cactushq.xyz migration case)", async () => {
+    mockFetchSequence(
+      { status: 301, location: "https://www.cactushq.xyz/gov/compound/proposal/220" },
+      { status: 200, body: htmlWithNextData(VALID_PAGE_PROPS) },
+    );
+    const { resolved } = await resolveViaSsrFallback(params);
+    expect(resolved.organization.name).toBe("Compound");
+  });
+
+  it("refuses a redirect to a non-allowlisted host, even though the initial URL was allowlisted", async () => {
+    mockFetchSequence({ status: 302, location: "https://evil.example.com/steal" });
+    await expect(resolveViaSsrFallback(params)).rejects.toMatchObject({ code: "CACTUS_HOST_NOT_ALLOWED" });
+  });
+
+  it("refuses a redirect to a private/internal-looking host (SSRF via redirect)", async () => {
+    mockFetchSequence({ status: 302, location: "http://169.254.169.254/latest/meta-data/" });
+    await expect(resolveViaSsrFallback(params)).rejects.toMatchObject({ code: "CACTUS_HOST_NOT_ALLOWED" });
+  });
+
+  it("refuses a redirect that downgrades to plain http, even to an otherwise-allowlisted hostname", async () => {
+    mockFetchSequence({ status: 302, location: "http://www.tally.xyz/gov/compound/proposal/220" });
+    await expect(resolveViaSsrFallback(params)).rejects.toMatchObject({ code: "CACTUS_HOST_NOT_ALLOWED" });
+  });
+
+  it("resolves a relative Location header against the current URL before validating it", async () => {
+    mockFetchSequence(
+      { status: 301, location: "/gov/compound/proposal/220-moved" },
+      { status: 200, body: htmlWithNextData(VALID_PAGE_PROPS) },
+    );
+    const { resolved } = await resolveViaSsrFallback(params);
+    expect(resolved.organization.name).toBe("Compound");
+  });
+
+  it("refuses a redirect chain longer than the bound, rather than following indefinitely", async () => {
+    const hops = Array.from({ length: 7 }, (_, i) => ({ status: 302, location: `https://www.tally.xyz/gov/compound/proposal/220?hop=${i}` }));
+    mockFetchSequence(...hops);
+    await expect(resolveViaSsrFallback(params)).rejects.toThrow(CactusResolutionError);
+  });
+});
