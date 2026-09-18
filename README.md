@@ -598,6 +598,10 @@ The one real, controlled Sepolia proof this repository's `MARKED ✓` is built o
 
 This is **controlled Sepolia test infrastructure** — a self-deployed Governor and token, not a real DAO's treasury. The funds moved were test funds between a self-deployed Timelock and a freshly-generated test recipient, never real value. Re-derive it yourself: `pnpm verify:gate6`.
 
+### Demo video correction
+
+> **Transaction-hash display typo:** The submitted demo video contains a one-character transcription error in the Gate 5 transaction hash shown in the KeeperHub execution overlay. The video displays `...72c34c1b...`; the verified Sepolia transaction is `0x49ac3ebbd7e957cb8b57e0e1dcc0e2e24243b2ae72c34cc1b839c7fe8a81d7cb` (`...72c34cc1b...`). This is a video-overlay typo only; the repository's canonical execution evidence and KeeperHub execution record reference the correct transaction. KeeperHub execution ID: `wn1mlnlj6kotkxqdjgebz`.
+
 ## Mode C / current limitations
 
 **Lane 1** — real Cactus mainnet governance objects, resolved and read-only (Gate 1A). **Lane 2** — a controlled Sepolia Governor, a real KeeperHub write, and real independent economic verification (Gates 5/6). Same Marked engine, two separate, labeled pieces of evidence — **there is no closed-loop Cactus→KeeperHub claim.**
