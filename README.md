@@ -15,54 +15,70 @@ One honesty note up front, since it governs every sentence below: **Marked has n
 
 ## Table of contents
 
-[The problem](#the-problem) · [Who this is for](#who-this-is-for) · [Concrete example](#concrete-example) · [What Marked does](#what-marked-does) · [System architecture](#system-architecture) · [The three truths](#the-three-truths) · [Cactus integration](#cactus-integration) · [Governor authorization engine](#governor-authorization-engine) · [Fulfillment commitment](#fulfillment-commitment) · [Agent boundary](#agent-boundary) · [KeeperHub execution](#keeperhub-execution) · [Execution sequence](#execution-sequence) · [State machine](#state-machine) · [Failure and recovery model](#failure-and-recovery-model) · [Economic postcondition verification](#economic-postcondition-verification) · [Marked Receipt](#marked-receipt) · [Persistence architecture](#persistence-architecture) · [Security model](#security-model) · [Trust boundaries](#trust-boundaries) · [Repository structure](#repository-structure) · [Web routes](#web-routes) · [Environment variables](#environment-variables) · [Local development](#local-development) · [Database development](#database-development) · [Testing strategy](#testing-strategy) · [Evidence / reproducibility](#evidence--reproducibility) · [Canonical proof](#canonical-proof) · [Mode C / current limitations](#mode-c--current-limitations) · [Decision records](#decision-records) · [Development laws](#development-laws) · [Documentation index](#documentation-index) · [Deployment](#deployment) · [FAQ](#faq) · [License](#license)
+[The problem](#the-problem) · [Who this is for](#who-this-is-for) · [A concrete example](#a-concrete-example) · [What Marked does](#what-marked-does) · [System architecture](#system-architecture) · [The three truths](#the-three-truths) · [Cactus integration](#cactus-integration) · [Governor authorization engine](#governor-authorization-engine) · [Fulfillment commitment](#fulfillment-commitment) · [Agent boundary](#agent-boundary) · [KeeperHub execution](#keeperhub-execution) · [Execution sequence](#execution-sequence) · [State machine](#state-machine) · [Failure and recovery model](#failure-and-recovery-model) · [Economic postcondition verification](#economic-postcondition-verification) · [Marked Receipt](#marked-receipt) · [Persistence architecture](#persistence-architecture) · [Security model](#security-model) · [Trust boundaries](#trust-boundaries) · [Repository structure](#repository-structure) · [Web routes](#web-routes) · [Environment variables](#environment-variables) · [Local development](#local-development) · [Database development](#database-development) · [Testing strategy](#testing-strategy) · [Evidence / reproducibility](#evidence--reproducibility) · [Canonical proof](#canonical-proof) · [Mode C / current limitations](#mode-c--current-limitations) · [Decision records](#decision-records) · [Development laws](#development-laws) · [Documentation index](#documentation-index) · [Deployment](#deployment) · [FAQ](#faq) · [License](#license)
 
 ---
 
 ## The problem
 
-**PASSED ≠ EXECUTED ≠ FULFILLED.**
+DAOs can make decisions onchain, but passing a proposal does not mean the approved action has actually been carried out.
 
-DAOs make decisions onchain, but someone still has to carry them through. A proposal can pass, clear its timelock, and become executable while the actual action remains a separate operational responsibility. A delegate, governance operator, foundation contributor, or other authorized actor still has to notice that the proposal is ready, verify what was authorized, execute it correctly, deal with transaction uncertainty, and confirm that the intended result actually happened.
+After a vote succeeds, there is still an operational handoff. A governance operator, protocol contributor, foundation team, or other authorized executor may need to track when the proposal becomes executable, determine exactly what the Governor authorized, submit the correct transaction, handle uncertain execution safely, and verify that the intended result actually happened.
 
-Existing governance interfaces are excellent at showing how a DAO reached a decision. Transaction infrastructure can execute contract calls. But there is still a gap between "the DAO approved this" and "the approved outcome has been verifiably fulfilled." Today those responsibilities can be fragmented across a governance UI, the Governor contract, a block explorer, scripts, transaction infrastructure, operator judgment, and manual follow-up — not because any DAO is careless, but because no single surface owns the handoff.
+Those responsibilities can span a governance interface, the Governor contract, transaction infrastructure, block explorers, scripts, and manual follow-up.
 
-Across 353 executed Governor Bravo proposals on Compound and Uniswap (Ethereum mainnet), the reproduced interval from execution-eligible (Timelock `eta`) to actually-executed has a **median of 2.2 minutes**, a **P90 of 12.96 hours**, a **P95 of 38.03 hours**, and a **max of 231.14 hours** (Uniswap #20). This measures **execution timing only, in this dataset** — it does not prove why any specific delay occurred, and it is not a claim that DAOs "regularly fail to execute" or that any of these 353 proposals were "forgotten." It is evidence that eligibility and execution are genuinely separate events, which is the lifecycle boundary Marked is built around. See [`evidence/historical/`](evidence/historical/) and `DEC-025`.
+That creates a gap between three different facts:
+
+**PASSED ≠ EXECUTED ≠ FULFILLED**
+
+- **Passed** — governance approved the action.
+- **Executed** — the authorized onchain call was submitted and confirmed.
+- **Fulfilled** — the intended economic outcome was independently verified.
+
+A successful vote proves a decision was made. A successful transaction proves a transaction ran. Neither, by itself, proves that the intended outcome was fulfilled.
+
+**Marked exists to close that handoff.**
+
+It turns an approved governance action into an explicit, auditable fulfillment workflow: resolve the governance context, independently reconstruct the exact onchain authorization, execute through KeeperHub, and verify the resulting economic state before declaring the proposal fulfilled.
+
+This is not a claim that DAOs routinely forget to execute, or that most proposals sit unexecuted — it is a description of the operational responsibility that remains after a vote passes, regardless of how quickly any one DAO handles it. For a sense of the real timing variance this handoff can involve, see the 353-proposal historical dataset in [Evidence / reproducibility](#evidence--reproducibility) below.
 
 ## Who this is for
 
-Marked is for the people responsible for closing that gap — not for every DAO voter.
+Marked is built for the people responsible for carrying governance decisions through after voting ends:
 
-- **Governance operators** — track an approved proposal from eligibility through verified fulfillment.
-- **Protocol / foundation operations contributors** — turn an approved governance action into a controlled execution workflow instead of scattered scripts and manual checks.
-- **Authorized executors / treasury operators** — execute only what the Governor actually authorized, with simulation, idempotency, reconciliation, and post-execution verification.
+- **Governance operators and stewards** who track approved proposals through eligibility and execution.
+- **Protocol and foundation operations teams** responsible for carrying out actions approved by governance.
+- **Authorized executors and treasury operators** who need to execute exactly what the Governor authorized and leave an auditable record of the result.
 
-This is not a consumer voting app, and it does not claim every DAO currently performs all of the steps above by hand — it describes the operational responsibility Marked addresses once a proposal has already passed.
+Marked is not another voting interface. It operates at the handoff between a governance decision and its verified onchain outcome.
 
-## Concrete example
+## A concrete example
 
-A DAO approves: *"Transfer 1,000 treasury tokens to recipient X."*
+Imagine a DAO approves a proposal to transfer **1,000 treasury tokens to a recipient**.
 
-**Without Marked:** the governance interface shows the proposal passed. An operator waits for eligibility, determines the correct execution, submits a transaction, and a block explorer may show success — but someone still has to separately establish whether X actually received exactly 1,000 tokens.
+The proposal passing establishes that governance approved the transfer. But someone still has to determine when it can execute, verify the exact authorized recipient and amount, submit the correct transaction, and establish afterward that the recipient actually received exactly 1,000 tokens.
 
-**With Marked:**
+Marked makes that lifecycle explicit:
 
-```
-Cactus proposal
-  → resolve governance context
-  → independently read the Governor
-  → reconstruct the exact authorized transfer
-  → freeze authorization
-  → wait for eligibility, revalidate, simulate
-  → execute via KeeperHub
-  → reconcile / finality
-  → verify Governor execution
-  → verify recipient balance 0 → 1,000 MTGT
-  → verify +1,000 delta + Transfer log evidence
-  → MARKED ✓
-```
+**Cactus proposal** → governance context
+**Onchain Governor** → exact cryptographic authorization
+**KeeperHub** → bounded transaction execution
+**Marked verification** → confirm the expected recipient, pre-state, post-state, exact balance delta, and transaction-bound transfer evidence
 
-This exact example — a real, controlled Sepolia proof, not a mockup — is detailed in [Canonical proof](#canonical-proof) below and reproducible with `pnpm verify:gate6`.
+Only when those facts agree does Marked produce:
+
+**MARKED ✓**
+
+Our controlled Sepolia proof demonstrates this exact flow with a real KeeperHub-mediated Governor Bravo execution and an independently verified **1,000 MTGT** transfer — not a Cactus-indexed proposal (see [Mode C](#mode-c--current-limitations) for the split-proof disclosure). Full detail: [Canonical proof](#canonical-proof) below, reproducible with `pnpm verify:gate6`.
+
+That operating problem determines Marked's architecture: no single system is allowed to answer every question.
+
+- **Cactus** = governance context
+- **Governor** = cryptographic authority
+- **KeeperHub** = execution
+- **Target state** = economic truth
+- **Marked** = reconciliation / verification
 
 ## What Marked does
 
