@@ -44,17 +44,6 @@ export function buildAction(overrides: Partial<GovernorAuthorizedAction> = {}): 
   };
 }
 
-export function computeFrozenAuthHash(actions: readonly GovernorAuthorizedAction[] = [buildAction()]) {
-  return computeActionAuthorizationHash({
-    version: 1,
-    chainId: CHAIN_ID,
-    governor: GOVERNOR,
-    governorFamily: "GOVERNOR_BRAVO",
-    proposalId: PROPOSAL_ID,
-    actions,
-  });
-}
-
 /** `governor` is handled separately (not via the generic `overrides` spread) because it is part of what `frozenActionAuthorizationHash` is computed over — an override applied only to the returned object, after hashing, would silently produce a commitment whose frozen hash could never match a fresh re-resolution against that same governor. */
 export function buildCommitment(params: { governor?: `0x${string}` } & Partial<Omit<FulfillmentCommitment, "governor">> = {}): FulfillmentCommitment {
   const { governor = GOVERNOR, ...overrides } = params;
@@ -199,13 +188,4 @@ export function fakeClient(params: FakeClientParams = {}): PublicClient {
   })) as unknown as PublicClient["waitForTransactionReceipt"];
 
   return { readContract, getCode, getBlockNumber, getBlock, getTransactionReceipt, waitForTransactionReceipt } as unknown as PublicClient;
-}
-
-export function mockKeeperHubFetch(status: number, body: unknown): (input: unknown, init?: unknown) => Promise<Response> {
-  return async () =>
-    ({
-      ok: status >= 200 && status < 300,
-      status,
-      json: () => Promise.resolve(body),
-    }) as Response;
 }

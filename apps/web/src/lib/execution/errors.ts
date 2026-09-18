@@ -32,13 +32,3 @@ export class ExecutionAlreadyInFlightError extends Error {
     this.name = "ExecutionAlreadyInFlightError";
   }
 }
-
-export class SandboxNeverExecutesError extends Error {
-  constructor() {
-    super(
-      "The recovery-sandbox job never calls KeeperHub, by design (see apps/web/src/lib/job-store.ts). " +
-        "Approving it only demonstrates the persistence/authentication engine, never live execution.",
-    );
-    this.name = "SandboxNeverExecutesError";
-  }
-}

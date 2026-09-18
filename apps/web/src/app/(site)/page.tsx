@@ -21,21 +21,22 @@ export default function LandingPage() {
       {/* --- Hero --- */}
       <section className="container-marked grid gap-12 pb-20 pt-20 sm:pt-28 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:items-center lg:gap-10">
         <div className="flex flex-col items-start gap-8">
-          <Badge tone="accent">Agent Economy Hackathon — KeeperHub</Badge>
+          <Badge tone="accent">Governance fulfillment</Badge>
           <Reveal>
             <h1 className="font-display text-[13vw] font-bold uppercase leading-[0.92] tracking-tight sm:text-7xl md:text-6xl lg:text-7xl">
-              Your DAO passed it.
-              <br />
-              Why are you still <span className="text-[var(--accent)]">babysitting</span> it?
+              Passed <span className="text-[var(--muted)]">≠</span> Executed <span className="text-[var(--muted)]">≠</span>{" "}
+              <span className="text-[var(--accent)]">Fulfilled</span>
             </h1>
           </Reveal>
           <Reveal delay={0.1} className="max-w-xl text-lg text-[var(--muted-strong)] sm:text-xl">
-            Marked closes the last mile between a governance decision and the economic action it authorized.
+            A DAO can approve an action and still need someone to safely carry it through. Marked gives governance
+            operators a verifiable path from a Cactus proposal to exact onchain authorization, KeeperHub execution,
+            and proof that the intended result actually happened.
           </Reveal>
           <Reveal delay={0.2} className="flex flex-wrap items-center gap-4">
-            <LinkButton href="/app">Open Marked →</LinkButton>
-            <LinkButton href="/demo" variant="secondary">
-              Watch a real fulfillment
+            <LinkButton href="#how-it-works">See how it works →</LinkButton>
+            <LinkButton href="/app/new" variant="secondary">
+              Resolve a proposal
             </LinkButton>
           </Reveal>
           <Reveal delay={0.3} className="flex flex-wrap gap-x-6 gap-y-2 pt-4">
@@ -63,13 +64,13 @@ export default function LandingPage() {
         <div className="rule" />
       </div>
 
-      {/* --- Passed ≠ Executed --- */}
+      {/* --- The handoff governance tools don't finish --- */}
       <Section>
-        <SectionHeading index="01" eyebrow="The problem" title="Passed ≠ Executed." />
+        <SectionHeading index="01" eyebrow="The handoff governance tools don't finish" title="The decision is only half the job." />
         <div className="mt-12 flex flex-col items-stretch gap-3 lg:flex-row lg:items-center">
           {[
-            { n: "01", t: "Proposal passes" },
-            { n: "02", t: "Timelock matures" },
+            { n: "01", t: "DAO votes yes" },
+            { n: "02", t: "Proposal becomes eligible" },
           ].map((step) => (
             <FlowStep key={step.n} n={step.n} t={step.t} />
           ))}
@@ -79,28 +80,51 @@ export default function LandingPage() {
           <Reveal className="flex flex-1 flex-col justify-center rounded-xl border border-[var(--danger)]/50 bg-[var(--danger-dim)] p-6 lg:py-8">
             <span className="section-label text-[var(--danger)]">The operational gap</span>
             <p className="mt-2 font-display text-2xl font-semibold uppercase leading-tight text-[var(--danger)]">
-              Someone still has to come back and finish it.
+              An operator still has to execute it.
             </p>
           </Reveal>
 
           <Arrow />
 
           {[
-            { n: "04", t: "Execution" },
+            { n: "04", t: "Transaction succeeds" },
             { n: "05", t: "Did the intended result actually happen?" },
           ].map((step) => (
             <FlowStep key={step.n} n={step.n} t={step.t} />
           ))}
         </div>
         <Reveal delay={0.1} className="mt-10 max-w-2xl text-lg text-[var(--muted-strong)]">
-          A DAO can finish voting while the authorized economic action remains unfinished. Marked turns that
-          operational gap into a deterministic fulfillment job.
+          A proposal can pass, clear its timelock, and become executable while the actual action remains a separate
+          operational responsibility. A delegate, governance operator, or authorized contributor still has to notice
+          it&apos;s ready, verify what was authorized, execute it correctly, handle transaction uncertainty, and
+          confirm the intended result actually happened — today, fragmented across a governance UI, the Governor
+          contract, a block explorer, scripts, and operator judgment.
         </Reveal>
+        <Reveal delay={0.15} className="mt-4 max-w-2xl text-lg font-semibold uppercase tracking-wide text-[var(--accent)]">
+          That is the gap Marked closes.
+        </Reveal>
+      </Section>
+
+      {/* --- Who it's for --- */}
+      <Section className="border-t border-[var(--border)]">
+        <SectionHeading index="02" eyebrow="Who Marked is for" title="For the people responsible for closing that gap." />
+        <div className="mt-12 grid gap-6 sm:grid-cols-3">
+          {[
+            { t: "Governance operators", d: "Track an approved proposal from eligibility through verified fulfillment." },
+            { t: "Protocol / foundation operations", d: "Turn an approved governance action into a controlled execution workflow instead of scattered scripts and manual checks." },
+            { t: "Authorized executors", d: "Execute only what the Governor actually authorized — with simulation, idempotency, reconciliation, and post-execution verification." },
+          ].map((x) => (
+            <Reveal key={x.t} className="rounded-xl border border-[var(--border)] p-6">
+              <p className="font-display text-xl font-bold uppercase leading-tight">{x.t}</p>
+              <p className="mt-2 text-sm text-[var(--muted-strong)]">{x.d}</p>
+            </Reveal>
+          ))}
+        </div>
         <Reveal delay={0.15} className="mt-8 max-w-3xl rounded-xl border border-[var(--border)] p-5">
           <p className="text-sm text-[var(--muted-strong)]">
-            This isn&apos;t hypothetical: across {HB.totalIncluded} executed Compound + Uniswap Governor Bravo
-            proposals on Ethereum mainnet, {HB.buckets[">24h"]} took more than 24 hours to execute after becoming
-            eligible, and the longest took {HB.maxHours}h ({HB.longestCase.dao} #{HB.longestCase.proposalId}).{" "}
+            The timing risk is not hypothetical: across {HB.totalIncluded} executed Compound + Uniswap Governor Bravo
+            proposals on Ethereum mainnet, eligibility and execution were separate events, with observed delays
+            ranging from seconds to more than {HB.maxHours}h ({HB.longestCase.dao} #{HB.longestCase.proposalId}).{" "}
             <Link href="/evidence" className="text-[var(--accent)] underline">
               View methodology →
             </Link>
@@ -130,9 +154,48 @@ export default function LandingPage() {
         </Reveal>
       </Section>
 
+      {/* --- Concrete example --- */}
+      <Section className="border-t border-[var(--border)]">
+        <SectionHeading index="03" eyebrow="A concrete example" title={'"Transfer 1,000 treasury tokens to recipient X."'} />
+        <div className="mt-12 grid gap-8 lg:grid-cols-2">
+          <Reveal className="rounded-xl border border-[var(--danger)]/40 bg-[var(--danger-dim)] p-6">
+            <p className="section-label text-[var(--danger)]">Without Marked</p>
+            <ul className="mt-3 space-y-2 text-sm text-[var(--muted-strong)]">
+              <li>— Governance interface shows the proposal passed</li>
+              <li>— Operator waits for eligibility</li>
+              <li>— Operator must determine the correct execution</li>
+              <li>— Transaction is submitted</li>
+              <li>— Block explorer may show success</li>
+              <li>— Someone still has to establish whether X actually received exactly 1,000 tokens</li>
+            </ul>
+          </Reveal>
+          <Reveal delay={0.1} className="rounded-xl border border-emerald-900/40 bg-[var(--accent-dim)] p-6">
+            <p className="section-label text-[var(--accent)]">With Marked</p>
+            <ul className="mt-3 space-y-1.5 text-sm text-[var(--muted-strong)]">
+              {[
+                "Cactus proposal",
+                "Resolve governance context",
+                "Independently read the Governor",
+                "Reconstruct the exact authorized transfer",
+                "Freeze authorization",
+                "Wait for eligibility, revalidate, simulate",
+                "Execute via KeeperHub",
+                "Reconcile / finality",
+                "Verify Governor execution",
+                "Verify recipient 0 → 1,000 MTGT",
+                "Verify +1,000 delta + Transfer evidence",
+              ].map((x) => (
+                <li key={x}>→ {x}</li>
+              ))}
+              <li className="pt-1 font-display text-lg font-bold uppercase text-[var(--accent)]">MARKED ✓</li>
+            </ul>
+          </Reveal>
+        </div>
+      </Section>
+
       {/* --- How Marked works --- */}
       <Section id="how-it-works" className="border-t border-[var(--border)]">
-        <SectionHeading index="02" eyebrow="Mechanism" title="From decision to verified outcome." />
+        <SectionHeading index="04" eyebrow="Mechanism" title="From decision to verified outcome." />
         <div className="mt-12 grid gap-8 sm:grid-cols-2">
           {[
             { n: "01", t: "Resolve", d: "Start from a Cactus governance proposal. Marked resolves the underlying Governor independently." },
@@ -151,7 +214,7 @@ export default function LandingPage() {
 
       {/* --- Three truths --- */}
       <Section id="three-truths" className="border-t border-[var(--border)]">
-        <SectionHeading index="03" eyebrow="The core idea" title="A tx hash is not the same as fulfillment." lead="Marked reconciles three independent truths." />
+        <SectionHeading index="05" eyebrow="The core idea" title="A tx hash is not the same as fulfillment." lead="Marked reconciles three independent truths." />
         {proof5 && proof6 ? (
           <div className="mt-12 grid gap-5 lg:grid-cols-3">
             <Reveal>
@@ -215,7 +278,7 @@ export default function LandingPage() {
 
       {/* --- Product preview --- */}
       <Section className="border-t border-[var(--border)]">
-        <SectionHeading index="04" eyebrow="The product" title="See it before you touch it." />
+        <SectionHeading index="06" eyebrow="The product" title="See it before you touch it." />
         {proof5 ? (
           <Reveal className="mt-12">
             <Card className="mx-auto max-w-lg">
@@ -290,7 +353,7 @@ export default function LandingPage() {
 
       {/* --- Fail closed --- */}
       <Section className="border-t border-[var(--border)]">
-        <SectionHeading index="05" eyebrow="Safety" title="When Marked isn't certain, it doesn't execute." />
+        <SectionHeading index="07" eyebrow="Safety" title="When Marked isn't certain, it doesn't execute." />
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {[
             { t: "Too early", d: "Timelock hasn't matured.", a: "Wait" },
@@ -309,7 +372,7 @@ export default function LandingPage() {
 
       {/* --- Architecture --- */}
       <Section className="border-t border-[var(--border)]">
-        <SectionHeading index="06" eyebrow="Integration architecture" title="Governance decides. KeeperHub executes. Marked verifies." />
+        <SectionHeading index="08" eyebrow="Integration architecture" title="Governance decides. KeeperHub executes. Marked verifies." />
         <div className="mt-14 flex flex-col">
           {[
             { t: "Cactus", d: "Governance context" },
@@ -340,7 +403,7 @@ export default function LandingPage() {
 
       {/* --- Agent boundary --- */}
       <Section className="border-t border-[var(--border)]">
-        <SectionHeading index="07" eyebrow="Agent economy" title="The agent prepares. The commitment decides." lead="An agent can understand the governance object, explain it, and compose the fulfillment workflow. But at runtime the money-moving action is constrained by deterministic authorization." />
+        <SectionHeading index="09" eyebrow="Agent economy" title="The agent prepares. The commitment decides." lead="An agent can understand the governance object, explain it, and compose the fulfillment workflow. But at runtime the money-moving action is constrained by deterministic authorization." />
         <div className="mt-12 grid gap-6 sm:grid-cols-2">
           <Reveal className="rounded-xl border border-emerald-900/40 bg-[var(--accent-dim)] p-6">
             <p className="section-label text-[var(--accent)]">Agent can</p>
@@ -392,28 +455,11 @@ export default function LandingPage() {
         </div>
       </Section>
 
-      {/* --- Who it's for --- */}
-      <Section className="border-t border-[var(--border)]">
-        <SectionHeading index="08" eyebrow="Who it's for" title="For the people who have to make sure the vote actually happens." />
-        <Reveal delay={0.1} className="mt-8 grid gap-8 sm:grid-cols-2">
-          <div>
-            <ul className="space-y-2 text-[var(--muted-strong)]">
-              {["DAO operations", "Foundation operations", "Treasury teams", "Protocol operators", "Governance stewards"].map((x) => (
-                <li key={x}>— {x}</li>
-              ))}
-            </ul>
-          </div>
-          <blockquote className="border-l-2 border-[var(--accent)] pl-5 text-lg italic text-[var(--muted-strong)]">
-            &ldquo;We already got the vote. Why does someone still have to remember to come back and finish it?&rdquo;
-          </blockquote>
-        </Reveal>
-      </Section>
-
       {/* --- FAQ --- */}
       <Section id="faq" className="border-t border-[var(--border)]">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] lg:gap-16">
           <div className="lg:sticky lg:top-24 lg:self-start">
-            <SectionHeading index="09" eyebrow="FAQ" title="Questions, answered plainly." />
+            <SectionHeading index="10" eyebrow="FAQ" title="Questions, answered plainly." />
             <p className="mt-6 max-w-sm text-sm text-[var(--muted-strong)]">
               Still have one? The{" "}
               <Link href="/docs" className="text-[var(--accent)] underline">
